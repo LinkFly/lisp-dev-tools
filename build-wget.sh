@@ -19,10 +19,11 @@ WGET_SOURCE_DIR= #computing later
 rm -rf $TMP_WGET_DIRNAME/*
 rm -f $UTILS_DIR/wget
 #############
-
+mkdir --parents $TMP_WGET_DIR
 cd $TMP_WGET_DIR/ && tar -xzvf $WGET_TARGZ_ARCHIVE_PATH
 cd $START_DIR
 WGET_SOURCE_DIR=$TMP_WGET_DIR/$(ls $TMP_WGET_DIR)
+mkdir --parents $WGET_SOURCE_DIR
 cd $WGET_SOURCE_DIR
 ./configure --without-ssl
 make
