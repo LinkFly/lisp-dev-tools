@@ -29,7 +29,7 @@ cd $TMP_DOWNLOAD_DIR;
 $WGET $URL;
 if [ -f $TMP_ARCHIVE_PATH ];
   then 
-    mkdir --parents $ARCHIVE_PATH
+    mkdir --parents $ARCHIVES_DIR
     mv $TMP_ARCHIVE_PATH $ARCHIVE_PATH; 
     echo "$ARCHIVE_NAME downloaded ... OK.";
   else echo "ERROR downloaded $ARCHIVE_NAME";
