@@ -1,0 +1,1 @@
+XDG_CONFIG_DIRS=/home/linkfly/Downloads/configs rlwrap sbcl
