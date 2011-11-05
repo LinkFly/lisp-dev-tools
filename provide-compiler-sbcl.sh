@@ -1,5 +1,5 @@
 #!/bin/sh
-
+echo "HERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"
 ##### Include scripts #####
 . ./global-params.conf
 . ./tools.conf

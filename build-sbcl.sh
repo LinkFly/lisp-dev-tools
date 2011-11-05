@@ -11,6 +11,7 @@ SBCL_LISPS_DIRNAME=sbcl
 SBCL_LISPS_SOURCES_DIRNAME=sbcl-sources
 SBCL_BIN_DIRNAME=src/runtime
 SBCL_CORE_BIN_DIRNAME=output
+SBCL_BIN_BUILD_RESULT=src/runtime/sbcl
 
 ########## Computing variables #####
 abs_path COMPILERS
@@ -20,6 +21,7 @@ SBCL_COMPILER_DIR=$COMPILERS/$SBCL_LISPS_COMPILERS/$SBCL_COMPILER_DIRNAME
 SBCL_SOURCES_DIR=$SOURCES/$SBCL_LISPS_SOURCES/$SBCL_SOURCES_DIRNAME
 SBCL_BIN_DIR=$SBCL_COMPILER_DIR/$SBCL_BIN_DIRNAME
 SBCL_CORE_BIN_DIR=$SBCL_COMPILER_DIR/$SBCL_CORE_BIN_DIRNAME
+SBCL_BIN_BUILD_RESULT=$SBCL_SOURCES_DIR/$SBCL_BIN_BUILD_RESULT
 
 ########## Checking sources directory #####
 if [ -d $SBCL_SOURCES_DIR ];
@@ -54,4 +56,3 @@ Directory with results: $SBCL_DIR";
 else echo "ERROR: Coping building sbcl results into $SBCL_DIR failed.
 Directory containded sources: $SBCL_SOURCES_DIR"; return 1;
 fi
-

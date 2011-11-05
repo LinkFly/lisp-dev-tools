@@ -21,19 +21,22 @@ abs_path PROVIDE_SOURCES_SBCL
 abs_path BUILD_SCRIPT
 abs_path SOURCES
 
-######## Build sbcl if needed #########
-echo "Providing $SBCL_DIRNAME ..."
-if [ -d $SBCL_DIR ];
-then echo "SBCL already exist (run run-sbcl.sh for using). 
-Directory: $SBCL_DIR (run remove-sbcl.sh for retry build).";
-else
-RESULT=1
-$PROVIDE_ARCHIVE_SBCL_BIN && $PROVIDE_COMPILER_SBCL && $PROVIDE_ARCHIVE_SBCL_SOURCE && $PROVIDE_SOURCES_SBCL && $BUILD_SCRIPT && RESULT=0;
-  if [ $RESULT = 0 ];
-  then echo "SBCL $SBCL_DIRNAME provided successful.
-Directory: $SBCL_DIR";
-  else echo "ERROR: SBCL $SBCL_DIRNAME provided failed."
-  fi
-fi
+######## Download compiler, get compiler, download ################
+######## sources, get sources and building sbcl if needed #########
+DIR=$SBCL_DIR
 
+PROCESS_SCRIPT="$PROVIDE_ARCHIVE_SBCL_BIN && $PROVIDE_COMPILER_SBCL && $PROVIDE_ARCHIVE_SBCL_SOURCE && $PROVIDE_SOURCES_SBCL && $BUILD_SCRIPT"
 
+MES_START_PROCESS="Providing SBCL $SBCL_DIRNAME ...
+\nDirectory for results: $SBCL_DIR"
+
+MES_ALREADY="SBCL already exist (run run-sbcl.sh for using, or run remove-sbcl.sh for retry build). 
+\nDirectory: $SBCL_DIR";
+
+MES_SUCCESS="SBCL $SBCL_DIRNAME provided successful.
+\nDirectory: $SBCL_DIR"
+
+MES_FAILED="ERROR: SBCL $SBCL_DIRNAME provided failed.
+\nDirectory that has not been created: $SBCL_DIR" 
+
+provide_dir "$DIR" "$PROCESS_SCRIPT" "$MES_START_PROCESS" "$MES_ALREADY" "$MES_SUCCESS" "$MES_FAILED"
