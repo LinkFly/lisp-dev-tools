@@ -31,9 +31,8 @@ fi
 ######### Building sbcl sources ###########
 echo "Building $SBCL_SOURCES_DIR ..."
 cd $SBCL_SOURCES_DIR
-#RESULT=1
-RESULT=0
-#PATH=$SBCL_BIN_DIR:$PATH SBCL_HOME=$SBCL_CORE_BIN_DIR sh make.sh --prefix=$SBCL_DIR && RESULT=0
+RESULT=1
+PATH=$SBCL_BIN_DIR:$PATH SBCL_HOME=$SBCL_CORE_BIN_DIR sh make.sh --prefix=$SBCL_DIR && RESULT=0
 
 ######### Checking building sources ###########
 if [ $RESULT = 0 ];
