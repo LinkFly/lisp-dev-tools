@@ -1,0 +1,411 @@
+@node Efficiency
+@comment  node-name,  next,  previous,  up
+@chapter Efficiency
+@cindex Efficiency
+
+@menu
+* Slot access::
+* Dynamic-extent allocation::
+* Modular arithmetic::
+* Global and Always-Bound variables::
+* Miscellaneous Efficiency Issues::
+@end menu
+
+@node  Slot access
+@comment  node-name,  next,  previous,  up
+@section Slot access
+@cindex Slot access
+
+@subsection Structure object slot access
+
+Structure slot accessors are efficient only if the compiler is able to
+open code them: compiling a call to a structure slot accessor before
+the structure is defined, declaring one @code{notinline}, or passing
+it as a functional argument to another function causes severe
+perfomance degradation.
+
+@subsection Standard object slot access
+
+The most efficient way to access a slot of a @code{standard-object} is
+by using @code{slot-value} with a constant slot name argument inside a
+@code{defmethod} body, where the variable holding the instance is a
+specializer parameter of the method and is never assigned to. The cost
+is roughly 1.6 times that of an open coded structure slot accessor.
+
+Second most efficient way is to use a CLOS slot accessor, or
+@code{slot-value} with a constant slot name argument, but in
+circumstances other than specified above. This may be up to 3 times as
+slow as the method described above.
+
+Example:
+
+@lisp
+(defclass foo () ((bar)))
+
+;; Fast: specializer and never assigned to
+(defmethod quux ((foo foo) new)
+  (let ((old (slot-value foo 'bar)))
+    (setf (slot-value foo 'bar) new)
+    old))
+
+;; Slow: not a specializer
+(defmethod quux ((foo foo) new)
+  (let* ((temp foo)
+         (old (slot-value temp 'bar)))
+    (setf (slot-value temp 'bar) new)
+    old))
+
+;; Slow: assignment to FOO
+(defmethod quux ((foo foo) new)
+  (let ((old (slot-value foo 'bar)))
+    (setf (slot-value foo 'bar) new)
+    (setf foo new)
+    old))
+@end lisp
+
+Note that when profiling code such as this, the first few calls to the
+generic function are not representative, as the dispatch mechanism is
+lazily set up during those calls.
+
+@node  Dynamic-extent allocation
+@comment  node-name,  next,  previous,  up
+@section Dynamic-extent allocation
+@cindex @code{dynamic-extent} declaration
+@cindex declaration, @code{dynamic-extent}
+
+SBCL has fairly extensive support for performing allocation on the
+stack when a variable is declared @code{dynamic-extent}. The
+@code{dynamic-extent} declarations are not verified, but are simply
+trusted as long as @code{sb-ext:*stack-allocate-dynamic-extent*} is
+true.
+
+@include var-sb-ext-star-stack-allocate-dynamic-extent-star.texinfo
+
+If dynamic extent constraints specified in the Common Lisp standard
+are violated, the best that can happen is for the program to have
+garbage in variables and return values; more commonly, the system will
+crash.
+
+In particular, it is important to realize that dynamic extend is
+contagious:
+
+@lisp
+(let* ((a (list 1 2 3))
+       (b (cons a a)))
+   (declare (dynamic-extent b))
+   ;; Unless A is accessed elsewhere as well, SBCL will consider
+   ;; it to be otherwise inaccessible -- it can only be accessed
+   ;; through B, after all -- and stack allocate it as well.
+   ;;
+   ;; Hence returning (CAR B) here is unsafe.
+   ...)
+@end lisp
+
+This allows stack allocation of complex structures. As a notable
+exception to this, SBCL does not as of 1.0.48.21 propagate
+dynamic-extentness through @code{&rest} arguments -- but another
+conforming implementation might, so portable code should not rely on
+this.
+
+@lisp
+(declaim (inline foo))
+(defun foo (fun &rest arguments)
+  (declare (dynamic-extent arguments))
+  (apply fun arguments))
+
+(defun bar (a)
+  ;; SBCL will heap allocate the result of (LIST A), and stack allocate
+  ;; only the spine of the &rest list -- so this is safe, but unportable.
+  ;;
+  ;; Another implementation, including earlier versions of SBCL might consider
+  ;; (LIST A) to be otherwise inaccessible and stack-allocate it as well!
+  (foo #'car (list a)))
+@end lisp
+
+There are many cases when @code{dynamic-extent} declarations could be
+useful. At present, SBCL implements stack allocation for
+
+@itemize
+
+@item
+@code{&rest} lists, when these are declared @code{dynamic-extent}.
+
+@item
+@findex @cl{cons}
+@findex @cl{list}
+@findex @cl{list*}
+@findex @cl{vector}
+@code{cons}, @code{list}, @code{list*}, and @code{vector} when the
+result is bound to a variable declared @code{dynamic-extent}.
+
+@item
+@findex @cl{make-array}
+simple forms of @code{make-array}, whose result is bound to a variable
+declared @code{dynamic-extent}: stack allocation is possible only if
+the resulting array is known to be both simple and one-dimensional,
+and has a constant @code{:element-type}.
+
+@cindex Safety optimization quality
+@strong{Note}: stack space is limited, so allocation of a large vector
+may cause stack overflow. For this reason potentially large vectors,
+which might circumvent stack overflow detection, are stack allocated
+only in zero @code{safety} policies.
+
+@item
+@findex @cl{flet}
+@findex @cl{labels}
+@cindex @code{safety} optimization quality
+@cindex optimization quality, @code{safety}
+closures defined with @code{flet} or @code{labels}, with a bound
+@code{dynamic-extent} declaration. Blocks and tags are also allocated
+on the heap, unless all non-local control transfers to them are
+compiled with zero @code{safety}.
+
+@item
+user-defined structures when the structure constructor defined using
+@code{defstruct} has been declared @code{inline} and the result of the
+call to the constructor is bound to a variable declared
+@code{dynamic-extent}.
+
+@strong{Note}: structures with ``raw'' slots can currently be
+stack-allocated only on x86 and x86-64.
+
+@item
+all of the above when they appear as initial parts of another
+stack-allocated object.
+
+@end itemize
+
+Examples:
+
+@lisp
+;;; Declaiming a structure constructor inline before definition makes
+;;; stack allocation possible.
+(declaim (inline make-thing))
+(defstruct thing obj next)
+
+;;; Stack allocation of various objects bound to DYNAMIC-EXTENT
+;;; variables.
+(let* ((list (list 1 2 3))
+       (nested (cons (list 1 2) (list* 3 4 (list 5))))
+       (vector (make-array 3 :element-type 'single-float))
+       (thing (make-thing :obj list
+                          :next (make-thing :obj (make-array 3)))))
+  (declare (dynamic-extent list nested vector thing))
+  ...)
+
+;;; Stack allocation of arguments to a local function is equivalent
+;;; to stack allocation of local variable values.
+(flet ((f (x)
+         (declare (dynamic-extent x))
+         ...))
+  ...
+  (f (list 1 2 3))
+  (f (cons (cons 1 2) (cons 3 4)))
+  ...)
+
+;;; Stack allocation of &REST lists
+(defun foo (&rest args)
+  (declare (dynamic-extent args))
+  ...)
+@end lisp
+
+Future plans include
+
+@itemize
+
+@item
+Automatic detection of the common idiom of calling quantifiers with a
+closure, even when the closure is not declared @code{dynamic-extent}.
+
+@end itemize
+
+@node  Modular arithmetic
+@comment  node-name,  next,  previous,  up
+@section Modular arithmetic
+@cindex Modular arithmetic
+@cindex Arithmetic, modular
+@cindex Arithmetic, hardware
+@findex @cl{logand}
+Some numeric functions have a property: @var{N} lower bits of the
+result depend only on @var{N} lower bits of (all or some)
+arguments. If the compiler sees an expression of form @code{(logand
+@var{exp} @var{mask})}, where @var{exp} is a tree of such ``good''
+functions and @var{mask} is known to be of type @code{(unsigned-byte
+@var{w})}, where @var{w} is a ``good'' width, all intermediate results
+will be cut to @var{w} bits (but it is not done for variables and
+constants!). This often results in an ability to use simple machine
+instructions for the functions.
+
+Consider an example.
+
+@lisp
+(defun i (x y)
+  (declare (type (unsigned-byte 32) x y))
+  (ldb (byte 32 0) (logxor x (lognot y))))
+@end lisp
+
+The result of @code{(lognot y)} will be negative and of type
+@code{(signed-byte 33)}, so a naive implementation on a 32-bit
+platform is unable to use 32-bit arithmetic here. But modular
+arithmetic optimizer is able to do it: because the result is cut down
+to 32 bits, the compiler will replace @code{logxor} and @code{lognot}
+with versions cutting results to 32 bits, and because terminals
+(here---expressions @code{x} and @code{y}) are also of type
+@code{(unsigned-byte 32)}, 32-bit machine arithmetic can be used.
+
+As of SBCL 0.8.5 ``good'' functions are @code{+}, @code{-};
+@code{logand}, @code{logior}, @code{logxor}, @code{lognot} and their
+combinations; and @code{ash} with the positive second
+argument. ``Good'' widths are 32 on HPPA, MIPS, PPC, Sparc and x86 and
+64 on Alpha.  While it is possible to support smaller widths as well,
+currently this is not implemented.
+
+@node  Global and Always-Bound variables
+@comment  node-name,  next,  previous,  up
+@section Global and Always-Bound variables
+
+@include macro-sb-ext-defglobal.texinfo
+
+@deffn {Declaration} @sbext{global}
+
+Syntax: @code{(sb-ext:global symbol*)}
+
+Only valid as a global proclamation.
+
+Specifies that the named symbols cannot be proclaimed or locally
+declared @code{special}. Proclaiming an already special or constant
+variable name as @code{global} signal an error. Allows more efficient
+value lookup in threaded environments in addition to expressing
+programmer intention.
+@end deffn
+
+@deffn {Declaration} @sbext{always-bound}
+
+Syntax: @code{(sb-ext:always-bound symbol*)}
+
+Only valid as a global proclamation.
+
+Specifies that the named symbols is always bound. Inhibits @code{makunbound}
+of the named symbols. Proclaiming an unbound symbol as @code{always-bound} signals
+an error. Allows compiler to elide boundness checks from value lookups.
+@end deffn
+
+@node  Miscellaneous Efficiency Issues
+@comment  node-name,  next,  previous,  up
+@section Miscellaneous Efficiency Issues
+
+FIXME: The material in the CMUCL manual about getting good
+performance from the compiler should be reviewed, reformatted in
+Texinfo, lightly edited for SBCL, and substituted into this
+manual. In the meantime, the original CMUCL manual is still 95+%
+correct for the SBCL version of the Python compiler. See the
+sections
+
+@itemize
+@item Advanced Compiler Use and Efficiency Hints
+@item Advanced Compiler Introduction
+@item More About Types in Python
+@item Type Inference
+@item Source Optimization
+@item Tail Recursion
+@item Local Call
+@item Block Compilation
+@item Inline Expansion
+@item Object Representation
+@item Numbers
+@item General Efficiency Hints
+@item Efficiency Notes
+@end itemize
+
+Besides this information from the CMUCL manual, there are a few other
+points to keep in mind.
+
+@itemize
+
+@item
+@findex @cl{let}
+@findex @cl{let*}
+@findex @cl{setq}
+@findex @cl{setf}
+The CMUCL manual doesn't seem to state it explicitly, but Python has a
+mental block about type inference when assignment is involved. Python
+is very aggressive and clever about inferring the types of values
+bound with @code{let}, @code{let*}, inline function call, and so
+forth. However, it's much more passive and dumb about inferring the
+types of values assigned with @code{setq}, @code{setf}, and
+friends. It would be nice to fix this, but in the meantime don't
+expect that just because it's very smart about types in most respects
+it will be smart about types involved in assignments.  (This doesn't
+affect its ability to benefit from explicit type declarations
+involving the assigned variables, only its ability to get by without
+explicit type declarations.)
+
+@c <!-- FIXME: Python dislikes assignments, but not in type
+@c     inference. The real problems are loop induction, closed over
+@c     variables and aliases. -->
+
+@item
+Since the time the CMUCL manual was written, CMUCL (and thus SBCL) has
+gotten a generational garbage collector. This means that there are
+some efficiency implications of various patterns of memory usage which
+aren't discussed in the CMUCL manual. (Some new material should be
+written about this.)
+
+@item
+SBCL has some important known efficiency problems.  Perhaps the most
+important are
+
+@itemize @minus
+
+@item
+The garbage collector is not particularly efficient, at least on
+platforms without the generational collector (as of SBCL 0.8.9, all
+except x86).
+
+@item
+Various aspects of the PCL implementation of CLOS are more inefficient
+than necessary.
+
+@end itemize
+
+@end itemize
+
+Finally, note that Common Lisp defines many constructs which, in
+the infamous phrase, ``could be compiled efficiently by a
+sufficiently smart compiler''. The phrase is infamous because
+making a compiler which actually is sufficiently smart to find all
+these optimizations systematically is well beyond the state of the art
+of current compiler technology. Instead, they're optimized on a
+case-by-case basis by hand-written code, or not optimized at all if
+the appropriate case hasn't been hand-coded. Some cases where no such
+hand-coding has been done as of SBCL version 0.6.3 include
+
+@itemize
+
+@item
+@code{(reduce #'f x)} where the type of @code{x} is known at compile
+time
+
+@item
+various bit vector operations, e.g.  @code{(position 0
+some-bit-vector)}
+
+@item
+specialized sequence idioms, e.g.  @code{(remove item list :count 1)}
+
+@item
+cases where local compilation policy does not require excessive type
+checking, e.g.  @code{(locally (declare (safety 1)) (assoc item
+list))} (which currently performs safe @code{endp} checking internal
+to assoc).
+
+@end itemize
+
+If your system's performance is suffering because of some construct
+which could in principle be compiled efficiently, but which the SBCL
+compiler can't in practice compile efficiently, consider writing a
+patch to the compiler and submitting it for inclusion in the main
+sources. Such code is often reasonably straightforward to write;
+search the sources for the string ``@code{deftransform}'' to find many
+examples (some straightforward, some less so).

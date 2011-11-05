@@ -1,3 +1,6 @@
 *~
-archives/*
-lisp/*
+archives
+lisp
+sources
+tmp
+compilers

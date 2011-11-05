@@ -1,0 +1,47 @@
+GENERAL INFORMATION
+
+Welcome to SBCL.
+
+If you'd like to install or build the system, see the "INSTALL" file.
+
+To find out more about who created the system, see the "CREDITS" file.
+
+If you'd like information about the legalities of copying the system,
+see the "COPYING" file.
+
+If you'd like more information about using the system, see the man
+page, "sbcl.1", or the user manual in the "doc/manual" subdirectory of
+the distribution. (The user manual is maintained as Texinfo in the
+source distribution; HTML version is available for download, and
+"INSTALL" describes how to build the Texinfo version in HTML and PDF.)
+
+The system is a work in progress. See the "TODO" file in the source
+distribution for some highlights.
+
+The "BUGS" file lists current known bugs.
+
+If you'd like to make suggestions, report a bug, or help to improve the
+system, please send mail to one of the mailing lists:
+  sbcl-help@lists.sourceforge.net
+  sbcl-devel@lists.sourceforge.net
+Note that as a spam reduction measure you must subscribe to the lists
+before you can post.
+
+
+SYSTEM-SPECIFIC HINTS
+
+for NetBSD:
+  NetBSD 2.0 and above are required because of the lack of needed
+  signal APIs in NetBSD 1.6 and earlier.
+
+for OpenBSD:
+  OpenBSD 3.0 has stricter ulimit values, and/or enforces them more
+  strictly, than its predecessors. Therefore SBCL's initial mmap()
+  won't work unless you increase the limit on the data segment from
+  the OpenBSD defaults, e.g. with
+    ulimit -S -d 1000000
+  before you run SBCL. Otherwise SBCL fails with a message like
+  "ensure_space: failed to validate xxxxxxx bytes at yyyyy". (SBCL
+  is just allocating this huge address space, not actually using this
+  huge memory at this point. OpenBSD <3.0 had no problem with this,
+  but OpenBSD 3.0 is less hospitable.)

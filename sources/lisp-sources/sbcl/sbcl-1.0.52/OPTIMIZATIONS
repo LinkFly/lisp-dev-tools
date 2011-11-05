@@ -1,0 +1,406 @@
+#1
+(defun mysl (s)
+    (declare (simple-string s))
+    (declare (optimize (speed 3) (safety 0) (debug 0)))
+    (let ((c 0))
+      (declare (fixnum c))
+      (dotimes (i (length s))
+        (when (eql (aref s i) #\1)
+          (incf c)))
+      c))
+
+* On X86 I is represented as a tagged integer.
+
+* Unnecessary move:
+  3: SLOT S!11[EDX] {SB-C::VECTOR-LENGTH 1 7} => t23[EAX]
+  4: MOVE t23[EAX] => t24[EBX]
+
+--------------------------------------------------------------------------------
+#2
+(defun quux (v)
+  (declare (optimize (speed 3) (safety 0) (space 2) (debug 0)))
+  (declare (type (simple-array double-float 1) v))
+  (let ((s 0d0))
+    (declare (type double-float s))
+    (dotimes (i (length v))
+      (setq s (+ s (aref v i))))
+    s))
+
+* Python does not combine + with AREF, so generates extra move and
+  allocates a register.
+
+* On X86 Python thinks that all FP registers are directly accessible
+  and emits costy MOVE ... => FR1.
+
+--------------------------------------------------------------------------------
+#3
+(defun bar (n)
+  (declare (optimize (speed 3) (safety 0) (space 2))
+           (type fixnum n))
+  (let ((v (make-list n)))
+    (setq v (make-array n))
+    (length v)))
+
+* IR1 does not optimize away (MAKE-LIST N).
+--------------------------------------------------------------------------------
+#4
+(defun bar (v1 v2)
+  (declare (optimize (speed 3) (safety 0) (space 2))
+           (type (simple-array base-char 1) v1 v2))
+  (dotimes (i (length v1))
+    (setf (aref v2 i) (aref v1 i))))
+
+VOP DATA-VECTOR-SET/SIMPLE-STRING V2!14[EDI] t32[EAX] t30[S2]>t33[CL]
+                                  => t34[S2]<t35[AL] 
+        MOV     #<TN t33[CL]>, #<TN t30[S2]>
+        MOV     BYTE PTR [EDI+EAX+1], #<TN t33[CL]>
+        MOV     #<TN t35[AL]>, #<TN t33[CL]>
+        MOV     #<TN t34[S2]>, #<TN t35[AL]>
+
+* The value of DATA-VECTOR-SET is not used, so there is no need in the
+  last two moves.
+
+* And why two moves?
+--------------------------------------------------------------------------------
+#8
+(defun foo (d)
+  (declare (optimize (speed 3) (safety 0) (debug 0)))
+  (declare (type (double-float 0d0 1d0) d))
+  (loop for i fixnum from 1 to 5
+        for x1 double-float = (sin d) ;;; !!!
+        do (loop for j fixnum from 1 to 4
+                 sum x1 double-float)))
+
+Without the marked declaration Python will use boxed representation for X1.
+
+This is equivalent to
+
+(let ((x nil))
+  (setq x 0d0)
+  ;; use of X as DOUBLE-FLOAT
+)
+
+The initial binding is effectless, and without it X is of type
+DOUBLE-FLOAT. Unhopefully, IR1 does not optimize away effectless
+SETs/bindings, and IR2 does not perform type inference.
+--------------------------------------------------------------------------------
+#9 "Multi-path constant folding"
+(defun foo (x)
+  (if (= (cond ((irgh x) 0)
+               ((buh x) 1)
+               (t 2))
+         0)
+      :yes
+      :no))
+
+This code could be optimized to
+
+(defun foo (x)
+  (cond ((irgh x) :yes)
+        ((buh x) :no)
+        (t :no)))
+--------------------------------------------------------------------------------
+#11
+(inverted variant of #9)
+
+(lambda (x)
+  (let ((y (sap-alien x c-string)))
+    (list (alien-sap y)
+          (alien-sap y))))
+
+It could be optimized to
+
+(lambda (x) (list x x))
+
+(if Y were used only once, the current compiler would optimize it)
+--------------------------------------------------------------------------------
+#12
+(typep (truly-the (simple-array * (*)) x) 'simple-vector)
+
+tests lowtag.
+--------------------------------------------------------------------------------
+#13
+FAST-+/FIXNUM and similar should accept unboxed arguments in interests
+of representation selection. Problem: inter-TN dependencies.
+--------------------------------------------------------------------------------
+#14
+The derived type of (/ (THE (DOUBLE-FLOAT (0D0)) X) (THE (DOUBLE-FLOAT
+1D0) Y)) is (DOUBLE-FLOAT 0.0d0). While it might be reasonable, it is
+better to derive (OR (MEMBER 0.0d0) (DOUBLE-FLOAT (0.0d0))).
+--------------------------------------------------------------------------------
+#15
+On the alpha, the system is reluctant to refer directly to a constant bignum,
+preferring to load a large constant through a slow sequence of instructions,
+then cons up a bignum for it:
+
+(LAMBDA (A)
+  (DECLARE (OPTIMIZE (SAFETY 1) (SPEED 3) (DEBUG 1))
+           (TYPE (INTEGER -10000 10000) A)
+           (IGNORABLE A))
+  (CASE A
+    ((89 125 16) (ASH A (MIN 18 -706)))
+    (T (DPB -3 (BYTE 30 30) -1))))
+--------------------------------------------------------------------------------
+#16
+(do ((i 0 (1+ i)))
+    ((= i (the (integer 0 100) n)))
+  ...)
+
+It is commonly expected for Python to derive (FIXNUMP I). (If ``='' is
+replaced with ``>='', Python will do.)
+--------------------------------------------------------------------------------
+#17 
+Type tests for (ARRAY BIT), (ARRAY T) and similar go through full
+%TYPEP, even though it is relatively simple to establish the arrayness
+of an object and also to obtain the element type of an array.  As of
+sbcl-0.8.12.30, this affects at least DUMP-OBJECT through
+COMPOUND-OBJECT-P, and (LABELS MAYBE-EMIT-MAKE-LOAD-FORMS GROVEL)
+through TYPEP UNBOXED-ARRAY, within the compiler itself.
+--------------------------------------------------------------------------------
+#20
+(defun-with-dx foo (x)
+  (flet ((make (x)
+           (let ((l (list nil nil)))
+             (setf (first l) x)
+             (setf (second l) (1- x))
+             l)))
+    (let ((l (make x)))
+      (declare (dynamic-extent l))
+      (mapc #'print l))))
+
+Result of MAKE is not stack allocated.
+--------------------------------------------------------------------------------
+#22
+IR2 does not perform unused code flushing.
+--------------------------------------------------------------------------------
+#24
+a. Iterations on &REST lists could be rewritten with &MORE vectors.
+b. Implement local unknown-values mv-call (useful for fast type checking).
+--------------------------------------------------------------------------------
+#26
+SBCL cannot derive upper bound for I and uses generic arithmetic here:
+
+(defun foo (l)
+  (declare (vector l))
+  (dotimes (i (length l))
+    (if (block nil
+          (map-foo (lambda (x) (if x (return t)))
+                   l))
+        t
+        nil)))
+
+(So the constraint propagator or a possible future SSA-convertor
+should know the connection between an NLE and its CLEANUP.)
+--------------------------------------------------------------------------------
+#27
+Initialization of stack-allocated arrays is inefficient: we always
+fill the vector with zeroes, even when it is not needed (as for
+platforms with conservative GC or for arrays of unboxed objectes) and
+is performed later explicitely.
+
+(This is harder than it might look at first glance, as MAKE-ARRAY is smart
+enough to eliminate something like ':initial-element 0'.  Such an optimization
+is valid if the vector is being allocated in the heap, but not if it is being
+allocated on the stack.  You could remove this optimization, but that makes
+the heap-allocated case somewhat slower...)
+
+To do this, extend ALLOCATE-VECTOR with ALLOW-JUNK argument, and when
+stack allocating don't zero if it is true -- and probably ALLOW-JUNK iff
+the vector is a specialized one (cannot have pointers.)
+--------------------------------------------------------------------------------
+#28
+a. Accessing raw slots in structure instances is more inefficient than
+it could be; if we placed raw slots before the header word, we would
+not need to do arithmetic at runtime to access them.  (But beware:
+this would complicate handling of the interior pointer).
+
+b. (Also note that raw slots are currently disabled on HPPA)
+--------------------------------------------------------------------------------
+#29
+Python is overly zealous when converting high-level CL functions, such
+as MIN/MAX, LOGBITP, and LOGTEST, to low-level CL functions.  Reducing
+Python's aggressiveness would make it easier to effect changes such as
+
+x86-64:
+* direct MIN/MAX on {SINGLE,DOUBLE}-FLOATs ({MIN,MAX}S{S,D})
+
+x86-64:
+* direct LOGBITP on word-sized integers and fixnums (BT + JC)
+
+x86{,-64}/PPC:
+* branch-free MIN/MAX on word-sized integers and fixnums (floats could
+  be handled too, modulo safety considerations on the PPC)
+
+x86-64:
+* efficient LOGTESTs on word-sized integers and fixnums (TEST)
+
+etc., etc.
+
+(The framework for this has been implemented as of 0.9.9.18; see the
+vm-support-routine COMBINATION-IMPLEMENTATION-STYLE and its use in
+src/compiler/ir1opt.lisp, IR1-OPTIMIZE-COMBINATION.  The above
+optimizations are left as an exercise for the reader.)
+--------------------------------------------------------------------------------
+#31
+The typecheck generated for a declaration like (integer 0 45) on x86 looks
+like:
+
+;      12B:       F6C203           TEST DL, 3
+;      12E:       753B             JNE L1
+;      130:       8BC2             MOV EAX, EDX
+;      132:       83F800           CMP EAX, 0
+;      135:       7C34             JL L1
+;      137:       8BC2             MOV EAX, EDX
+;      139:       3DB4000000       CMP EAX, 180
+;      13E:       7F2B             JNLE L1
+
+A better code sequence for this would be:
+
+  TEST DL, 3
+  JNE L1
+  MOV EAX, EDX
+  CMP EAX, 180
+  JBE L1
+
+Doing an unsigned comparison means that, similarly to %CHECK-BOUND, we can
+combine the <0 and >=bound tests.  This sort of test is generated often
+in SBCL and any array-based code that's serious about type-checking its
+indices.
+--------------------------------------------------------------------------------
+#32
+The code for a vector bounds check on x86 (similarly on x86-64) where
+the vector is in EDX and the index in EAX looks like:
+
+;       49: L0:   8B5AFD           MOV EBX, [EDX-3]
+;       4C:       39C3             CMP EBX, EAX
+;       4E:       7632             JBE L2
+
+because %CHECK-BOUND is used for bounds-checking any array dimension.
+A more efficient specialization (%CHECK-BOUND/VECTOR) would produce:
+
+  CMP [EDX-3], EAX
+  JBE L2
+
+Which is slightly shorter and avoids using a register.
+--------------------------------------------------------------------------------
+#33
+Reports from the Java camp indicate that using an SSE2-based
+floating-point backend on x86 when possible is highly preferable to
+using the x86 FP stack.  It would be nice if SBCL included an SSE2-based
+floating point backend with a compile-time option to switch between the
+two.
+--------------------------------------------------------------------------------
+#35
+Compiling
+
+(defun foo (a i)
+  (declare (type simple-vector a))
+  (aref a i))
+
+results in the following x86 code:
+
+; 115886E9:       F7C703000000     TEST EDI, 3                ; no-arg-parsing entry point
+;      6EF:       7510             JNE L0
+;      6F1:       8BC7             MOV EAX, EDI
+;      6F3:       83F800           CMP EAX, 0
+;      6F6:       7C09             JL L0
+;      6F8:       8BC7             MOV EAX, EDI
+;      6FA:       3DF8FFFF7F       CMP EAX, 2147483640
+;      6FF:       7E0F             JLE L1
+;      701: L0:   8B057C865811     MOV EAX, [#x1158867C]      ; '(MOD
+                                                              ;   536870911)
+;      707:       0F0B0A           BREAK 10                   ; error trap
+;      70A:       05               BYTE #X05
+;      70B:       1F               BYTE #X1F                  ; OBJECT-NOT-TYPE-ERROR
+;      70C:       FECE01           BYTE #XFE, #XCE, #X01      ; EDI
+;      70F:       0E               BYTE #X0E                  ; EAX
+;      710: L1:   8B42FD           MOV EAX, [EDX-3]
+;      713:       8BCF             MOV ECX, EDI
+;      715:       39C8             CMP EAX, ECX
+;      717:       7620             JBE L2
+;      719:       8B540A01         MOV EDX, [EDX+ECX+1]
+
+... plus the standard return sequence and some error blocks.  The
+`TEST EDI, 3' and associated comparisons are to ensure that `I' is a
+positive fixnum.  The associated comparisons are unnecessary, as the
+%CHECK-BOUND VOP only requires its tested index to be a fixnum and takes
+care of the negative fixnum case itself.
+
+{HAIRY-,}DATA-VECTOR-REF are DEFKNOWN'd with EXPLICIT-CHECK, which would
+seem to take care of this, but EXPLICIT-CHECK only seems to be used when
+compiling calls to unknown functions or similar.  Furthermore,
+EXPLICIT-CHECK, as NJF understands it, doesn't have the right
+semantics--it suppresses all type checking of arguments, whereas what we
+really want is to ensure that the argument is a fixnum, but not check
+its positiveness.
+--------------------------------------------------------------------------------
+#36
+
+In #35, the CMP EAX, $foo instructions are all preceded by a MOV.  They
+appear to be unnecessary, but are necessary because in IR2, EDI is a
+DESCRIPTOR-REG, whereas EAX is an ANY-REG--and the comparison VOPs only
+accept ANY-REGs.  Therefore, the MOVs are "necessary" to ensure that the
+comparison VOP receives an TN of the appropriate storage class.
+
+Obviously, it would be better if a) we only performed one MOV prior to
+all three comparisons or b) eliminated the necessity of the MOV(s)
+altogether.  The former option is probably easier than the latter.
+
+--------------------------------------------------------------------------------
+#38
+
+(setf (subseq s1 start1 end1) (subseq s2 start2 end1))
+
+could be transformed into
+
+(let ((#:s2 s2)
+      (#:start2 start2)
+      (#:end2 end2))
+ (replace s1 #:s2 :start1 start1 :end1 end1 :start2 #:start2 :end2 #:end2))
+
+when the return value is unused, avoiding the need to cons up the new sequence.
+
+--------------------------------------------------------------------------------
+#39
+
+(let ((*foo* 42)) ...)
+
+currently compiles to code that ensures the TLS index at runtime, which
+is both a decently large chunk of code and unnecessary, as we could ensure
+the TLS index at load-time as well.
+
+--------------------------------------------------------------------------------
+#40
+
+When FTYPE is declared -- to say (function (t t t t t) t), and
+function has a compiler-macro,
+
+  (apply #'foo 'x1 x2 'x3 more)
+
+can be transformed into
+
+  (apply (lambda (x2 x4 x5) (foo 'x1 x2 'x3 x4 x5)) x2 more)
+
+which allows compiler-macro-expansion for FOO. (Only constant
+arguments can be moved inside the new lambda -- otherwise evaluation
+order is altered.)
+
+--------------------------------------------------------------------------------
+#41
+
+The unibyte external formats are written in a very generic way.  Three
+optimizations immediately applicable that could be automatically
+generated:
+
+(a) if the external format merely permutes the first 256 characters, a
+    constant-time lookup (rather than a binary search) could be
+    performed on output.  This applies at least to EBCDIC, which
+    currently has a hand-rolled mapper instead.
+
+(b) if there are no undefined characters corresponding to the 256
+    codes, then no error checking need be done on input.
+
+(c) if there is a way to use particular bits of the exceptional
+    characters, constant-time output (rather than binary search) can
+    still be achieved as used to be done by the latin-9 external
+    format before 1.0.31.

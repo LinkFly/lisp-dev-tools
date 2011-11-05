@@ -1,0 +1,23 @@
+SBCL is -- ahem! -- imperfectly documented. What can we say? Help with
+documentation might not be refused.:-)
+
+There is a Unix man page, sbcl.1.
+
+There is a user manual in texinfo format, in doc/manual/. (In
+binary distributions, the compiled-into-HTML translations are also
+included.) 
+
+Much of the documentation for supported extensions is in their Lisp
+doc strings. For example, to find out how to use the SAVE-LISP-AND-DIE
+function in the SB-EXT package, you can execute
+  (documentation 'sb-ext:save-lisp-and-die 'function)
+or
+  (describe 'sb-ext:save-lisp-and-die)
+in SBCL.
+
+The user manual is incomplete, and some of its chapters are just notes
+that "this is similar to chapter such-and-such of the CMU CL user
+manual". The old CMU CL documentation can still be useful both for
+missing chapters of the user manual and for documentation of the
+internals of the system. It can be downloaded from
+<ftp://sbcl.sourceforge.net/pub/sbcl/cmucl-docs.tar.bz2>.

@@ -1,0 +1,184 @@
+SBCL TODO
+=========
+
+     "There's nothing an agnostic can't do as long as he doesn't know
+     whether he believes in anything or not."
+       -- Monty Python.
+
+     "God grant me serenity to accept the code I cannot change, courage
+     to change the code I can, and wisdom to know the difference."
+       -- Erik Naggum
+
+     "Accumulation of half-understood design decisions eventually
+     chokes a program as a water weed chokes a canal. By refactoring
+     you can ensure that your full understanding of how the program
+     should be designed is always reflected in the program. As a water
+     weed quickly spreads its tendrils, partially understood design
+     decisions quickly spread their effects throughout your program. No
+     one or two or even ten individual actions will be enough to
+     eradicate the problem."
+       -- Martin Fowler, in _Refactoring: Improving the Design of Existing
+          Code_, p. 360
+
+     "I wish I didn't know now what I didn't know then."
+       -- Bob Seger
+
+  This files is maintained as part of the SBCL distribution, and
+  describes flying pies and moons on sticks that SBCL developers dream
+  about. The items are in no particular order.
+
+  The omission of an item is no guarantee that no-one would like it,
+  just like the inclusion of an item is no guarantee that someone is
+  actively working on it.
+
+  In addition to this file, there is the BUGS file, and there are also
+  hundreds of FIXME notes in the sources. (Things marked as KLUDGE are
+  in general things which are ugly or confusing, but that, for
+  whatever reason, may stay that way indefinitely.)
+
+THREADING INTERFACE
+
+  SB-THREAD has some problems: recursivity of a mutex should probably
+  be a feature of the mutex, and not of the lexical location. Thread
+  local variables are needed. Sessions and sharing the terminal need
+  to be thought about.
+
+PEEPHOLE OPTIMIZER
+
+  Have you ever read SBCL disassembly?
+
+DEFGLOBAL
+
+  Global lexical variables. Esp. since with threads special variable
+  accesses is no speed daemon.
+
+FINISHING EXTERNAL FORMATS
+
+  Byte order marks. Newline conventions. A way to specify an external
+  format without needing to duplicate code. Fixing the inefficiencies.
+
+TIMEOUTS
+
+  Asyncronous unwinds suck horribly, but to implement reliable systems
+  one simply needs timeouts. These should probably be local, since
+  otherwise they effectively become asynchronous unwinds. Basically,
+  for any potentially blocking operation there should be a :TIMEOUT
+  arguent (or a version of the operation that accepts the argument).
+
+ADVICE/FWRAP
+
+  SBCL has an internal function encapsulation mechanism, and is able to
+  install breakpoint to function start/end -- this is used to implement
+  the instrumentation based profiler and tracing. It would be good to
+  have this as an exported interface, and it would be good if the
+  SYMBOL-FUNCTION / FDEFINITION confusion was fixed: currently the
+  latter returns the underlying definition, whereas the first returns
+  the encapsulation.
+
+GENERIC FUNCTION TRACING
+
+  This sucks currently. It would also be good to be able to trace
+  individual methods.
+
+POLICY MADNESS
+
+  The interactions between various optimization policies are far from
+  obvious. Someone should figure out how to make this better, and fix
+  it. One option would be to have just a few (eg. DEBUG, SMALL,
+  FAST-SAFE, FAST-UNSAFE) "dominant" policies, and expose the rest
+  as separately declarable optimization toggles.
+
+  MAYBE-INLINE is also nice, but it would be good if someone could
+  figure out how to get rid of it while retaining the semantics it
+  provides. Inlining recursive functions is also something to think
+  about.
+
+  INHIBIT-WARNINGS really needs to go away.
+
+WINDOWS
+
+  Needs love.
+
+DARWIN
+
+  Needs love, particularly threads and exceptions/signals. slam.sh is
+  also broken there.
+
+FUNCTION NAMES
+
+  We'd like to be able to (SETF %FUNCTION-NAME) on a closure.
+
+UNDEFINED FUNCTION / VARIABLE RESTARTS
+
+  You know, like Allegro is reputed to have.
+
+MISC CLEANUPS
+
+  These need to be taken a good look at -- it might be that some of them
+  are already done, or otherwise no longer relevant.)
+
+   * EVAL/EVAL-WHEN/%COMPILE/DEFUN/DEFSTRUCT cleanups:
+	** make %COMPILE understand magicality of DEFUN FOO
+		w.r.t. e.g. preexisting inlineness of FOO
+	** use %COMPILE where COMPILE-TOP-LEVEL used to be used
+	** remove redundant COMPILE-TOP-LEVEL and
+		FUNCTIONAL-KIND=:TOP-LEVEL stuff from the compiler
+   * outstanding embarrassments
+	** :IGNORE-ERRORS-P cruft in stems-and-flags.lisp-expr. (It's
+		reasonable to support this as a crutch when initially
+		bootstrapping from balky xc hosts with their own
+		idiosyncratic ideas of what merits FAILURE-P, but it's
+		embarrassing to have to use it when bootstrapping
+		under SBCL!),
+   * miscellaneous simple refactoring
+	* belated renaming:
+		** rename %PRIMITIVE to %VOP
+		** A few hundred things named FN should be named FUN
+	* These days ANSI C has inline functions, so..
+		** redo many cpp macros as inline functions:
+			HeaderValue, Pointerp, CEILING, ALIGNED_SIZE,
+			GET_FREE_POINTER, SET_FREE_POINTER,
+			GET_GC_TRIGGER, SET_GC_TRIGGER, GetBSP, SetBSP,
+			os_trunc_foo(), os_round_up_foo()
+		** remove various avoid-evaluating-C-macro-arg-twice
+			cruft
+  * Some work on conditions emitted by the system
+	** eliminate COMPILER-WARN and COMPILER-STYLE-WARN, which
+		were simply limited versions of WARN and STYLE-WARN.
+	** eliminate use of INHIBIT-WARNINGS by code emitted by the
+		system from user code.
+	** cause use of INHIBIT-WARNINGS to signal a STYLE-WARNING.
+	** eliminate use of INHIBIT-WARNINGS within the system
+	** deprecate INHIBIT-WARNINGS, causing its use to signal a
+		full WARNING.
+	** begin work on developing a class hierarchy of conditions
+		along semantic lines.
+
+PCL INTEGRATION
+
+  AKA CLOS in cold init.
+
+HIGH LEVEL SOCKET INTERFACE
+
+  Something slightly above the level of BSD sockets would be nice.
+
+RPC INTERFACE
+
+  For talking with other processes.
+
+CROSS PLATFORM GUI
+
+  Since this is a high priority we're waiting for PHP coders to
+  offer their help to build a website about this.
+
+BLOCK COMPILATION
+
+  You know, like CMUCL does.
+
+(MOSTLY) PARALLEL GC
+
+  Several algorithms exist, even one would be nice.
+
+INCREMENTAL GC
+
+  For those who need it.
