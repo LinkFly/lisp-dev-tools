@@ -1,37 +1,44 @@
 #!/bin/sh
+echo "Running provide-archive.sh ..."
+
+######## Correcting path $$$$$$$$$$$
+CUR_PATH=$DIR
+cd $(dirname $0)
 
 ######### Parameters ###############
-### ARCHIVE_NAME - name archives
-### URL - where to locate archive
-######### Configuring variables ####
-UTILS_DIRNAME=utils
-ARCHIVES_DIRNAME=archives
-WGET=$PWD/$UTILS_DIRNAME/wget
-PROVIDE_WGET=$PWD/provide-wget.sh
-TMP_DIRNAME="tmp"
-TMP_DOWNLOAD_DIRNAME="tmp-download"
-###########
-#ARCHIVE_NAME=slime-current.tgz
-#URL=http://common-lisp.net/project/slime/snapshots/slime-current.tgz
-########## Computing variables ####
-ARCHIVES_DIR=$PWD/$ARCHIVES_DIRNAME
-ARCHIVE_PATH=$ARCHIVES_DIR/$ARCHIVE_NAME
-TMP_DIR=$PWD/$TMP_DIRNAME
-TMP_DOWNLOAD_DIR=$TMP_DIR/$TMP_DOWNLOAD_DIRNAME
-TMP_ARCHIVE_PATH=$TMP_DOWNLOAD_DIR/$ARCHIVE_NAME
+ARCHIVE_NAME=$1
+URL=$2
 
+######## Include scripts ###########
+. ./global-params.conf
+. ./tools.conf
+. ./utils.sh
+
+######### Configuring variables ####
+DOWNLOAD_SCRIPT=download-archive.sh
+
+######### Computing variables ######
+abs_path DOWNLOAD_SCRIPT
+abs_path TMP_DOWNLOAD
+abs_path ARCHIVES
+
+ARCHIVE_PATH=$ARCHIVES/$ARCHIVE_NAME
+TMP_ARCHIVE=$TMP_DOWNLOAD/$ARCHIVE_NAME
+
+######### Downloading if needed ######
 if [ -f $ARCHIVE_PATH ];
 then echo "$ARCHIVE_NAME already downloaded ... OK.";
 else 
-$PROVIDE_WGET
-mkdir --parents $TMP_DOWNLOAD_DIR
-cd $TMP_DOWNLOAD_DIR;
-$WGET $URL;
-if [ -f $TMP_ARCHIVE_PATH ];
+mkdir --parents $TMP_DOWNLOAD
+cd $TMP_DOWNLOAD;
+$DOWNLOAD_SCRIPT $URL
+if [ -f $TMP_ARCHIVE ];
   then 
-    mkdir --parents $ARCHIVES_DIR
-    mv $TMP_ARCHIVE_PATH $ARCHIVE_PATH; 
-    echo "$ARCHIVE_NAME downloaded ... OK.";
-  else echo "ERROR downloaded $ARCHIVE_NAME";
+    mkdir --parents $ARCHIVES;
+    mv $TMP_ARCHIVE $ARCHIVE_PATH; 
+    echo "$ARCHIVE_NAME downloaded ... OK."; 
+  else echo "ERROR: downloading $ARCHIVE_NAME failed"; return 1;
 fi
 fi
+
+echo "End running provide-archive.sh ..."
