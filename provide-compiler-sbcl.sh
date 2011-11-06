@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "HERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"
+
 ##### Include scripts #####
 . ./global-params.conf
 . ./tools.conf
@@ -13,13 +13,26 @@ abs_path EXTRACT_COMPILER_SCRIPT
 abs_path COMPILERS
 SBCL_LISPS_COMPILERS=$COMPILERS/$SBCL_LISPS_COMPILERS
 
-######## Build sbcl if needed #########
-echo "Providing SBCL compiler $SBCL_COMPILER_DIRNAME ...
-Directory: $SBCL_LISPS_COMPILERS";
-if [ -d $SBCL_LISPS_COMPILERS/$SBCL_COMPILER_DIRNAME ];
-then echo "SBCL compiler already exist (run build-sbcl.sh for building SBCL sources).";
-else $EXTRACT_COMPILER_SCRIPT && echo "Providing SBCL compiler $SBCL_COMPILER_DIRNAME successful.
-Directory: $SBCL_LISPS_COMPILERS/$SBCL_COMPILER_DIRNAME";
-fi
+######## Providing SBCL binary for compilation if needed #########
+DIR=$SBCL_LISPS_COMPILERS/$SBCL_COMPILER_DIRNAME
+
+PROCESS_SCRIPT="$EXTRACT_COMPILER_SCRIPT"
+
+MES_START_PROCESS="Providing SBCL compiler $SBCL_COMPILER_DIRNAME ...
+\nDirectory for SBCL compilers: $SBCL_LISPS_COMPILERS";
+
+MES_ALREADY="SBCL compiler $SBCL_COMPILER_DIRNAME already exist.
+\nRun build-sbcl.sh for building SBCL sources.
+\nDirectory: $SBCL_LISPS_COMPILERS/$SBCL_COMPILER_DIRNAME";
+
+MES_SUCCESS="Providing SBCL compiler $SBCL_COMPILER_DIRNAME successful.
+\nDirectory: $SBCL_LISPS_COMPILERS/$SBCL_COMPILER_DIRNAME"
+
+MES_FAILED="ERROR: Providing SBCL compiler $SBCL_COMPILER_DIRNAME failed.
+\nDirectory that has not been created: $SBCL_LISPS_COMPILERS/$SBCL_COMPILER_DIRNAME" 
+
+provide_dir "$DIR" "$PROCESS_SCRIPT" "$MES_START_PROCESS" "$MES_ALREADY" "$MES_SUCCESS" "$MES_FAILED"
+
+
 
 

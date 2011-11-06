@@ -23,11 +23,22 @@ SBCL_BIN_DIR=$SBCL_COMPILER_DIR/$SBCL_BIN_DIRNAME
 SBCL_CORE_BIN_DIR=$SBCL_COMPILER_DIR/$SBCL_CORE_BIN_DIRNAME
 SBCL_BIN_BUILD_RESULT=$SBCL_SOURCES_DIR/$SBCL_BIN_BUILD_RESULT
 
+########## Checking not builded ###########
+echo "Checking SBCL not builded ...
+Directory: $SBCL_DIR"
+if [ -d $SBCL_DIR ];
+then echo "ERROR: SBCL already builded.
+Run remove-sbcl.sh and retry building, or run rebuild-sbcl.sh
+Directory: $SBCL_DIR"; return 1;
+else echo "Checking SBCL not builded success. Building ...";
+fi
+
 ########## Checking sources directory #####
+echo "Checking SBCL sources directory ...
+Directory: $SBCL_SOURCES_DIR"
 if [ -d $SBCL_SOURCES_DIR ];
-then echo "OK - sources is found.
-Directory: $SBCL_SOURCES_DIR";
-else echo "ERROR: directory $SBCL_SOURCES_DIR does not exist! Please running provide-sources-sbcl.sh"
+then echo "OK - SBCL sources directory $SBCL_SOURCES_DIR is found."
+else echo "ERROR: directory $SBCL_SOURCES_DIR does not exist! Please run the provide-sources-sbcl.sh"
 fi
 
 ######### Building sbcl sources ###########
@@ -37,9 +48,11 @@ RESULT=1
 PATH=$SBCL_BIN_DIR:$PATH SBCL_HOME=$SBCL_CORE_BIN_DIR sh make.sh --prefix=$SBCL_DIR && RESULT=0
 
 ######### Checking building sources ###########
-if [ $RESULT = 0 ];
+echo "Checking builded SBCL $SBCL_SOURCES_DIRNAME ...
+Directory contained sources: $SBCL_SOURCES_DIR"
+if [ $RESULT = 0 ] && [ -f $SBCL_BIN_BUILD_RESULT ];
 then echo "Building sbcl from $SBCL_SOURCES_DIRNAME successful.
-Directory containded sources: $SBCL_SOURCES_DIR";
+Directory contained sources: $SBCL_SOURCES_DIR";
 else echo "ERROR: Building sbcl from $SBCL_SOURCES_DIRNAME failed.
 Directory contained sources: $SBCL_SOURCES_DIR"; return 1;
 fi
@@ -50,9 +63,12 @@ RESULT=1
 sh install.sh && RESULT=0
 
 ######### Checking coping building result ###########
-if [ $RESULT = 0 ];
+echo "Checking coping SBCL build results from $SBCL_SOURCES_DIRNAME to $SBCL_DIRNAME.
+Directory contained sources: $SBCL_SOURCES_DIR.
+Directory contained build results: $SBCL_DIR."
+if [ $RESULT = 0 ] && [ -d $SBCL_DIR ];
 then echo "Coping building sbcl results into $SBCL_DIR successful.
-Directory with results: $SBCL_DIR";
+Directory with build results: $SBCL_DIR";
 else echo "ERROR: Coping building sbcl results into $SBCL_DIR failed.
 Directory containded sources: $SBCL_SOURCES_DIR"; return 1;
 fi
