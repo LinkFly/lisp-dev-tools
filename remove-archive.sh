@@ -4,19 +4,19 @@
 ARCHIVE_NAME=$1
 
 ######## Include scripts ###########
-. ./global-params.conf
-. ./utils.sh
-
-######### Configuring variables ####
-
+. ./includes.sh
 
 ######### Computing variables ######
-abs_path ARCHIVES_DIR
-ARCHIVE_PATH=$ARCHIVES_DIR/$ARCHIVE_NAME
+abs_path ARCHIVES
+ARCHIVE_PATH=$ARCHIVES/$ARCHIVE_NAME
 
 ######### Removing if is exist #####
 if [ -f $ARCHIVE_PATH ];
-then rm $ARCHIVE_PATH && echo "$ARCHIVE_NAME removed successful.";
-else echo "$ARCHIVE_NAME not found."
+then rm $ARCHIVE_PATH && echo "$ARCHIVE_NAME removed successful.
+\n
+\nOK.";
+else echo "$ARCHIVE_NAME not found.
+\n
+\nNOT FOUND."
 fi
 

@@ -4,9 +4,7 @@
 SRC_OR_BIN=$1
 
 ##### Include scripts #####
-. ./global-params.conf
-. ./tools.conf
-. ./utils.sh
+. ./includes.sh
 
 ######### Configuring variables ####
 PROVIDE_ARCHIVE_SCRIPT=provide-archive.sh
@@ -18,9 +16,8 @@ abs_path ARCHIVES
 ######## Checking  parameters ######
 ARGS="$SRC_OR_BIN"
 ARGS_NEED="src bin"
-MES_CHECK_START="
-Checking argument for $0 ..."
-MES_SUCCESS="OK"
+MES_CHECK_START="\nChecking argument '$SRC_OR_BIN' for $0 ... "
+MES_SUCCESS="ok."
 MES_FAILED="ERROR: checking params failed - first argument must be \"src\" or \"bin\"!"
 check_args "$ARGS" "$ARGS_NEED" "$MES_CHECK_START" "$MES_SUCCESS" "$MES_FAILED" || return 1
 
@@ -28,14 +25,14 @@ check_args "$ARGS" "$ARGS_NEED" "$MES_CHECK_START" "$MES_SUCCESS" "$MES_FAILED" 
 if [ $SRC_OR_BIN = "src" ];
 then 
 ARCHIVE_TYPE=sources; 
-ARCHIVE_FILE=$ARCHIVES/$SBCL_SOURCE_ARCHIVE;
+ARCHIVE_FILE=$SBCL_SOURCE_ARCHIVE;
 ARCHIVE_URL=$SBCL_SOURCE_URL;
 fi
 
 if [ $SRC_OR_BIN = "bin" ];
 then
 ARCHIVE_TYPE=binary;
-ARCHIVE_FILE=$ARCHIVES/$SBCL_BIN_ARCHIVE;
+ARCHIVE_FILE=$SBCL_BIN_ARCHIVE;
 ARCHIVE_URL=$SBCL_BIN_URL;
 fi
 

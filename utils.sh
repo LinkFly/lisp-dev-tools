@@ -29,7 +29,7 @@ MES_CHECK_START=$3
 MES_SUCCESS=$4
 MES_FAILED=$5
 
-echo $MES_CHECK_START
+printf "$MES_CHECK_START"
 if [ "$SRC_OR_BIN" = "" ];
 then echo $MES_FAILED; return 1;
 else 
@@ -74,15 +74,14 @@ fi
 }
 
 abs_path () {
-local D_999
-local TMP_999
-local ABS_P_999
-D_999=\$
-eval TMP_999=$D_999$1
-ABS_P_999=$(abs_path_p $TMP_999)
-
-if [ $ABS_P_999 = "no" ];
-then eval $1=$PREFIX/$TMP_999;
+local ABS_PATH_D
+local ABS_PATH_TMP
+local ABS_PATH_ABS_P
+ABS_PATH_D=\$
+eval ABS_PATH_TMP=$ABS_PATH_D$1
+ABS_PATH_ABS_P=$(abs_path_p $ABS_PATH_TMP)
+if [ $ABS_PATH_ABS_P = "no" ];
+then eval $1=$PREFIX/$ABS_PATH_TMP;
 fi
 }
 

@@ -1,9 +1,7 @@
 #!/bin/sh
 
 ##### Include scripts #####
-. ./global-params.conf
-. ./tools.conf
-. ./utils.sh
+. ./includes.sh
 
 ######### Configuring variables #######
 BUILD_SCRIPT=build-sbcl.sh

@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "Running provide-archive.sh ..."
+echo "\nRunning provide-archive.sh ..."
 
 ######## Correcting path $$$$$$$$$$$
 CUR_PATH=$DIR
@@ -10,9 +10,7 @@ ARCHIVE_NAME=$1
 URL=$2
 
 ######## Include scripts ###########
-. ./global-params.conf
-. ./tools.conf
-. ./utils.sh
+. ./includes.sh
 
 ######### Configuring variables ####
 DOWNLOAD_SCRIPT=download-archive.sh
@@ -27,7 +25,7 @@ TMP_ARCHIVE=$TMP_DOWNLOAD/$ARCHIVE_NAME
 
 ######### Downloading if needed ######
 if [ -f $ARCHIVE_PATH ];
-then echo "$ARCHIVE_NAME already downloaded ... OK.";
+then echo "$ARCHIVE_NAME already downloaded ... \n\nALREADY.";
 else 
 mkdir --parents $TMP_DOWNLOAD
 rm -f $TMP_ARCHIVE
@@ -37,8 +35,12 @@ if [ -f $TMP_ARCHIVE ];
   then 
     mkdir --parents $ARCHIVES;
     mv $TMP_ARCHIVE $ARCHIVE_PATH; 
-    echo "$ARCHIVE_NAME downloaded ... OK."; 
-  else echo "ERROR: downloading $ARCHIVE_NAME failed"; return 1;
+    echo "$ARCHIVE_NAME downloaded. 
+\n
+\nOK."; 
+  else echo "ERROR: downloading $ARCHIVE_NAME
+\n
+\nFAILED."; return 1;
 fi
 fi
 
