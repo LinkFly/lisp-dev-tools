@@ -1,6 +1,7 @@
 *~
 archives/*
 lisp/*
+compilers/*
 sources/*
 tmp/*
 utils/tools/*
