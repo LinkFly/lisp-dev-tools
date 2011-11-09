@@ -1,9 +1,7 @@
 #!/bin/sh
 
 ##### Include scripts #####
-. ./global-params.conf
-. ./tools.conf
-. ./utils.sh
+. ./includes.sh
 
 ######### Configuring variables ####
 PROVIDE_ARCHIVE_SBCL_BIN=provide-archive-sbcl-bin.sh
@@ -27,12 +25,16 @@ DIR=$SBCL_DIR
 
 PROCESS_SCRIPT="$PROVIDE_ARCHIVE_SBCL_BIN && $PROVIDE_COMPILER_SBCL && $PROVIDE_ARCHIVE_SBCL_SOURCE && $PROVIDE_SOURCES_SBCL && $PROVIDE_BUILD_SCRIPT"
 
-MES_START_PROCESS="Providing SBCL $SBCL_DIRNAME ...
+MES_START_PROCESS="
+\nProviding SBCL $SBCL_DIRNAME ...
 \nDirectory for results: $SBCL_DIR"
 
-MES_ALREADY="SBCL already exist.
+MES_ALREADY="
+\nSBCL already exist.
 \nRun run-sbcl.sh for using, or run rebuild-sbcl.sh for retry build). 
-\nDirectory: $SBCL_DIR";
+\nDirectory: $SBCL_DIR
+\n
+\nOK.";
 
 MES_SUCCESS="SBCL $SBCL_DIRNAME provided successful.
 \nDirectory: $SBCL_DIR"

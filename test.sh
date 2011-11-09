@@ -1,0 +1,2 @@
+printf "Checking ..."
+echo "OK"

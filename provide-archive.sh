@@ -30,8 +30,9 @@ if [ -f $ARCHIVE_PATH ];
 then echo "$ARCHIVE_NAME already downloaded ... OK.";
 else 
 mkdir --parents $TMP_DOWNLOAD
+rm -f $TMP_ARCHIVE
 cd $TMP_DOWNLOAD;
-$DOWNLOAD_SCRIPT $URL
+$DOWNLOAD_SCRIPT $URL;
 if [ -f $TMP_ARCHIVE ];
   then 
     mkdir --parents $ARCHIVES;

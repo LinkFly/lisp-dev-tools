@@ -1,5 +1,6 @@
 #!/bin/sh
-echo "Running download-archive.sh ..."
+echo "
+Running download-archive.sh ..."
 
 ######### Parameters ###############
 URL=$1
@@ -19,7 +20,7 @@ LOADER=$UTILS/$LOADER
 
 ########## Downloading #############
 $PROVIDE_LOADER
-echo $URL
+echo "URL: $URL"
 $LOADER $URL
 
 echo "End running download-archive.sh ..."

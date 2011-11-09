@@ -3,4 +3,4 @@ archives/*
 lisp/*
 sources/*
 tmp/*
-compilers/*
+utils/tools/*

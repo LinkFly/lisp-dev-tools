@@ -5,28 +5,43 @@
 . ./tools.conf
 . ./utils.sh
 
-######### Configuring variables ####
-EXTRACT_CMD="tar -xjvf"
-
-######### Computing variables ####
+######### Configuring and computing variables ####
 abs_path ARCHIVES
 abs_path SOURCES
 SBCL_LISPS_SOURCES=$SOURCES/$SBCL_LISPS_SOURCES
 SBCL_SOURCE_ARCHIVE=$ARCHIVES/$SBCL_SOURCE_ARCHIVE
+EXTRACT_CMD="tar --directory $SBCL_LISPS_SOURCES -xjvf"
 
-##### Checking existing sbcl archive #######
-if [ -f $SBCL_SOURCE_ARCHIVE ];
-then echo "Checking existing archive $SBCL_SOURCE_ARCHIVE successful. Extracting ...";
-else echo "Checking existing archive $SBCL_SOURCE_ARCHIVE failed. Please ensure the existence of the archive."
-fi
-
-##### Getting sbcl compiler #######
+################# Extracted SBCL sources #########
 mkdir --parents $SBCL_LISPS_SOURCES
-cd $SBCL_LISPS_SOURCES
-$EXTRACT_CMD $SBCL_SOURCE_ARCHIVE
+echo "Extracting SBCL sources from $SBCL_SOURCE_ARCHIVE ...
+Directory with archives: $ARCHIVES"
 
-##### Checking of extracted #######
-if [ -d $SBCL_LISPS_SOURCES/$SBCL_SOURCES_DIRNAME ];
-then echo "Extracted $SBCL_SOURCE_ARCHIVE successful."; 
-else echo "Extracted $SBCL_SOURCE_ARCHIVE failed"; return -1;
-fi
+### Call extract_arhcive function ###
+EXTRACT_CMD=$EXTRACT_CMD
+ARCHIVE=$SBCL_SOURCE_ARCHIVE
+RESULT_DIR=$SBCL_LISPS_SOURCES/$SBCL_SOURCES_DIRNAME
+
+MES_CHECK_ALREADY_FAIL="ERROR: SBCL sources already the existing.
+\nDirectory with sources: $RESULT_DIR
+\nDirectory with archives: $ARCHIVES"
+
+MES_CHECK_AR_FAIL="ERROR: Archive $ARCHIVE not found.
+\nDirectory with archives: $ARCHIVES
+\nPlease ensure the existence of the archive, for this run the:
+\n
+\nprovide-archive.sh <archive-name> <url>
+\n
+\nFAILED."
+
+MES_START_EXTRACTED="Extracting from $ARCHIVE  ..."
+MES_CHECK_RES_FAIL="ERROR: Extracted $SBCL_SOURCE_ARCHIVE failed.
+\nDirectory with archives: $ARCHIVES"
+MES_CHECK_RES_SUCC="Extracted $ARCHIVE successful.
+\nDirectory with result: $RESULT_DIR
+\nOK."
+
+extract_archive "$EXTRACT_CMD" "$ARCHIVE" "$RESULT_DIR" \
+"$MES_CHECK_ALREADY_FAIL" "$MES_CHECK_AR_FAIL" \
+"$MES_START_EXTRACTED" "$MES_CHECK_RES_FAIL" "$MES_CHECK_RES_SUCC"
+ 
