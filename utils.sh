@@ -86,68 +86,45 @@ fi
 }
 
 provide_dir_or_file () {
-local DIR_OR_FILE
-local PROCESS_SCRIPT
-local MES_START_PROCESS
-local MES_ALREADY
-local MES_SUCCESS
-local MES_FAILED
+local DIR_OR_FILE="$2"
+local PROCESS_CMD="$3"
+local MES_START_PROCESS="$4"
+local MES_ALREADY="$5"
+local MES_SUCCESS="$6"
+local MES_FAILED="$7"
 
-DIR_OR_FILE=$2
-PROCESS_SCRIPT=$3
-MES_START_PROCESS=$4
-MES_ALREADY=$5
-MES_SUCCESS=$6
-MES_FAILED=$7
-
-echo $MES_START_PROCESS
+echo "$MES_START_PROCESS"
 if [ -$1 $DIR_OR_FILE ];
 then 
-    echo $MES_ALREADY;
+    echo "$MES_ALREADY";
 else 
     RESULT=1;
-    eval "$PROCESS_SCRIPT" && RESULT=0;
+    eval "$PROCESS_CMD" && RESULT=0;
     if [ $RESULT = 0 ];
-    then echo $MES_SUCCESS
-    else echo $MES_FAILED; return 1;
+    then echo "$MES_SUCCESS"
+    else echo "$MES_FAILED"; return 1;
     fi
 fi
 }
 
 provide_dir () {
-local DIR
-local PROCESS_SCRIPT
-local MES_START_PROCESS
-local MES_ALREADY
-local MES_SUCCESS
-local MES_FAILED
-
-DIR=$1
-PROCESS_SCRIPT=$2
-MES_START_PROCESS=$3
-MES_ALREADY=$4
-MES_SUCCESS=$5
-MES_FAILED=$6
-
-provide_dir_or_file d "$DIR" "$PROCESS_SCRIPT" "$MES_START_PROCESS" "$MES_ALREADY" "$MES_SUCCESS" "$MES_FAILED"
+local DIR="$1"
+local PROCESS_CMD="$2"
+local MES_START_PROCESS="$3"
+local MES_ALREADY="$4"
+local MES_SUCCESS="$5"
+local MES_FAILED="$6"
+provide_dir_or_file d "$DIR" "$PROCESS_CMD" "$MES_START_PROCESS" "$MES_ALREADY" "$MES_SUCCESS" "$MES_FAILED"
 }
 
 provide_file () {
-local DIR
-local PROCESS_SCRIPT
-local MES_START_PROCESS
-local MES_ALREADY
-local MES_SUCCESS
-local MES_FAILED
-
-FILE=$1
-PROCESS_SCRIPT=$2
-MES_START_PROCESS=$3
-MES_ALREADY=$4
-MES_SUCCESS=$5
-MES_FAILED=$6
-
-provide_dir_or_file f "$FILE" "$PROCESS_SCRIPT" "$MES_START_PROCESS" "$MES_ALREADY" "$MES_SUCCESS" "$MES_FAILED"
+local FILE="$1"
+local PROCESS_CMD="$2"
+local MES_START_PROCESS="$3"
+local MES_ALREADY="$4"
+local MES_SUCCESS="$5"
+local MES_FAILED="$6"
+provide_dir_or_file f "$FILE" "$PROCESS_CMD" "$MES_START_PROCESS" "$MES_ALREADY" "$MES_SUCCESS" "$MES_FAILED"
 }
 
 extract_archive () {

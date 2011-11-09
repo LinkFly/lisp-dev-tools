@@ -42,20 +42,20 @@ FILE=$SBCL_DIR
 PROCESS_SCRIPT="$PROVIDE_ARCHIVE_SCRIPT $ARCHIVE_FILE $ARCHIVE_URL"
 
 MES_START_PROCESS="
-\nProviding SBCL $ARCHIVE_TYPE archive $ARCHIVE_FILE ...
-\nDirectory with archives: $ARCHIVES"
+Providing SBCL $ARCHIVE_TYPE archive $ARCHIVE_FILE ...
+Directory with archives: $ARCHIVES"
 
 MES_ALREADY="
-\nSBCL $ARCHIVE_TYPE archive $ARCHIVE_FILE already exist.
-\nDirectory with archives: $ARCHIVES
-\n
-\nOK."
+SBCL $ARCHIVE_TYPE archive $ARCHIVE_FILE already exist.
+Directory with archives: $ARCHIVES
+
+OK."
 
 MES_SUCCESS="
-\nProviding SBCL $ARCHIVE_TYPE archive $ARCHIVE_FILE successful.
-\nDirectory with archives: $ARCHIVES
-\n
-\nOK."
+Providing SBCL $ARCHIVE_TYPE archive $ARCHIVE_FILE successful.
+Directory with archives: $ARCHIVES
+
+OK."
 
 MES_FAILED="ERROR: providing SBCL $ARCHIVE_TYPE archive!"
 
