@@ -1,8 +1,5 @@
 #!/bin/sh
 
-. ./tools.conf
-. ./utils.sh
-
 if ! [ "$LISP" = "" ];
 then CUR_LISP=$LISP;
 fi

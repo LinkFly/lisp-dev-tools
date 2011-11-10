@@ -1,7 +1,8 @@
 #!/bin/sh
 
-. ./tools.conf
-. ./utils.sh
+##### Include scripts #####
+. ./includes.sh
+. ./core.sh
 
 local D=\$
 local TMP=$1

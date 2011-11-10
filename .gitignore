@@ -4,4 +4,5 @@ lisp/*
 compilers/*
 sources/*
 tmp/*
+tmp-downloads/*
 utils/tools/*

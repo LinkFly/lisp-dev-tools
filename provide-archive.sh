@@ -35,9 +35,10 @@ if [ -f $TMP_ARCHIVE ];
   then 
     mkdir --parents $ARCHIVES;
     mv $TMP_ARCHIVE $ARCHIVE_PATH; 
-    echo "$ARCHIVE_NAME downloaded. 
-\n
-\nOK."; 
+    echo "
+$ARCHIVE_NAME downloaded. 
+
+OK."; 
   else echo "ERROR: downloading $ARCHIVE_NAME
 \n
 \nFAILED."; return 1;

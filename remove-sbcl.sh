@@ -1,8 +1,8 @@
 #!/bin/sh
 
-##### Include scripts #########
-. ./tools.conf
-. ./utils.sh
+##### Include scripts #####
+. ./includes.sh
+. ./core.sh
 
 ###### Computing variables ####
 abs_path SBCL_DIR

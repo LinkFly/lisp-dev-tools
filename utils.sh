@@ -12,9 +12,6 @@
 CUR_PATH=$PWD
 cd $(dirname $0)
 
-######## Include scripts ###########
-. ./global-params.conf
-
 ######## Function definitions ######
 check_args () {
 local ARGS
@@ -45,6 +42,10 @@ fi
 
 uppercase () {
 echo $1 | tr 'a-z' 'A-Z'
+}
+
+downcase () {
+echo $1 | tr 'A-Z' 'a-z'
 }
 
 vardef () {
@@ -85,6 +86,15 @@ then eval $1=$PREFIX/$ABS_PATH_TMP;
 fi
 }
 
+get_spec_val () {
+### Parameters ###
+local EVALUATED_PART=$1
+local REST_PART=$2
+######
+local D=\$
+echo $(eval echo $D$(uppercase $EVALUATED_PART)$REST_PART)
+}
+
 provide_dir_or_file () {
 local DIR_OR_FILE="$2"
 local PROCESS_CMD="$3"
@@ -94,7 +104,7 @@ local MES_SUCCESS="$6"
 local MES_FAILED="$7"
 
 echo "$MES_START_PROCESS"
-if [ -$1 $DIR_OR_FILE ];
+if ! [ "$DIR_OR_FILE" = "" ] && [ -$1 $DIR_OR_FILE ];
 then 
     echo "$MES_ALREADY";
 else 
@@ -200,7 +210,7 @@ local RESULT
 local FILE_REALPATH=$(readlink $UTILS_DIR/$FILE_LINK_NAME)
 local FILE_LINK=$UTILS_DIR/$FILE_LINK_NAME
 
-if [ $FILE_REALPATH ] && [ $(abs_path_p FILE_REALPATH) = "no" ];
+if [ "$FILE_REALPATH" = "" ] && [ $(abs_path_p "$FILE_REALPATH") = "no" ];
 then FILE_REALPATH=$UTILS_DIR/$FILE_REALPATH
 fi
 
@@ -216,6 +226,68 @@ if [ $FILE_REALPATH ] && [ -f $FILE_REALPATH ];
 	echo "$MES_BUILDED_SUCC"
     else echo "$MES_BUILDED_FAIL"
     fi
+fi
+}
+
+build () {
+######## Parameters #########
+local SOURCES_DIR="$1"
+local RESULT_DIR="$2"
+local PROCESS_CMD="$3"
+local BIN_BUILD_RESULT="$4"
+local MES_ALREADY_FAIL="$5"
+local MES_NOT_EXIST_SRC_FAIL="$6"
+local MES_START_BUILDING="$7"
+local MES_BUILDING_SUCC="$8"
+local MES_BUILDING_FAIL="$9"
+local MES_COPING_RESULT_SUCC="$10"
+local MES_COPING_RESULT_FAIL="$11"
+ 
+#echo "$SOURCES_DIR"
+#echo "$RESULT_DIR"
+#echo "$PROCESS_CMD"
+#echo "$BIN_BUILD_RESULT"
+#echo "$MES_ALREADY_FAIL"
+#echo "$MES_NOT_EXIST_SRC_FAIL"
+#echo "$MES_START_BUILDING"
+#echo "$MES_BUILDING_SUCC"
+#echo "$MES_BUILDING_FAIL"
+#echo "$MES_COPING_RESULT_SUCC"
+#echo "$MES_COPING_RESULT_FAIL"
+#exit 0;
+
+########## Checking not builded ###########
+if [ -d "$RESULT_DIR" ];
+then echo "$MES_ALREADY_FAIL"; return 1;
+fi
+
+########## Checking sources directory #####
+if ! [ -d "$SOURCES_DIR" ];
+then echo "$MES_NOT_EXIST_SRC_FAIL"; return 1;
+fi
+
+######### Building sbcl sources ###########
+echo "$MES_START_BUILDING"
+cd "$SOURCES_DIR"
+RESULT=1
+eval "$PROCESS_CMD && RESULT=0"
+
+######### Checking building sources ###########
+if [ $RESULT = 0 ] && [ -f "$BIN_BUILD_RESULT" ];
+then echo "$MES_BUILDING_SUCC";
+else echo "$MES_BUILDING_FAIL"; return 1;
+fi
+
+######## Coping results #######################
+echo "Coping results into $RESULT_DIR ..."
+mkdir --parents "$RESULT_DIR"
+RESULT=1
+sh install.sh && RESULT=0
+
+######### Checking coping building result #####
+if [ $RESULT = 0 ] && [ -d "$RESULT_DIR" ];
+then echo "$MES_COPING_RESULT_SUCC";
+else echo "$MES_COPING_RESULT_FAIL"; return 1;
 fi
 }
 

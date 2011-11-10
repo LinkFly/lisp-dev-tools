@@ -1,9 +1,8 @@
 #!/bin/sh
 
-######## Include scripts ###########
-. ./global-params.conf
-. ./tools.conf
-. ./utils.sh
+##### Include scripts #####
+. ./includes.sh
+. ./core.sh
 
 ######### Computing variables ######
 abs_path SOURCES

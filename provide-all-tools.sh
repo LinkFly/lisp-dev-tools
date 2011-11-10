@@ -1,7 +1,8 @@
 #!/bin/sh
 
-######### Include scripts ##########
-. ./tools.conf
+##### Include scripts #####
+. ./includes.sh
+. ./core.sh
 
 ######### Configuring variables ####
 PROVIDE_ARCHIVE=provide-archive.sh

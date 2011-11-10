@@ -38,7 +38,7 @@ Directory for results: $SBCL_DIR"
 
 MES_ALREADY="
 SBCL already exist.
-Run run-sbcl.sh for using, or run rebuild-sbcl.sh for retry build). 
+Run run-lisp.sh for using, or run rebuild-lisp.sh for retry build). 
 Directory: $SBCL_DIR
 
 OK.";

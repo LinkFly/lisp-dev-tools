@@ -1,9 +1,8 @@
 #!/bin/sh
 
 ##### Include scripts #####
-. ./global-params.conf
-. ./tools.conf
-. ./utils.sh
+. ./includes.sh
+. ./core.sh
 
 ######### Configuring and computing variables ####
 abs_path ARCHIVES
@@ -44,4 +43,3 @@ MES_CHECK_RES_SUCC="Extracted $ARCHIVE successful.
 extract_archive "$EXTRACT_CMD" "$ARCHIVE" "$RESULT_DIR" \
 "$MES_CHECK_ALREADY_FAIL" "$MES_CHECK_AR_FAIL" \
 "$MES_START_EXTRACTED" "$MES_CHECK_RES_FAIL" "$MES_CHECK_RES_SUCC"
- 

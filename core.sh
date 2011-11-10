@@ -38,3 +38,37 @@ OK."
 build_if_no "$FILE_LINK_NAME" "$UTILS_DIR" "$BUILD_SCRIPT" "$BUILDED_FILE" \
 "$MES_ALREADY" "$MESS_BUILDED_FAIL" "$MES_BUILDED_SUCC"
 }
+
+get_lisp_param () {
+REST_PARAM_PART="$1"
+echo $(get_spec_val $CUR_LISP _$REST_PARAM_PART)
+}
+
+########## Created general "LISP_" parameters ########## 
+local ALL_LISP_PARAMS="
+VERSION
+ARCH
+OS
+DIRNAME
+LISPS_DIR
+DIR
+LISPS_SOURCES
+SOURCES_DIRNAME
+LISPS_COMPILERS
+COMPILER_DIRNAME
+NO_BUILDING
+BUILD_CMD
+HOME_VAR_NAME
+BIN_DIR
+CORE_BIN_DIR
+BIN_BUILD_RESULT
+BIN_ARCHIVE
+BIN_URL
+SOURCE_ARCHIVE
+SOURCE_URL"
+
+for param in $ALL_LISP_PARAMS;
+do 
+    eval LISP_${param}="\"$(get_lisp_param $param)\""; 
+done
+##################### end filling LISP_ variables ##############

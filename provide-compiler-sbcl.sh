@@ -1,9 +1,8 @@
 #!/bin/sh
 
 ##### Include scripts #####
-. ./global-params.conf
-. ./tools.conf
-. ./utils.sh
+. ./includes.sh
+. ./core.sh
 
 ######### Configuring variables ####
 EXTRACT_COMPILER_SCRIPT=extract-compiler-sbcl.sh

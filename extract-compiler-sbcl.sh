@@ -1,9 +1,8 @@
 #!/bin/sh
 
 ##### Include scripts #####
-. ./global-params.conf
-. ./tools.conf
-. ./utils.sh
+. ./includes.sh
+. ./core.sh
 
 ######### Configuring and computing variables ####
 abs_path ARCHIVES
