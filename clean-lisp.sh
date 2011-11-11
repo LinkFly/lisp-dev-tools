@@ -5,4 +5,3 @@ cd $(dirname $0)
 ./remove-compiler-lisp.sh
 ./remove-archive-lisp-src.sh
 ./remove-archive-lisp-bin.sh
-

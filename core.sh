@@ -69,9 +69,13 @@ CORE_BIN_DIR
 BIN_BUILD_RESULT
 BIN_ARCHIVE
 BIN_URL
+RENAME_BIN_DOWNLOAD
+RENAME_SRC_DOWNLOAD
 SOURCE_ARCHIVE
 SOURCE_URL
-ARCHIVE_TYPE"
+RENAME_SRC_DOWNLOAD
+SRC_ARCHIVE_TYPE
+BIN_ARCHIVE_TYPE"
 
 for param in $ALL_LISP_PARAMS;
 do 
@@ -84,6 +88,10 @@ if [ $(downcase "$CUR_LISP") = "xcl" ];
 then
     echo "PATH=$UTILS:$PATH make && echo '(rebuild-lisp)' | ./xcl"; 
 fi
+if [ $(downcase "$CUR_LISP") = "ecl" ]; 
+then
+    echo "PATH=$UTILS:$PATH ./configure --prefix $LISP_DIR && PATH=$UTILS:$PATH $LISP_BUILD_CMD"; 
+fi
 if [ $(downcase "$CUR_LISP") = "sbcl" ];
 then 
     echo "PATH=$LISP_COMPILER_DIR/$LISP_BIN_DIR:$PATH $LISP_HOME_VAR_NAME=$LISP_COMPILER_DIR/$LISP_CORE_BIN_DIR $LISP_BUILD_CMD --prefix=$LISP_DIR"
@@ -93,10 +101,12 @@ fi
 get_install_lisp_cmd () {
 if [ $(downcase "$CUR_LISP") = "xcl" ]; then echo "cp xcl $LISP_DIR/xcl"; fi
 if [ $(downcase "$CUR_LISP") = "sbcl" ]; then echo "sh install.sh"; fi
+if [ $(downcase "$CUR_LISP") = "ecl" ]; then echo "$ECL_INSTALL_CMD"; fi
 }
 
 get_run_lisp_cmd () {
 if [ $(downcase "$CUR_LISP") = "xcl" ]; then echo "$LISP_DIR/$LISP_RELATIVE_PATH"; fi
+if [ $(downcase "$CUR_LISP") = "ecl" ]; then echo "$LISP_DIR/$LISP_RELATIVE_PATH"; fi
 if [ $(downcase "$CUR_LISP") = "sbcl" ]; 
 then echo "$LISP_DIR/$LISP_RELATIVE_PATH --core $LISP_DIR/lib/sbcl/sbcl.core"; fi
 }

@@ -1,0 +1,2 @@
+
+(DEFSYSTEM "sockets" :CLASS ASDF::PREBUILT-SYSTEM :LIB "SYS:sockets" :COMPONENTS ((:COMPILED-FILE "sockets"))) 

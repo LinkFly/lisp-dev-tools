@@ -1,0 +1,2 @@
+
+(DEFSYSTEM "defsystem" :CLASS ASDF::PREBUILT-SYSTEM :LIB "SYS:defsystem" :COMPONENTS ((:COMPILED-FILE "defsystem"))) 

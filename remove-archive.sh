@@ -18,11 +18,11 @@ ARCHIVE_PATH=$ARCHIVES/$ARCHIVE_NAME
 ######### Removing if is exist #####
 if [ -f $ARCHIVE_PATH ];
 then rm $ARCHIVE_PATH && echo "
-$ARCHIVE_NAME removed successful.
+Archive $ARCHIVE_NAME removed successful.
 
 OK.";
 else echo "
-$ARCHIVE_NAME already does not exist.
+Archive $ARCHIVE_NAME already does not exist.
 
 ALREADY."
 fi

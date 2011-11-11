@@ -1,3 +1,3 @@
 #!/bin/sh
 cd $(dirname $0)
-./remove-archive-lisp.sh src
+./remove-archive-lisp.sh bin

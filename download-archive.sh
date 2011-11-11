@@ -4,6 +4,7 @@ Running download-archive.sh ..."
 
 ######### Parameters ###############
 URL=$1
+RENAME_DOWNLOAD=$2
 
 ######## Include scripts ###########
 #. $(dirname $0)/global-params.conf
@@ -17,17 +18,22 @@ cd $(dirname $0)
 cd $TMP_PATH
 
 ######### Configuring variables ####
-PROVIDE_LOADER=provide-wget.sh
-LOADER=wget
+local PROVIDE_LOADER=provide-wget.sh
+local LOADER=wget
+local EXTRA_PARAMS
 
 ######### Computing variables ######
 abs_path PROVIDE_LOADER
 abs_path UTILS
 LOADER=$UTILS/$LOADER
 
+if ! [ "$RENAME_DOWNLOAD" = "" ];
+then EXTRA_PARAMS="--output-document $RENAME_DOWNLOAD"; 
+fi
+
 ########## Downloading #############
 $PROVIDE_LOADER
 echo "URL: $URL"
-$LOADER $URL
+$LOADER $URL $EXTRA_PARAMS
 
 echo "End running download-archive.sh"
