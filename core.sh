@@ -52,12 +52,16 @@ OS
 DIRNAME
 LISPS_DIR
 DIR
+RELATIVE_PATH
 LISPS_SOURCES
 SOURCES_DIRNAME
+LIB_DEPS
+NO_LIB_DEPS_HINT
 LISPS_COMPILERS
 COMPILER_DIRNAME
 NO_BUILDING
 BUILD_CMD
+INSTALL_CMD
 HOME_VAR_NAME
 BIN_DIR
 CORE_BIN_DIR
@@ -65,10 +69,48 @@ BIN_BUILD_RESULT
 BIN_ARCHIVE
 BIN_URL
 SOURCE_ARCHIVE
-SOURCE_URL"
+SOURCE_URL
+ARCHIVE_TYPE"
 
 for param in $ALL_LISP_PARAMS;
 do 
     eval LISP_${param}="\"$(get_lisp_param $param)\""; 
 done
 ##################### end filling LISP_ variables ##############
+
+get_build_lisp_cmd () {
+if [ $(downcase "$CUR_LISP") = "xcl" ]; 
+then
+    echo "PATH=$UTILS:$PATH make && echo '(rebuild-lisp)' | ./xcl"; 
+fi
+if [ $(downcase "$CUR_LISP") = "sbcl" ];
+then 
+    echo "PATH=$LISP_COMPILER_DIR/$LISP_BIN_DIR:$PATH $LISP_HOME_VAR_NAME=$LISP_COMPILER_DIR/$LISP_CORE_BIN_DIR $LISP_BUILD_CMD --prefix=$LISP_DIR"
+fi
+}
+
+get_install_lisp_cmd () {
+if [ $(downcase "$CUR_LISP") = "xcl" ]; then echo "cp xcl $LISP_DIR/xcl"; fi
+if [ $(downcase "$CUR_LISP") = "sbcl" ]; then echo "sh install.sh"; fi
+}
+
+get_run_lisp_cmd () {
+if [ $(downcase "$CUR_LISP") = "xcl" ]; then echo "$LISP_DIR/$LISP_RELATIVE_PATH"; fi
+if [ $(downcase "$CUR_LISP") = "sbcl" ]; 
+then echo "$LISP_DIR/$LISP_RELATIVE_PATH --core $LISP_DIR/lib/sbcl/sbcl.core"; fi
+}
+
+check_dep_libs () {
+local LIBS="$1"
+for lib in $LIBS; 
+do if ! [ -f $lib ];
+    then echo "
+ERROR: library $lib not found.
+$LISP_NO_LIB_DEPS_HINT
+
+FAILED."; exit 1;
+    fi
+done
+}
+    
+    

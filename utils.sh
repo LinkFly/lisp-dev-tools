@@ -40,6 +40,14 @@ else
 fi
 }
 
+subdir_to_dir () {
+local DIR=$1
+local SUBDIR=$(ls $DIR)
+for f in $(ls -A $DIR/$SUBDIR); 
+do mv $DIR/$SUBDIR/$f $DIR/$f; done
+rm -rf $DIR/$SUBDIR
+}
+
 uppercase () {
 echo $1 | tr 'a-z' 'A-Z'
 }
@@ -164,13 +172,18 @@ fi
 ######### Extracted archive file ####### 
 echo $MES_START_EXTRACTED
 RESULT=1
+local TMPPATH="$PWD"
+local CURPATH="$TMPPATH"
+mkdir --parents "$RESULT_DIR"
+cd "$RESULT_DIR"
 $EXTRACT_CMD $ARCHIVE && RESULT=0
-
-##### Checking of extracted #######
-if [ -d "$RESULT_DIR" ] && [ $RESULT = 0 ];
-then echo "$MES_CHECK_RES_SUCC"; 
+if [ $RESULT = 0 ] && [ "$(ls $RESULT_DIR)" != "" ]
+then 
+    echo "$MES_CHECK_RES_SUCC"; 
+    subdir_to_dir $RESULT_DIR
 else rm -rf "$RESULT_DIR"; echo "$MES_CHECK_RES_FAIL"; return 1;
 fi
+cd "$CURPATH"
 }
 
 
@@ -207,14 +220,14 @@ local MES_BUILDED_SUCC="$7"
 ########################
 
 local RESULT
-local FILE_REALPATH=$(readlink $UTILS_DIR/$FILE_LINK_NAME)
 local FILE_LINK=$UTILS_DIR/$FILE_LINK_NAME
+local FILE_REALPATH=$(readlink $UTILS_DIR/$FILE_LINK_NAME)
 
-if [ "$FILE_REALPATH" = "" ] && [ $(abs_path_p "$FILE_REALPATH") = "no" ];
+if [ "$FILE_REALPATH" != "" ] && [ $(abs_path_p "$FILE_REALPATH") = "no" ];
 then FILE_REALPATH=$UTILS_DIR/$FILE_REALPATH
 fi
 
-########## Building wget if does not exist #######
+########## Building if does not exist #######
 if [ $FILE_REALPATH ] && [ -f $FILE_REALPATH ]; 
   then echo "$MES_ALREADY";
   else
@@ -224,7 +237,7 @@ if [ $FILE_REALPATH ] && [ -f $FILE_REALPATH ];
     then
 	rm -f $FILE_LINK && ln -s $BUILDED_FILE $FILE_LINK;
 	echo "$MES_BUILDED_SUCC"
-    else echo "$MES_BUILDED_FAIL"
+    else echo "$MES_BUILDED_FAIL"; return 1;
     fi
 fi
 }
@@ -234,20 +247,22 @@ build () {
 local SOURCES_DIR="$1"
 local RESULT_DIR="$2"
 local PROCESS_CMD="$3"
-local BIN_BUILD_RESULT="$4"
-local MES_ALREADY_FAIL="$5"
-local MES_NOT_EXIST_SRC_FAIL="$6"
-local MES_START_BUILDING="$7"
-local MES_BUILDING_SUCC="$8"
-local MES_BUILDING_FAIL="$9"
-local MES_COPING_RESULT_SUCC="$10"
-local MES_COPING_RESULT_FAIL="$11"
- 
+local INSTALL_CMD="$4"
+local BIN_BUILD_RESULT="$5"
+local MES_ALREADY="$6"
+local MES_NOT_EXIST_SRC_FAIL="$7"
+local MES_START_BUILDING="$8"
+local MES_BUILDING_SUCC="$9"
+local MES_BUILDING_FAIL="$10"
+local MES_COPING_RESULT_SUCC="$11"
+local MES_COPING_RESULT_FAIL="$12"
+
 #echo "$SOURCES_DIR"
 #echo "$RESULT_DIR"
 #echo "$PROCESS_CMD"
+#echo "$INSTALL_CMD"
 #echo "$BIN_BUILD_RESULT"
-#echo "$MES_ALREADY_FAIL"
+#echo "$MES_ALREADY"
 #echo "$MES_NOT_EXIST_SRC_FAIL"
 #echo "$MES_START_BUILDING"
 #echo "$MES_BUILDING_SUCC"
@@ -258,7 +273,7 @@ local MES_COPING_RESULT_FAIL="$11"
 
 ########## Checking not builded ###########
 if [ -d "$RESULT_DIR" ];
-then echo "$MES_ALREADY_FAIL"; return 1;
+then echo "$MES_ALREADY"; return 0;
 fi
 
 ########## Checking sources directory #####
@@ -282,7 +297,7 @@ fi
 echo "Coping results into $RESULT_DIR ..."
 mkdir --parents "$RESULT_DIR"
 RESULT=1
-sh install.sh && RESULT=0
+eval "$INSTALL_CMD && RESULT=0"
 
 ######### Checking coping building result #####
 if [ $RESULT = 0 ] && [ -d "$RESULT_DIR" ];
@@ -308,8 +323,14 @@ local TMP_TOOL_DIR="$2"
 local EXTRACT_SCRIPT="$3"
 local RESULT_DIR="$4"
 local COMPILING_EXTRA_PARAMS="$5"
+local MES_ARCHIVE_CHECK_FAIL="$6"
 
 local START_DIR=$PWD
+
+##### Checking archive #########
+if ! [ -f "$ARCHIVE_PATH" ] || [ "$ARCHIVE_PATH" = "" ];
+then echo "$MES_ARCHIVE_CHECK_FAIL"; return 1;
+fi
 
 ################################
 rm -rf $TMP_TOOL_DIR

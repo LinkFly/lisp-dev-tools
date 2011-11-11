@@ -1,0 +1,25 @@
+#dir
+/usr/include/gtk-3.0
+
+#files
+/usr/lib/libgdk-3.a
+/usr/lib/libgdk-3.so
+/usr/lib/libgtk-3.a
+/usr/lib/libgtk-3.so
+
+#######################
+sudo aptitude -y install libgtk-3-dev libXpm-dev libjpeg-dev libgif-dev libungif4-dev libtiff-dev
+
+##############################
+For compilation XCL required:
+### For compilation gmp
+m4
+###
+sudo aptitude -y install m4
+##########
+
+######## For compilation self XCL
+
+### For ubuntu ###
+sudo ln -s /usr/lib/x86_64-linux-gnu/libpthread.so /usr/lib/libpthread.so
+

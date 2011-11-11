@@ -12,7 +12,6 @@ PROVIDE_ARCHIVE_SCRIPT=provide-archive.sh
 
 ######### Computing variables ######
 abs_path PROVIDE_ARCHIVE_SCRIPT
-abs_path ARCHIVES
 
 ######## Checking  parameters ######
 ARGS="$SRC_OR_BIN"
