@@ -1,4 +1,5 @@
 #!/bin/sh
+cd $(dirname $0)
 
 ##### Include scripts #####
 . ./includes.sh
@@ -22,17 +23,25 @@ abs_path PROVIDE_BUILD_SCRIPT
 abs_path PROVIDE_PREBUILD_SCRIPT
 abs_path SOURCES
 
+local BUILD_OR_PREBUILD_SCRIPT
+local PROVIDE_SELF_COMPILER
 local CUR_LISP_UP=$(uppercase $CUR_LISP)
+
 if [ "$LISP_NO_BUILDING" = "yes" ];
 then BUILD_OR_PREBUILD_SCRIPT=$PROVIDE_PREBUILD_SCRIPT;
 else BUILD_OR_PREBUILD_SCRIPT=$PROVIDE_BUILD_SCRIPT;
+fi
+
+if [ "$LISP_SELF_COMPILATION_P" = "yes" ];
+then PROVIDE_SELF_COMPILER="$PROVIDE_ARCHIVE_LISP_BIN && $PROVIDE_COMPILER_LISP";
+else PROVIDE_SELF_COMPILER="echo 'nop' > /dev/null";
 fi
 
 ######## Download compiler, get compiler, download ################
 ######## sources, get sources and building lisp if needed #########
 DIR=$LISP_DIR
 
-PROCESS_SCRIPT="$PROVIDE_ARCHIVE_LISP_BIN && $PROVIDE_COMPILER_LISP && $PROVIDE_ARCHIVE_LISP_SOURCE && $PROVIDE_SOURCES_LISP && $BUILD_OR_PREBUILD_SCRIPT"
+PROCESS_SCRIPT="$PROVIDE_SELF_COMPILER && $PROVIDE_ARCHIVE_LISP_SOURCE && $PROVIDE_SOURCES_LISP && $BUILD_OR_PREBUILD_SCRIPT"
 
 MES_START_PROCESS="
 Providing $CUR_LISP_UP $LISP_DIRNAME ...
