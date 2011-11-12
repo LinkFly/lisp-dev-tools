@@ -13,4 +13,4 @@ ERROR: $(uppercase $CUR_LISP) $LISP_DIR/$LISP_RELATIVE_PATH not found (please ru
 FAILED."; return 1;
 fi
 
-eval "$(get_run_lisp_cmd) $@"
+eval "XDG_CONFIG_DIRS=$PWD/conf $(get_run_lisp_cmd) $@"
