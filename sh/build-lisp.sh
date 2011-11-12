@@ -1,8 +1,6 @@
 #!/bin/sh
-
-##### Include scripts #####
+cd $(dirname $0)/sh 
 . ./includes.sh
-. ./core.sh
 
 ########## Computing variables #####
 abs_path LISP_DIR

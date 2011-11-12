@@ -1,9 +1,6 @@
 #!/bin/sh
-
-######## Include scripts ###########
-cd $(dirname $0)
+cd $(dirname $0)/sh 
 . ./includes.sh
-. ./core.sh
 
 ######## Configuring variables #####
 BUILD_SCRIPT=build-m4.sh

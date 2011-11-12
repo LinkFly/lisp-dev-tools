@@ -1,8 +1,6 @@
 #!/bin/sh
-
-##### Include scripts #####
+cd $(dirname $0)/sh 
 . ./includes.sh
-. ./core.sh
 
 ######### Configuring and computing variables ####
 LISPS_COMPILERS=$COMPILERS/$LISP_LISPS_COMPILERS

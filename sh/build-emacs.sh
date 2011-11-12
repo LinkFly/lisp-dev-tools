@@ -1,6 +1,5 @@
 #!/bin/sh
-
-### Includes ###
+cd $(dirname $0)/sh 
 . ./includes.sh
 
 ######### Computing variables ####

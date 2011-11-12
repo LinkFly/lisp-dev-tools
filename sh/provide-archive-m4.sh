@@ -1,6 +1,5 @@
 #!/bin/sh
-
-##### Include scripts #####
+cd $(dirname $0)/sh 
 . ./includes.sh
 
 ######### Configuring variables ####

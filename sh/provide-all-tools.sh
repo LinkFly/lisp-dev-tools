@@ -1,8 +1,6 @@
 #!/bin/sh
-
-##### Include scripts #####
+cd $(dirname $0)/sh 
 . ./includes.sh
-. ./core.sh
 
 ######### Configuring variables ####
 PROVIDE_ARCHIVE=provide-archive.sh

@@ -1,8 +1,6 @@
 #!/bin/sh
-
-### Includes ###
+cd $(dirname $0)/sh 
 . ./includes.sh
-. ./core.sh
 
 ### Call build_tool ###
 local ARCHIVE_PATH=$PREFIX/$WGET_ARCHIVE

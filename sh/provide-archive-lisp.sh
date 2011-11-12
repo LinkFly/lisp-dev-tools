@@ -1,9 +1,6 @@
 #!/bin/sh
-cd $(dirname $0)
-
-##### Include scripts #####
+cd $(dirname $0)/sh 
 . ./includes.sh
-. ./core.sh
 
 ##### Parameters #####
 SRC_OR_BIN=$1
