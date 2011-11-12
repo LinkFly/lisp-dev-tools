@@ -1,4 +1,7 @@
 #!/bin/sh
+cd $(dirname $0)
+. ./includes.sh
+
 echo "\nRunning provide-archive.sh ..."
 
 ######## Correcting path $$$$$$$$$$$
@@ -10,18 +13,8 @@ local ARCHIVE_NAME=$1
 local URL=$2
 local RENAME_DOWNLOAD=$3
 
-######## Include scripts ###########
-. ./includes.sh
-. ./core.sh
-
 ######### Configuring variables ####
-DOWNLOAD_SCRIPT=download-archive.sh
-
-######### Computing variables ######
-abs_path DOWNLOAD_SCRIPT
-abs_path TMP_DOWNLOAD
-abs_path ARCHIVES
-
+DOWNLOAD_SCRIPT=$SCRIPTS_DIR/download-archive.sh
 ARCHIVE_PATH=$ARCHIVES/$ARCHIVE_NAME
 TMP_ARCHIVE=$TMP_DOWNLOAD/$ARCHIVE_NAME
 

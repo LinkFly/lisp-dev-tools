@@ -2,11 +2,6 @@
 cd $(dirname $0)
 . ./includes.sh
 
-######### Computing variables ####
-abs_path ARCHIVES
-abs_path UTILS
-abs_path TMP
-
 ### Call build_tool ###
 local ARCHIVE_PATH=$ARCHIVES/$EMACS_ARCHIVE
 local TMP_TOOL_DIR=$TMP/emacs-compiling

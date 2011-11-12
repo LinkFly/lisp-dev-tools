@@ -199,6 +199,23 @@ fi
 
 }
 
+file_is_exist_p () {
+local FILE_LINK_NAME="$1"
+local UTILS_DIR="$2"
+
+local FILE_REALPATH=$(readlink $UTILS_DIR/$FILE_LINK_NAME)
+
+if [ "$FILE_REALPATH" != "" ] && [ $(abs_path_p "$FILE_REALPATH") = "no" ];
+then FILE_REALPATH=$UTILS_DIR/$FILE_REALPATH
+fi
+
+########## Building if does not exist #######
+if [ $FILE_REALPATH ] && [ -f $FILE_REALPATH ]; 
+then echo "yes"; 
+else echo "no";
+fi
+}
+
 build_if_no () {
 ###### Parameters ######
 local FILE_LINK_NAME="$1"
@@ -210,16 +227,10 @@ local MES_BUILDED_FAIL="$6"
 local MES_BUILDED_SUCC="$7"
 ########################
 
-local RESULT
 local FILE_LINK=$UTILS_DIR/$FILE_LINK_NAME
-local FILE_REALPATH=$(readlink $UTILS_DIR/$FILE_LINK_NAME)
-
-if [ "$FILE_REALPATH" != "" ] && [ $(abs_path_p "$FILE_REALPATH") = "no" ];
-then FILE_REALPATH=$UTILS_DIR/$FILE_REALPATH
-fi
 
 ########## Building if does not exist #######
-if [ $FILE_REALPATH ] && [ -f $FILE_REALPATH ]; 
+if [ "$(file_is_exist_p $FILE_LINK_NAME $UTILS_DIR)" = "yes" ]
   then echo "$MES_ALREADY";
   else
     RESULT=1;
@@ -262,6 +273,7 @@ local MES_COPING_RESULT_FAIL="$12"
 #echo "$MES_COPING_RESULT_FAIL"
 #exit 0;
 
+local CURPATH="$PWD"
 ########## Checking not builded ###########
 if [ -d "$RESULT_DIR" ];
 then echo "$MES_ALREADY"; return 0;
@@ -274,11 +286,10 @@ fi
 
 ######### Building sbcl sources ###########
 echo "$MES_START_BUILDING"
-local CURPATH="$PWD"
 cd "$SOURCES_DIR"
 RESULT=1
 eval "$PROCESS_CMD && RESULT=0"
-cd "$CURPATH"
+
 
 ######### Checking building sources ###########
 if [ $RESULT = 0 ] && [ -f "$BIN_BUILD_RESULT" ];
@@ -297,6 +308,7 @@ if [ $RESULT = 0 ] && [ -d "$RESULT_DIR" ];
 then echo "$MES_COPING_RESULT_SUCC";
 else echo "$MES_COPING_RESULT_FAIL"; return 1;
 fi
+cd "$CURPATH"
 }
 
 change_param () {

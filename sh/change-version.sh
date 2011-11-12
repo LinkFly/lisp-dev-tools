@@ -1,9 +1,7 @@
 #!/bin/sh
-
-##### Include scripts #####
+cd $(dirname $0)
 . ./includes.sh
-. ./core.sh
 
 local LISP_VERSION_PARAM=$(uppercase $CUR_LISP)_VERSION
-$(dirname $0)/change-default-param.sh $LISP_VERSION_PARAM $1 tools.conf
+./change-default-param.sh $LISP_VERSION_PARAM $1 $SCRIPTS_DIR/conf/tools.conf && echo "Current lisp version: $(./get-default-param.sh $LISP_VERSION_PARAM)"
 

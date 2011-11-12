@@ -1,6 +1,8 @@
 #!/bin/sh
+CUR_PATH=$PWD
 cd $(dirname $0)
 . ./includes.sh
+cd $CUR_PATH
 
 echo "
 Running download-archive.sh ..."
@@ -9,15 +11,10 @@ Running download-archive.sh ..."
 URL=$1
 RENAME_DOWNLOAD=$2
 
-######### Configuring variables ####
-local PROVIDE_LOADER=provide-wget.sh
-local LOADER=wget
+######### Configuring and computing variables ####
+local PROVIDE_LOADER=$SCRIPTS_DIR/provide-wget.sh
+local LOADER=$UTILS/wget
 local EXTRA_PARAMS
-
-######### Computing variables ######
-abs_path PROVIDE_LOADER
-abs_path UTILS
-LOADER=$UTILS/$LOADER
 
 if ! [ "$RENAME_DOWNLOAD" = "" ];
 then EXTRA_PARAMS="--output-document $RENAME_DOWNLOAD"; 
@@ -25,7 +22,6 @@ fi
 
 ########## Downloading #############
 $PROVIDE_LOADER
-echo "URL: $URL"
+echo "\nURL: $URL"
 $LOADER $URL $EXTRA_PARAMS
-
 echo "End running download-archive.sh"

@@ -1,8 +1,6 @@
 #!/bin/sh
-
-##### Include scripts #####
+cd $(dirname $0)
 . ./includes.sh
-. ./core.sh
 
 local D=\$
 local TMP=$1

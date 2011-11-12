@@ -4,12 +4,27 @@ provide_tool () {
 ### Parameters ###
 local TOOL_NAME=$1
 local BUILD_SCRIPT=$2
+local PROVIDE_ARCHIVE_SCRIPT=$3
 
 local D=\$
 local TOOL_DIR=$(eval echo $D$(uppercase $TOOL_NAME)_TOOL_DIR)
 local TOOL_RELATIVE_DIR=$(eval echo $D$(uppercase $TOOL_NAME)_RELATIVE_DIR)
+local TOOL_ARCHIVE=$(eval echo $D$(uppercase $TOOL_NAME)_ARCHIVE)
 
-abs_path UTILS
+#### Providing archive if needed ####
+if [ "$(file_is_exist_p $TOOL_NAME $UTILS)" = "no" ]
+then if ! [ -f $ARCHIVES/$TOOL_ARCHIVE ];
+     then if ! [ "$PROVIDE_ARCHIVE_SCRIPT" = "" ]; 
+	  then $PROVIDE_ARCHIVE_SCRIPT; 
+	  else echo "
+ERROR: Not arhive and not PROVIDE_ARHCHIVE_SCRIPT argument.
+Call provide_tool must be with it (third) of argument.
+
+FAILED."; exit 1;
+	  fi
+     fi
+fi
+#########################################
 
 ### Call build_if_no ###
 FILE_LINK_NAME=$TOOL_NAME
@@ -59,6 +74,7 @@ LISPS_COMPILERS
 COMPILER_DIRNAME
 NO_BUILDING_P
 SELF_COMPILATION_P
+PREBUILD_CMD
 BUILD_CMD
 INSTALL_CMD
 HOME_VAR_NAME
@@ -88,7 +104,7 @@ then
 fi
 if [ $(downcase "$CUR_LISP") = "ecl" ]; 
 then
-    echo "PATH=$UTILS:$PATH ./configure --prefix $LISP_DIR && PATH=$UTILS:$PATH $LISP_BUILD_CMD"; 
+    echo "$LISP_PREBUILD_CMD; PATH=$UTILS:$PATH ./configure --prefix $LISP_DIR && PATH=$UTILS:$PATH $LISP_BUILD_CMD"; 
 fi
 if [ $(downcase "$CUR_LISP") = "sbcl" ];
 then 

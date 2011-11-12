@@ -3,10 +3,7 @@ cd $(dirname $0)
 . ./includes.sh
 
 ######### Configuring variables ####
-PROVIDE_ARCHIVE_SCRIPT=provide-archive.sh
-
-######### Computing variables ######
-abs_path PROVIDE_ARCHIVE_SCRIPT
+PROVIDE_ARCHIVE_SCRIPT=$SCRIPTS_DIR/provide-archive.sh
 
 ######## Providing sbcl archive if needed #########
 FILE=$ARCHIVES/$M4_ARCHIVE
@@ -24,7 +21,7 @@ Directory with archives: $ARCHIVES
 OK."
 
 MES_SUCCESS="
-Providing emacs archive $M4_ARCHIVE successful.
+Providing M4 archive $M4_ARCHIVE successful.
 Directory with archives: $ARCHIVES
 
 OK."

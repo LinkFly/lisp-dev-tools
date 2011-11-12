@@ -3,13 +3,17 @@ cd $(dirname $0)
 . ./includes.sh
 
 ######### Configuring variables #######
-BUILD_SCRIPT=build-lisp.sh
+local BUILD_SCRIPT=$SCRIPTS_DIR/build-lisp.sh
+local PROVIDE_M4_SCRIPT=$SCRIPTS_DIR/provide-m4.sh
 
 ########## Computing variables ########
 abs_path LISP_DIR
-abs_path BUILD_SCRIPT
 
 local CUR_LISP_UP=$(uppercase $CUR_LISP)
+
+###### Provide m4 ######
+$PROVIDE_M4_SCRIPT
+
 ########## Building sbcl if needed ####
 DIR=$LISP_DIR
 
@@ -32,8 +36,8 @@ Directory: $LISP_DIR
 OK."
 
 MES_FAILED="
-Providing builded $CUR_LISP_UP $LISP_DIRNAME failed.
-Directory that has not been created: $LISP_DIR
+ERROR: Providing builded $CUR_LISP_UP $LISP_DIRNAME failed.
+Directory (not been created): $LISP_DIR
 
 FAILED."
 

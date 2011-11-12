@@ -14,10 +14,7 @@ MES_FAILED="ERROR: checking params failed - first argument must be \"src\" or \"
 check_args "$ARGS" "$ARGS_NEED" "$MES_CHECK_START" "$MES_SUCCESS" "$MES_FAILED" || return 1
 
 ######### Configuring variables ####
-local PROVIDE_ARCHIVE_SCRIPT=provide-archive.sh
-
-######### Computing variables ######
-abs_path PROVIDE_ARCHIVE_SCRIPT
+local PROVIDE_ARCHIVE_SCRIPT=$SCRIPTS_DIR/provide-archive.sh
 
 ######## Computing variables #######
 if [ $SRC_OR_BIN = "src" ];

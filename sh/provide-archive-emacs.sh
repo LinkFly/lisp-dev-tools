@@ -3,11 +3,7 @@ cd $(dirname $0)
 . ./includes.sh
 
 ######### Configuring variables ####
-PROVIDE_ARCHIVE_SCRIPT=provide-archive.sh
-
-######### Computing variables ######
-abs_path PROVIDE_ARCHIVE_SCRIPT
-abs_path ARCHIVES
+PROVIDE_ARCHIVE_SCRIPT=$SCRIPTS_DIR/provide-archive.sh
 
 ######## Providing sbcl archive if needed #########
 FILE=$ARCHIVES/$EMACS_ARCHIVE

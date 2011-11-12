@@ -3,15 +3,11 @@ cd $(dirname $0)
 . ./includes.sh
 
 ######### Configuring variables ####
-EXTRACT_SOURCES_SCRIPT=extract-sources-lisp.sh
+EXTRACT_SOURCES_SCRIPT=$SCRIPTS_DIR/extract-sources-lisp.sh
+LISPS_SOURCES=$SOURCES/$LISP_LISPS_SOURCES
+LISP_SOURCES_PATH=$LISPS_SOURCES/$LISP_SOURCES_DIRNAME
+CUR_LISP_UP=$(uppercase $CUR_LISP)
 
-######### Computing variables ####
-abs_path EXTRACT_SOURCES_SCRIPT
-abs_path SOURCES
-local LISPS_SOURCES=$SOURCES/$LISP_LISPS_SOURCES
-local LISP_SOURCES_PATH=$LISPS_SOURCES/$LISP_SOURCES_DIRNAME
-
-local CUR_LISP_UP=$(uppercase $CUR_LISP)
 ######## Build lisp if needed #########
 DIR=$LISP_SOURCES_PATH
 

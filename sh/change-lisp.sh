@@ -1,3 +1,5 @@
 #!/bin/sh
+cd $(dirname $0)
+. ./includes.sh
 
-$(dirname $0)/change-default-param.sh CUR_LISP $1 tools.conf
+./change-default-param.sh CUR_LISP $1 $SCRIPTS_DIR/conf/tools.conf && echo "Current lisp: $CUR_LISP"

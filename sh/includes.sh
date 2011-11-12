@@ -6,5 +6,10 @@
 . ./include/absolutized-pathes.sh
 . ./conf/tools.conf
 . ./include/correct-params.sh
-. ./core.sh 
+. ./core.sh
+SCRIPTS_DIR=sh
+abs_path SCRIPTS_DIR
+
+
+
 

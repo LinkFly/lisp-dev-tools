@@ -39,26 +39,26 @@ Directory (contained sources): $LISP_SOURCES_DIR"
 
 local MES_BUILDING_SUCC="
 Building $CUR_LISP_UP from $LISP_SOURCES_DIRNAME successful.
-Directory contained sources: $LISP_SOURCES_DIR
+Directory (contained sources): $LISP_SOURCES_DIR
 
 OK."
 
 local MES_BUILDING_FAIL="
 ERROR: Building $CUR_LISP_UP from $LISP_SOURCES_DIRNAME failed.
-Directory contained sources: $LISP_SOURCES_DIR
+Directory (contained sources): $LISP_SOURCES_DIR
 
 FAILED."
 
 local MES_COPING_RESULT_SUCC="
 Coping building $CUR_LISP_UP results into $LISP_DIR successful.
-Directory contained sources: $LISP_SOURCES_DIR
-Directory with build results: $LISP_DIR
+Directory (contained sources): $LISP_SOURCES_DIR
+Directory (with build results): $LISP_DIR
 
 OK."
 
 local MES_COPING_RESULT_FAIL="
 ERROR: Coping building $CUR_LISP_UP results into $LISP_DIR failed.
-Directory contained sources: $LISP_SOURCES_DIR
+Directory (contained sources): $LISP_SOURCES_DIR
 
 FAILED."
 

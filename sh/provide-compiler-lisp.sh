@@ -1,19 +1,15 @@
 #!/bin/sh
-
-##### Include scripts #####
+cd $(dirname $0)
 . ./includes.sh
-. ./core.sh
 
 ######### Configuring variables ####
-EXTRACT_COMPILER_SCRIPT=extract-compiler-lisp.sh
+EXTRACT_COMPILER_SCRIPT=$SCRIPTS_DIR/extract-compiler-lisp.sh
 
 ######### Computing variables ####
-abs_path EXTRACT_COMPILER_SCRIPT
-abs_path COMPILERS
 LISPS_COMPILERS=$COMPILERS/$LISP_LISPS_COMPILERS
 LISP_COMPILER_PATH=$LISPS_COMPILERS/$LISP_COMPILER_DIRNAME
 
-local CUR_LISP_UP=$(uppercase $CUR_LISP)
+CUR_LISP_UP=$(uppercase $CUR_LISP)
 
 ######## Providing LISP binary for compilation if needed #########
 DIR=$LISP_COMPILER_PATH
