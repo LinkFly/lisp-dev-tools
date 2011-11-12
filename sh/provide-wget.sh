@@ -1,8 +1,6 @@
 #!/bin/sh
-
-######## Include scripts ###########
-. $(dirname $0)/includes.sh
-. $(dirname $0)/core.sh
+cd $(dirname $0)
+. ./includes.sh
 
 ######## Configuring variables #####
 BUILD_SCRIPT=build-wget.sh

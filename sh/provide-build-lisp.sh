@@ -1,5 +1,5 @@
 #!/bin/sh
-cd $(dirname $0)/sh 
+cd $(dirname $0)
 . ./includes.sh
 
 ######### Configuring variables #######

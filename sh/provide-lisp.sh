@@ -1,9 +1,6 @@
 #!/bin/sh
 cd $(dirname $0)
-
-##### Include scripts #####
 . ./includes.sh
-. ./core.sh
 
 ######### Configuring variables ####
 local PROVIDE_ARCHIVE_LISP_BIN=provide-archive-lisp-bin.sh
