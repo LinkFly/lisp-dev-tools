@@ -1,1 +1,1 @@
-Scripts for download and configuring common lisp development tools.
+Linux shell scripts for automatization download, compilation and configuring lisp development tools (emacs, slime, sbcl and other lisps ...)

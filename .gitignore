@@ -3,6 +3,7 @@ archives/*
 lisp/*
 compilers/*
 sources/*
+lisp-libs/*
 tmp/*
 tmp-downloads/*
 utils/tools/*
