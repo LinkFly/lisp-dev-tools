@@ -163,6 +163,7 @@ local MES_CHECK_AR_FAIL="$5"
 local MES_START_EXTRACTED="$6"
 local MES_CHECK_RES_FAIL="$7"
 local MES_CHECK_RES_SUCC="$8"
+local ARCHIVE_LOWERING_P=$9
 
 #### Other variables ####
 local RESULT
@@ -181,13 +182,15 @@ fi
 echo $MES_START_EXTRACTED
 RESULT=1
 local CURPATH="$PWD"
+
 mkdir --parents "$RESULT_DIR"
 cd "$RESULT_DIR"
 $EXTRACT_CMD $ARCHIVE && RESULT=0
 if [ $RESULT = 0 ] && [ "$(ls $RESULT_DIR)" != "" ]
 then 
     echo "$MES_CHECK_RES_SUCC"; 
-    subdir_to_dir $RESULT_DIR
+    if [ "$ARCHIVE_LOWERING_P" = "yes" ];
+    then subdir_to_dir $RESULT_DIR; fi
 else rm -rf "$RESULT_DIR"; echo "$MES_CHECK_RES_FAIL"; return 1;
 fi
 cd "$CURPATH"
@@ -205,7 +208,7 @@ local RESULT
 RESULT=1
 if [ -d "$DIR" ];
 then 
-    rm -r "$DIR" && RESULT=0;
+    rm -rf "$DIR" && RESULT=0;
     if ( ! [ -d $DIR ] ) && [ $RESULT = 0 ];
     then echo "$MES_SUCC";
     else echo "$MES_FAIL"; return 1;
@@ -304,7 +307,9 @@ echo "$MES_START_BUILDING"
 cd "$SOURCES_DIR"
 RESULT=1
 eval "$PROCESS_CMD && RESULT=0"
-
+#echo "hererrrrrrrrrrrrrrrrrrR"
+#echo "$BIN_BUILD_RESULT"
+#exit 1;
 ######### Checking building sources ###########
 if [ $RESULT = 0 ] && [ -f "$BIN_BUILD_RESULT" ];
 then echo "$MES_BUILDING_SUCC";
@@ -312,7 +317,7 @@ else echo "$MES_BUILDING_FAIL"; return 1;
 fi
 
 ######## Coping results #######################
-echo "Coping results into $RESULT_DIR ..."
+echo "\nCoping results into $RESULT_DIR ..."
 mkdir --parents "$RESULT_DIR"
 RESULT=1
 eval "$INSTALL_CMD && RESULT=0" 

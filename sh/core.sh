@@ -202,6 +202,8 @@ SOURCE_URL
 RENAME_SRC_DOWNLOAD
 SRC_ARCHIVE_TYPE
 BIN_ARCHIVE_TYPE
+SRC_ARCHIVE_LOWERING_P
+BIN_ARCHIVE_LOWERING_P
 DEPS_ON_TOOLS"
 
 for param in $ALL_LISP_PARAMS;
@@ -211,6 +213,7 @@ done
 ##################### end filling LISP_ variables ##############
 
 get_build_lisp_cmd () {
+abs_path LISP_DIR
 if [ $(downcase "$CUR_LISP") = "xcl" ]; 
 then
     echo "PATH=$UTILS:$PATH make && echo '(rebuild-lisp)' | ./xcl"; 
@@ -229,13 +232,24 @@ if [ $(downcase "$CUR_LISP") = "sbcl" ];
 then 
     echo "PATH=$LISP_COMPILER_DIR/$LISP_BIN_DIR:$PATH $LISP_HOME_VAR_NAME=$LISP_COMPILER_DIR/$LISP_CORE_BIN_DIR $LISP_BUILD_CMD --prefix=$LISP_DIR"
 fi
+if [ $(downcase "$CUR_LISP") = "cmucl" ];
+then 
+    echo "cd ../;PATH=$LISP_COMPILER_DIR/$LISP_BIN_DIR:$PATH src/tools/build.sh -C \"\" -o lisp";
+fi
 }
 
 get_install_lisp_cmd () {
-if [ $(downcase "$CUR_LISP") = "xcl" ]; then echo "cp xcl $LISP_DIR/xcl"; fi
-if [ $(downcase "$CUR_LISP") = "sbcl" ]; then echo "sh install.sh"; fi
+abs_path LISP_DIR
+
 if [ $(downcase "$CUR_LISP") = "ecl" ] || [ $(downcase "$CUR_LISP") = "clisp" ] || [ $(downcase "$CUR_LISP") = "mkcl" ];
 then echo "$LISP_INSTALL_CMD"; fi
+
+if [ $(downcase "$CUR_LISP") = "xcl" ]; then echo "cp xcl $LISP_DIR/xcl"; fi
+if [ $(downcase "$CUR_LISP") = "sbcl" ]; then echo "sh install.sh"; fi
+
+if [ $(downcase "$CUR_LISP") = "cmucl" ]; 
+then echo "cp -r $SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME/../build-4 $LISP_DIR/build-4";
+fi
 }
 
 get_run_lisp_cmd () {
@@ -247,6 +261,9 @@ then echo "$LISP_DIR/$LISP_RELATIVE_PATH"; fi
 
 if [ $(downcase "$CUR_LISP") = "sbcl" ]; 
 then echo "$LISP_DIR/$LISP_RELATIVE_PATH --core $LISP_DIR/lib/sbcl/sbcl.core"; fi
+
+if [ $(downcase "$CUR_LISP") = "cmucl" ]; 
+then echo "$LISP_DIR/$LISP_RELATIVE_PATH"; fi
 }
 
 check_dep_libs () {

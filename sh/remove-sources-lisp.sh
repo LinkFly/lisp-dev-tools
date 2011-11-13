@@ -13,7 +13,7 @@ local CUR_LISP_UP=$(uppercase $CUR_LISP)
 DIR=$SOURCES_DIR
 MES_SUCC="
 $CUR_LISP_UP sources $LISP_SOURCES_DIRNAME removed successful.
-Directory (with sources): $LISPS_SOURCES_PATH
+Directory (with lisps sources): $LISPS_SOURCES_PATH
 
 OK."
 
@@ -24,17 +24,11 @@ Directory with (with sources): $LISPS_SOURCES_PATH
 FAILED."
 
 MES_ABSENCE="
-$CUR_LISP_UP sources $LISP_COMPILER_DIRNAME already does not exist.
-Directory (with sources): $LISPS_SOURCES_PATH
+$CUR_LISP_UP sources $LISP_SOURCES_DIRNAME already does not exist.
+Directory (with lisps sources): $LISPS_SOURCES_PATH
 
 ALREADY."
 
 remove_dir "$DIR" "$MES_SUCC" "$MES_FAIL" "$MES_ABSENCE"
 
-#if [ -d $LISPS_SOURCES_PATH/$SBCL_SOURCES_DIRNAME ];
-#then rm -r $LISPS_SOURCES_PATH/$SBCL_SOURCES_DIRNAME && echo "$SBCL_SOURCES_DIRNAME removed successful.
-#Directory: $LISPS_SOURCES_PATH/$SBCL_SOURCES_DIRNAME";
-#else echo "$SBCL_SOURCES_DIRNAME removed failed.
-#Directory: $LISPS_SOURCES_PATH/$SBCL_SOURCES_DIRNAME";
-#fi
 
