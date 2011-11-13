@@ -1,4 +1,2 @@
 #!/bin/sh
-cd $(dirname $0)
-. ./includes.sh
-build_tool autoconf
+$(dirname $0)/build-tool.sh autoconf

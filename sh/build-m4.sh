@@ -1,4 +1,2 @@
 #!/bin/sh
-cd $(dirname $0)
-. ./includes.sh
-build_tool m4
+$(dirname $0)/build-tool.sh m4

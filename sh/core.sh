@@ -3,9 +3,8 @@
 provide_tool () {
 ### Parameters ###
 local TOOL_NAME=$1
-local BUILD_SCRIPT=$2
-local PROVIDE_ARCHIVE_SCRIPT=$3
 
+TOOL_NAME=$(downcase $TOOL_NAME)
 local D=\$
 local TOOL_DIR=$(get_spec_val $TOOL_NAME _TOOL_DIR)
 local TOOL_RELATIVE_DIR=$(get_spec_val $TOOL_NAME _RELATIVE_DIR)
@@ -23,7 +22,7 @@ then
     for dep in $TOOL_DEPS_ON_TOOLS; 
     do
 	echo "Resolving dependency: $dep"
-	$SCRIPTS_DIR/provide-tool.sh $dep || exit 1;
+	provide_tool "$dep" || exit 1;
     done
 fi
 
@@ -31,7 +30,7 @@ fi
 if [ "$(file_is_exist_p $TOOL_NAME $UTILS)" = "no" ]
 then if ! [ -f $ARCHIVES/$TOOL_ARCHIVE ];
      then if ! [ "$PROVIDE_ARCHIVE_SCRIPT" = "" ]; 
-	  then $PROVIDE_ARCHIVE_SCRIPT; 
+	  then provide_archive_tool "$TOOL_NAME"
 	  else echo "
 ERROR: Not arhive and not PROVIDE_ARHCHIVE_SCRIPT argument.
 Call provide_tool must be with it (third) of argument.
@@ -60,7 +59,7 @@ done
 ### Call build_if_no ###
 FILE_LINK_NAMES=$TOOL_PROVIDE_FILES
 UTILS_DIR=$UTILS
-BUILD_CMD="PATH=$UTILS:$PATH $BUILD_SCRIPT"
+BUILD_CMD="PATH=$UTILS:$PATH; build_tool $TOOL_NAME"
 BUILDED_FILES="$BUILDED_FILES"
 MES_ALREADY="
 Tool $TOOL_NAME found in $UTILS
