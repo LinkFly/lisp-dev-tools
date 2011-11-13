@@ -51,8 +51,8 @@ done
 local BUILDED_FILES=""
 for link in $TOOL_PROVIDE_FILES;
 do 
-BUILDED_FILES="${BUILDED_FILES}
-$TOOLS_DIRNAME/$TOOL_DIR/$TOOL_RELATIVE_DIR/$link"
+BUILDED_FILES="${BUILDED_FILES};
+$TOOLS_DIRNAME/$TOOL_DIR/$TOOL_RELATIVE_DIR/$link";
 done
 
 ### Call build_if_no ###
@@ -240,6 +240,7 @@ if [ $(downcase "$CUR_LISP") = "clisp" ]; then echo "$LISP_INSTALL_CMD"; fi
 get_run_lisp_cmd () {
 if [ $(downcase "$CUR_LISP") = "xcl" ]; then echo "$LISP_DIR/$LISP_RELATIVE_PATH"; fi
 if [ $(downcase "$CUR_LISP") = "ecl" ]; then echo "$LISP_DIR/$LISP_RELATIVE_PATH"; fi
+if [ $(downcase "$CUR_LISP") = "clisp" ]; then echo "$LISP_DIR/$LISP_RELATIVE_PATH"; fi
 if [ $(downcase "$CUR_LISP") = "sbcl" ]; 
 then echo "$LISP_DIR/$LISP_RELATIVE_PATH --core $LISP_DIR/lib/sbcl/sbcl.core"; fi
 }

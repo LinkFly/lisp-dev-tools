@@ -315,7 +315,7 @@ fi
 echo "Coping results into $RESULT_DIR ..."
 mkdir --parents "$RESULT_DIR"
 RESULT=1
-eval "$INSTALL_CMD && RESULT=0"
+eval "$INSTALL_CMD && RESULT=0" 
 
 ######### Checking coping building result #####
 if [ $RESULT = 0 ] && [ -d "$RESULT_DIR" ];

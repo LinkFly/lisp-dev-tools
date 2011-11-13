@@ -4,15 +4,11 @@ cd $(dirname $0)
 
 ######### Configuring variables #######
 local BUILD_SCRIPT=$SCRIPTS_DIR/build-lisp.sh
-local PROVIDE_M4_SCRIPT=$SCRIPTS_DIR/provide-m4.sh
 
 ########## Computing variables ########
 abs_path LISP_DIR
 
 local CUR_LISP_UP=$(uppercase $CUR_LISP)
-
-###### Provide m4 ######
-$PROVIDE_M4_SCRIPT
 
 ########## Building sbcl if needed ####
 DIR=$LISP_DIR
