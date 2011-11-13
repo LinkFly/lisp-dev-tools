@@ -121,8 +121,8 @@ if ! [ "$DIR_OR_FILE" = "" ] && [ -$1 $DIR_OR_FILE ];
 then 
     echo "$MES_ALREADY";
 else 
-    RESULT=1;
-    eval "$PROCESS_CMD" && RESULT=0;
+    RESULT=1;    
+    eval "$PROCESS_CMD" && RESULT=0;    
     if [ $RESULT = 0 ];
     then echo "$MES_SUCCESS"
     else echo "$MES_FAILED"; return 1;
@@ -131,16 +131,19 @@ fi
 }
 
 provide_dir () {
+
 local DIR="$1"
 local PROCESS_CMD="$2"
 local MES_START_PROCESS="$3"
 local MES_ALREADY="$4"
 local MES_SUCCESS="$5"
 local MES_FAILED="$6"
+
 provide_dir_or_file d "$DIR" "$PROCESS_CMD" "$MES_START_PROCESS" "$MES_ALREADY" "$MES_SUCCESS" "$MES_FAILED"
 }
 
 provide_file () {
+
 local FILE="$1"
 local PROCESS_CMD="$2"
 local MES_START_PROCESS="$3"
@@ -269,10 +272,12 @@ fi
 }
 
 build () {
+
 ######## Parameters #########
 local SOURCES_DIR="$1"
 local RESULT_DIR="$2"
 local PROCESS_CMD="$3"
+
 local INSTALL_CMD="$4"
 local BIN_BUILD_RESULT="$5"
 local MES_ALREADY="$6"
@@ -299,7 +304,6 @@ echo "$MES_START_BUILDING"
 cd "$SOURCES_DIR"
 RESULT=1
 eval "$PROCESS_CMD && RESULT=0"
-
 
 ######### Checking building sources ###########
 if [ $RESULT = 0 ] && [ -f "$BIN_BUILD_RESULT" ];
@@ -343,6 +347,7 @@ local MES_BUILD_FAIL="$7"
 #### Optional parameters ####
 local PRE_BUILD_CMD="$8"
 local PRE_MAKE_CMD="$9"
+local PRE_INSTALL_CMD="$10"
 
 local START_DIR=$PWD
 
@@ -359,17 +364,17 @@ $EXTRACT_SCRIPT $ARCHIVE_PATH
 cd $TMP_TOOL_DIR/$(ls $TMP_TOOL_DIR)
 
 if ! [ "$PRE_BUILD_CMD" = "" ];
-then PRE_BUILD_CMD="$PRE_BUILD_CMD && ";
-fi
+then PRE_BUILD_CMD="$PRE_BUILD_CMD && ";fi
+
 if ! [ "$PRE_MAKE_CMD" = "" ];
-then 
-    local D=\$; 
-    PRE_MAKE_CMD="$D($PRE_MAKE_CMD) && "
-fi
+then PRE_MAKE_CMD="$PRE_MAKE_CMD && ";fi 
+
+if ! [ "$PRE_INSTALL_CMD" = "" ];
+then PRE_INSTALL_CMD="$PRE_INSTALL_CMD && ";fi
 
 local RESULT=1
 mkdir --parents $RESULT_DIR
-eval "$PRE_BUILD_CMD./configure --prefix $RESULT_DIR $COMPILING_EXTRA_PARAMS && ${PRE_MAKE_CMD}make && make install && RESULT=0"
+eval "$PRE_BUILD_CMD./configure --prefix $RESULT_DIR $COMPILING_EXTRA_PARAMS && ${PRE_MAKE_CMD}make && ${PRE_INSTALL_CMD}make install && RESULT=0"
 if [ $RESULT = 1 ];
 then echo "$MES_BUILD_FAIL";  rm -rf $RESULT_DIR; exit 1;
 fi

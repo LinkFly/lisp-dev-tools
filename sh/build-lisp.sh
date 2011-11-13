@@ -8,16 +8,33 @@ local CUR_LISP_UP=$(uppercase $CUR_LISP)
 local LISP_SOURCES_DIR=$SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME
 local LISP_COMPILER_DIR=$COMPILERS/$LISP_LISPS_COMPILERS/$LISP_COMPILER_DIRNAME
 
-#############################
+###################################
 #### Checking dependecies libs ####
 local LIBS="$LISP_LIB_DEPS"
 check_dep_libs "$LIBS"
+
+#### Resolving dependencies #######
+resolve_deps "$LISP_DEPS_ON_TOOLS"
 
 #### Call build ####
 local SOURCES_DIR="$LISP_SOURCES_DIR"
 local RESULT_DIR="$LISP_DIR"
 local PROCESS_CMD="$(get_build_lisp_cmd)"
+if [ "$PROCESS_CMD" = "" ];
+then echo "
+ERROR: empty build command.
+
+FAILED."; exit 1;
+fi
+
 local INSTALL_CMD="$(get_install_lisp_cmd)"
+if [ "$INSTALL_CMD" = "" ];
+then echo "
+ERROR: empty install command.
+
+FAILED."; exit 1;
+fi
+
 local BIN_BUILD_RESULT="$LISP_SOURCES_DIR/$LISP_BIN_BUILD_RESULT"
 
 local MES_ALREADY="

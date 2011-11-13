@@ -1,5 +1,18 @@
 #!/bin/sh
 
+resolve_deps () {
+local DEPS="$1"
+if ! [ "$1" = "" ];
+then
+    for dep in $DEPS
+    do
+	echo "Resolving dependency: $dep ...";
+	provide_tool "$dep" || exit 1;
+	echo "OK.";
+    done
+fi
+}
+
 provide_tool () {
 ### Parameters ###
 local TOOL_NAME=$1
@@ -17,26 +30,12 @@ then TOOL_PROVIDE_FILES="$TOOL_NAME";
 fi
 
 echo "Processing of tool: $TOOL_NAME"
-if ! [ "$TOOL_DEPS_ON_TOOLS" = "" ];
-then
-    for dep in $TOOL_DEPS_ON_TOOLS; 
-    do
-	echo "Resolving dependency: $dep"
-	provide_tool "$dep" || exit 1;
-    done
-fi
+resolve_deps "$TOOL_DEPS_ON_TOOLS"
 
 #### Providing archive if needed ####
 if [ "$(file_is_exist_p $TOOL_NAME $UTILS)" = "no" ]
 then if ! [ -f $ARCHIVES/$TOOL_ARCHIVE ];
-     then if ! [ "$PROVIDE_ARCHIVE_SCRIPT" = "" ]; 
-	  then provide_archive_tool "$TOOL_NAME"
-	  else echo "
-ERROR: Not arhive and not PROVIDE_ARHCHIVE_SCRIPT argument.
-Call provide_tool must be with it (third) of argument.
-
-FAILED."; exit 1;
-	  fi
+     then provide_archive_tool "$TOOL_NAME";
      fi
 fi
 #########################################
@@ -88,11 +87,13 @@ local TOOL_NAME="$1"
 local D=\$
 local NAME=$(uppercase $TOOL_NAME)
 local TOOL_TMP_DIRNAME=$(downcase $TOOL_NAME)-compiling
-local TOOL_ARCHIVE=$(get_spec_val $TOOL_NAME _ARCHIVE)
-local TOOL_DIRNAME=$(get_spec_val $TOOL_NAME _TOOL_DIR)
-local TOOL_COMPILING_EXTRA_ARGS=$(get_spec_val $TOOL_NAME _COMPILING_EXTRA_ARGS)
-local TOOL_PRE_BUILD_CMD=$(get_spec_val $TOOL_NAME _PRE_BUILD_CMD)
-local TOOL_EXTRACT_CMD=$(get_spec_val $TOOL_NAME _EXTRACT_CMD)
+local TOOL_ARCHIVE="$(get_spec_val $TOOL_NAME _ARCHIVE)"
+local TOOL_DIRNAME="$(get_spec_val $TOOL_NAME _TOOL_DIR)"
+local TOOL_COMPILING_EXTRA_ARGS="$(get_spec_val $TOOL_NAME _COMPILING_EXTRA_ARGS)"
+local TOOL_EXTRACT_CMD="$(get_spec_val $TOOL_NAME _EXTRACT_CMD)"
+local TOOL_PRE_BUILD_CMD="$(get_spec_val $TOOL_NAME _PRE_BUILD_CMD)"
+local TOOL_PRE_MAKE_CMD="$(get_spec_val $TOOL_NAME _PRE_MAKE_CMD)"
+local TOOL_PRE_INSTALL_CMD="$(get_spec_val $TOOL_NAME _PRE_INSTALL_CMD)"
 
 if [ "$TOOL_EXTRACT_CMD"="" ];
 then TOOL_EXTRACT_CMD="tar -xzvf"
@@ -115,9 +116,12 @@ ERROR: Building tool $NAME failed.
 FAILED."
 
 PRE_BUILD_CMD="$TOOL_PRE_BUILD_CMD"
+PRE_MAKE_CMD=
+PRE_INSTALL_CMD="$TOOL_PRE_INSTALL_CMD"
 
 extract_build_install "$ARCHIVE_PATH" "$TMP_TOOL_DIR" "$EXTRACT_SCRIPT" "$RESULT_DIR" \
-"$COMPILING_EXTRA_PARAMS" "$MES_ARCHIVE_CHECK_FAIL" "$MES_BUILD_FAIL" "$PRE_BUILD_CMD"
+"$COMPILING_EXTRA_PARAMS" "$MES_ARCHIVE_CHECK_FAIL" "$MES_BUILD_FAIL" "$PRE_BUILD_CMD" \
+"$PRE_MAKE_CMD" "$PRE_INSTALL_CMD"
 }
 
 provide_archive_tool () {
@@ -197,7 +201,8 @@ SOURCE_ARCHIVE
 SOURCE_URL
 RENAME_SRC_DOWNLOAD
 SRC_ARCHIVE_TYPE
-BIN_ARCHIVE_TYPE"
+BIN_ARCHIVE_TYPE
+DEPS_ON_TOOLS"
 
 for param in $ALL_LISP_PARAMS;
 do 
@@ -214,6 +219,11 @@ if [ $(downcase "$CUR_LISP") = "ecl" ];
 then
     echo "$LISP_PREBUILD_CMD; PATH=$UTILS:$PATH ./configure --prefix $LISP_DIR && PATH=$UTILS:$PATH $LISP_BUILD_CMD"; 
 fi
+if [ $(downcase "$CUR_LISP") = "clisp" ]; 
+then
+    local LIBSIGSEGV_DIR=$UTILS/$TOOLS_DIRNAME/$LIBSIGSEGV_TOOL_DIR;
+    echo "PATH=$UTILS:$PATH ./configure --with-libsigsegv-prefix=${LIBSIGSEGV_DIR} --prefix $LISP_DIR && PATH=$UTILS:$PATH $LISP_BUILD_CMD && $LISP_INSTALL_CMD"; 
+fi
 if [ $(downcase "$CUR_LISP") = "sbcl" ];
 then 
     echo "PATH=$LISP_COMPILER_DIR/$LISP_BIN_DIR:$PATH $LISP_HOME_VAR_NAME=$LISP_COMPILER_DIR/$LISP_CORE_BIN_DIR $LISP_BUILD_CMD --prefix=$LISP_DIR"
@@ -223,7 +233,8 @@ fi
 get_install_lisp_cmd () {
 if [ $(downcase "$CUR_LISP") = "xcl" ]; then echo "cp xcl $LISP_DIR/xcl"; fi
 if [ $(downcase "$CUR_LISP") = "sbcl" ]; then echo "sh install.sh"; fi
-if [ $(downcase "$CUR_LISP") = "ecl" ]; then echo "$ECL_INSTALL_CMD"; fi
+if [ $(downcase "$CUR_LISP") = "ecl" ]; then echo "$LISP_INSTALL_CMD"; fi
+if [ $(downcase "$CUR_LISP") = "clisp" ]; then echo "$LISP_INSTALL_CMD"; fi
 }
 
 get_run_lisp_cmd () {
