@@ -35,8 +35,8 @@ $ARCHIVE_NAME downloaded.
 
 OK."; 
   else echo "ERROR: downloading $ARCHIVE_NAME
-\n
-\nFAILED."; return 1;
+
+FAILED."; exit 1;
 fi
 fi
 

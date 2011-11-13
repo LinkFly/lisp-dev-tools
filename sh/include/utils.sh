@@ -48,6 +48,19 @@ downcase () {
 echo $1 | tr 'A-Z' 'a-z'
 }
 
+esc_slashes () {
+echo "$(echo $1 | sed 's/\//\\\//g')"
+}
+
+get_n_arg () {
+### Parameters ###
+local ARRAY="$1"
+local POS=$2
+##########
+local D=\$
+echo $(eval "echo "$ARRAY" | awk '{print $D$POS}'")
+}
+
 vardef () {
 local D
 local TMP
@@ -218,27 +231,38 @@ fi
 
 build_if_no () {
 ###### Parameters ######
-local FILE_LINK_NAME="$1"
+local FILE_LINK_NAMES="$1"
 local UTILS_DIR="$2"
-local BUILD_SCRIPT="$3"
-local BUILDED_FILE="$4"
+local BUILD_CMD="$3"
+local BUILDED_FILES="$4"
 local MES_ALREADY="$5"
 local MES_BUILDED_FAIL="$6"
 local MES_BUILDED_SUCC="$7"
 ########################
 
-local FILE_LINK=$UTILS_DIR/$FILE_LINK_NAME
+local ALL_FILES_EXIST_P="yes"
+for link in $FILE_LINK_NAMES;
+do 
+    if ! [ "$(file_is_exist_p $link $UTILS_DIR)" = "yes" ];
+    then ALL_FILES_EXIST_P="no";
+    fi
+done
 
 ########## Building if does not exist #######
-if [ "$(file_is_exist_p $FILE_LINK_NAME $UTILS_DIR)" = "yes" ]
+if [ "$ALL_FILES_EXIST_P" = "yes" ];
   then echo "$MES_ALREADY";
   else
     RESULT=1;
-    $BUILD_SCRIPT && RESULT=0;
+    eval "$BUILD_CMD && RESULT=0";
     if [ $RESULT = 0 ];
     then
-	rm -f $FILE_LINK && ln -s $BUILDED_FILE $FILE_LINK;
-	echo "$MES_BUILDED_SUCC"
+	local N=0;
+	for link in $FILE_LINK_NAMES;
+	do
+	    N=$(($N + 1));
+	    rm -f $UTILS_DIR/$link && ln -s $(get_n_arg "$BUILDED_FILES" $N) $UTILS_DIR/$link;
+	done
+	echo "$MES_BUILDED_SUCC";
     else echo "$MES_BUILDED_FAIL"; return 1;
     fi
 fi
@@ -321,7 +345,7 @@ local CHANGE_REGEX="s/$PARAM=$OLD_VAL/$PARAM=$NEW_VAL/g"
 sed -i $CHANGE_REGEX $FILE
 }
 
-build_tool () {
+extract_build_install () {
 #### Parameters ####
 local ARCHIVE_PATH="$1"
 local TMP_TOOL_DIR="$2"
@@ -329,6 +353,10 @@ local EXTRACT_SCRIPT="$3"
 local RESULT_DIR="$4"
 local COMPILING_EXTRA_PARAMS="$5"
 local MES_ARCHIVE_CHECK_FAIL="$6"
+local MES_BUILD_FAIL="$7"
+#### Optional parameters ####
+local PRE_BUILD_CMD="$8"
+local PRE_MAKE_CMD="$9"
 
 local START_DIR=$PWD
 
@@ -343,9 +371,23 @@ mkdir --parents $TMP_TOOL_DIR
 cd $TMP_TOOL_DIR
 $EXTRACT_SCRIPT $ARCHIVE_PATH
 cd $TMP_TOOL_DIR/$(ls $TMP_TOOL_DIR)
-./configure --prefix $RESULT_DIR $COMPILING_EXTRA_PARAMS
-make
-make install
+
+if ! [ "$PRE_BUILD_CMD" = "" ];
+then PRE_BUILD_CMD="$PRE_BUILD_CMD && ";
+fi
+if ! [ "$PRE_MAKE_CMD" = "" ];
+then 
+    local D=\$; 
+    PRE_MAKE_CMD="$D($PRE_MAKE_CMD) && "
+fi
+
+local RESULT=1
+mkdir --parents $RESULT_DIR
+eval "$PRE_BUILD_CMD./configure --prefix $RESULT_DIR $COMPILING_EXTRA_PARAMS && ${PRE_MAKE_CMD}make && make install && RESULT=0"
+if [ $RESULT = 1 ];
+then echo "$MES_BUILD_FAIL";  rm -rf $RESULT_DIR; exit 1;
+fi
+
 cd $START_DIR
 rm -rf $TMP_TOOL_DIR
 }

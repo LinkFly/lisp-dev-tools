@@ -1,4 +1,2 @@
 #!/bin/sh
-cd $(dirname $0)
-. ./includes.sh
-provide_tool wget $SCRIPTS_DIR/build-wget.sh
+$(dirname $0)/provide-tool.sh wget

@@ -8,7 +8,30 @@
 /usr/lib/libgtk-3.so
 
 #######################
+### For --with-gui
 sudo aptitude -y install libgtk-3-dev libXpm-dev libjpeg-dev libgif-dev libungif4-dev libtiff-dev
+
+### For emacs 24.0.91
+For configuring:
+sudo aptitude -y install autoconf
+
+For GUI:
+sudo aptitude install libgtk2.0-dev
+
+Option:
+Required:  makeinfo >= 4.6
+sudo aptitude -y install texinfo (OR --without-texinfo)
+
+##########
+
+#######################
+For compilation wget required:
+
+configure: error: --with-ssl was given, but GNUTLS is not available.
+
+(OR give --without-ssl to ./configure)
+
+sudo aptitude -y install gnutls-dev
 
 ##############################
 For compilation XCL required:
