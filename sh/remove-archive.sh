@@ -5,10 +5,6 @@ cd $(dirname $0)
 ######### Parameters ###############
 ARCHIVE_NAME=$1
 
-######## Include scripts ###########
-. ./includes.sh
-. ./core.sh
-
 ######### Computing variables ######
 ARCHIVE_PATH=$ARCHIVES/$ARCHIVE_NAME
 

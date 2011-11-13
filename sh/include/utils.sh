@@ -283,20 +283,6 @@ local MES_BUILDING_FAIL="$10"
 local MES_COPING_RESULT_SUCC="$11"
 local MES_COPING_RESULT_FAIL="$12"
 
-#echo "$SOURCES_DIR"
-#echo "$RESULT_DIR"
-#echo "$PROCESS_CMD"
-#echo "$INSTALL_CMD"
-#echo "$BIN_BUILD_RESULT"
-#echo "$MES_ALREADY"
-#echo "$MES_NOT_EXIST_SRC_FAIL"
-#echo "$MES_START_BUILDING"
-#echo "$MES_BUILDING_SUCC"
-#echo "$MES_BUILDING_FAIL"
-#echo "$MES_COPING_RESULT_SUCC"
-#echo "$MES_COPING_RESULT_FAIL"
-#exit 0;
-
 local CURPATH="$PWD"
 ########## Checking not builded ###########
 if [ -d "$RESULT_DIR" ];
