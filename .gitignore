@@ -5,5 +5,5 @@ compilers/*
 sources/*
 lisp-libs/*
 tmp/*
-tmp-downloads/*
+tmp-download/*
 utils/tools/*
