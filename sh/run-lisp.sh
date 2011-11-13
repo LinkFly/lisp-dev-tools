@@ -2,15 +2,16 @@
 cd $(dirname $0)
 . ./includes.sh
 
-######## Computing variables #####
-abs_path LISP_DIR
+RUN_COMMAND=$(get_run_lisp_cmd)
 
 ######## Checking lisp ###########
-if ! [ -f "$LISP_DIR/$LISP_RELATIVE_PATH" ];
+if ! [ -f "$RUN_COMMAND" ];
 then echo "
-ERROR: $(uppercase $CUR_LISP) $LISP_DIR/$LISP_RELATIVE_PATH not found (please run provide-lisp.sh).
+ERROR: $(uppercase $CUR_LISP) $RUN_COMMAND not found (please run provide-lisp.sh).
 
-FAILED."; return 1;
+FAILED."; exit 1;
 fi
 
-eval "XDG_CONFIG_DIRS=$PWD/conf $(get_run_lisp_cmd) $@"
+if [ "$(get_run_lisp_cmd)" = "" ]; then echo "ERROR: empty lisp command."; fi
+
+eval "XDG_CONFIG_DIRS=$PREFIX/conf $RUN_COMMAND $@"

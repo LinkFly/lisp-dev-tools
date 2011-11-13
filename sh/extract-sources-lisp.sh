@@ -17,7 +17,7 @@ echo "
 Extracting $CUR_LISP_UP sources from $LISP_SOURCE_ARCHIVE_PATH ...
 Directory with archives: $ARCHIVES"
 
-### Call extract_arhcive function ###
+### Call extract_archive function ###
 EXTRACT_CMD=$EXTRACT_CMD
 ARCHIVE=$LISP_SOURCE_ARCHIVE_PATH
 RESULT_DIR=$LISPS_SOURCES_PATH/$LISP_SOURCES_DIRNAME

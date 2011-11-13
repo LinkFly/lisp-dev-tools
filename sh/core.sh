@@ -215,9 +215,10 @@ if [ $(downcase "$CUR_LISP") = "xcl" ];
 then
     echo "PATH=$UTILS:$PATH make && echo '(rebuild-lisp)' | ./xcl"; 
 fi
-if [ $(downcase "$CUR_LISP") = "ecl" ]; 
+if [ $(downcase "$CUR_LISP") = "ecl" ] || [ $(downcase "$CUR_LISP") = "mkcl" ]; 
 then
-    echo "$LISP_PREBUILD_CMD; PATH=$UTILS:$PATH ./configure --prefix $LISP_DIR && PATH=$UTILS:$PATH $LISP_BUILD_CMD"; 
+    if ! [ "$LISP_PREBUILD_CMD" = "" ]; then LISP_PREBUILD_CMD="$LISP_PREBUILD_CMD; "; fi
+    echo "${LISP_PREBUILD_CMD}PATH=$UTILS:$PATH ./configure --prefix $LISP_DIR && PATH=$UTILS:$PATH $LISP_BUILD_CMD"; 
 fi
 if [ $(downcase "$CUR_LISP") = "clisp" ]; 
 then
@@ -233,14 +234,17 @@ fi
 get_install_lisp_cmd () {
 if [ $(downcase "$CUR_LISP") = "xcl" ]; then echo "cp xcl $LISP_DIR/xcl"; fi
 if [ $(downcase "$CUR_LISP") = "sbcl" ]; then echo "sh install.sh"; fi
-if [ $(downcase "$CUR_LISP") = "ecl" ]; then echo "$LISP_INSTALL_CMD"; fi
-if [ $(downcase "$CUR_LISP") = "clisp" ]; then echo "$LISP_INSTALL_CMD"; fi
+if [ $(downcase "$CUR_LISP") = "ecl" ] || [ $(downcase "$CUR_LISP") = "clisp" ] || [ $(downcase "$CUR_LISP") = "mkcl" ];
+then echo "$LISP_INSTALL_CMD"; fi
 }
 
 get_run_lisp_cmd () {
-if [ $(downcase "$CUR_LISP") = "xcl" ]; then echo "$LISP_DIR/$LISP_RELATIVE_PATH"; fi
-if [ $(downcase "$CUR_LISP") = "ecl" ]; then echo "$LISP_DIR/$LISP_RELATIVE_PATH"; fi
-if [ $(downcase "$CUR_LISP") = "clisp" ]; then echo "$LISP_DIR/$LISP_RELATIVE_PATH"; fi
+abs_path LISP_DIR
+
+if [ $(downcase "$CUR_LISP") = "xcl" ] || [ $(downcase "$CUR_LISP") = "ecl" ] || \
+    [ $(downcase "$CUR_LISP") = "clisp" ] || [ $(downcase "$CUR_LISP") = "mkcl" ]; 
+then echo "$LISP_DIR/$LISP_RELATIVE_PATH"; fi
+
 if [ $(downcase "$CUR_LISP") = "sbcl" ]; 
 then echo "$LISP_DIR/$LISP_RELATIVE_PATH --core $LISP_DIR/lib/sbcl/sbcl.core"; fi
 }

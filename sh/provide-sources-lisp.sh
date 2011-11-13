@@ -25,7 +25,7 @@ Directory: $LISP_SOURCES_PATH
 ALREADY."
 
 MES_SUCCESS="
-Providing $CUR_LISP_UP $LISP_SOURCES_DIRNAME successful.
+Providing sources $CUR_LISP_UP $LISP_SOURCES_DIRNAME successful.
 Directory: $LISP_SOURCES_PATH
 
 OK."

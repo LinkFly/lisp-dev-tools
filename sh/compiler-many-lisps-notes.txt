@@ -46,3 +46,6 @@ sudo aptitude -y install m4
 ### For ubuntu ###
 sudo ln -s /usr/lib/x86_64-linux-gnu/libpthread.so /usr/lib/libpthread.so
 
+################## Compilation CMUCL #########
+libc6-dev-i386: /usr/include/gnu/stubs-32.h
+
