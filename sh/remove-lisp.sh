@@ -8,7 +8,7 @@ abs_path LISP_DIR
 #### Build sbcl if needed #####
 echo "Removing sbcl-$LISP_VERSION ..."
 if [ -d $LISP_DIR ];
-then rm -r $LISP_DIR && echo "
+then rm -rf $LISP_DIR && echo "
 LISP removed successful.
 Directory (which has been deleted): $LISP_DIR
 

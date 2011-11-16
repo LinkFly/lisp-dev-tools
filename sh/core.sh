@@ -248,7 +248,7 @@ if [ $(downcase "$CUR_LISP") = "xcl" ]; then echo "cp xcl $LISP_DIR/xcl"; fi
 if [ $(downcase "$CUR_LISP") = "sbcl" ]; then echo "sh install.sh"; fi
 
 if [ $(downcase "$CUR_LISP") = "cmucl" ]; 
-then echo "cp -r $SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME/../build-4 $LISP_DIR/build-4";
+then echo "cp -r $SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME/../build-4 $LISP_DIR/build-4;mkdir --parents $LISP_DIR/src/i18n;cp $SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME/i18n/unidata.bin $LISP_DIR/src/i18n/unidata.bin";
 fi
 }
 
@@ -263,7 +263,7 @@ if [ $(downcase "$CUR_LISP") = "sbcl" ];
 then echo "$LISP_DIR/$LISP_RELATIVE_PATH --core $LISP_DIR/lib/sbcl/sbcl.core"; fi
 
 if [ $(downcase "$CUR_LISP") = "cmucl" ]; 
-then echo "$LISP_DIR/$LISP_RELATIVE_PATH"; fi
+then echo "cd $LISP_DIR;./$LISP_RELATIVE_PATH"; fi
 }
 
 check_dep_libs () {

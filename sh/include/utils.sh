@@ -293,9 +293,9 @@ local MES_COPING_RESULT_FAIL="$12"
 
 local CURPATH="$PWD"
 ########## Checking not builded ###########
-if [ -d "$RESULT_DIR" ];
-then echo "$MES_ALREADY"; return 0;
-fi
+#if [ -d "$RESULT_DIR" ];
+#then echo "$MES_ALREADY"; return 0;
+#fi
 
 ########## Checking sources directory #####
 if ! [ -d "$SOURCES_DIR" ];
@@ -307,9 +307,14 @@ echo "$MES_START_BUILDING"
 cd "$SOURCES_DIR"
 RESULT=1
 eval "$PROCESS_CMD && RESULT=0"
-#echo "hererrrrrrrrrrrrrrrrrrR"
+
+#echo "$PROCESS_CMD && RESULT=0"
+#echo $(pwd)
 #echo "$BIN_BUILD_RESULT"
 #exit 1;
+#RESULT=0
+
+
 ######### Checking building sources ###########
 if [ $RESULT = 0 ] && [ -f "$BIN_BUILD_RESULT" ];
 then echo "$MES_BUILDING_SUCC";
@@ -325,7 +330,7 @@ eval "$INSTALL_CMD && RESULT=0"
 ######### Checking coping building result #####
 if [ $RESULT = 0 ] && [ -d "$RESULT_DIR" ];
 then echo "$MES_COPING_RESULT_SUCC";
-else echo "$MES_COPING_RESULT_FAIL"; return 1;
+else echo "$MES_COPING_RESULT_FAIL"; remove -rf "$RESULT_DIR"; exit 1;
 fi
 cd "$CURPATH"
 }

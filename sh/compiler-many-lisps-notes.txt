@@ -1,3 +1,23 @@
+######## For ABCL compilation #############
+1. Download jdk
+2. extract jdk
+3. download ant
+4. extract ant
+5. download junit
+6. copy junit in lib/optional into ant dir
+7. build ant:
+
+JAVA_HOME=$(pwd)/jdk1.6.0_29 sh build.sh -Ddist.dir=/home/linkfly/Downloads/javajre/ant/ant-dist dist
+
+8. ABCL compilation by ant:
+
+RUN_ANT="PATH=$(pwd)/ant/ant-dist/bin:$PATH JAVA_HOME=$(pwd)/jdk1.6.0_29 ANT_HOME=$(pwd)/ant/ant/dist ant"
+eval "$RUN_ANT -f abcl-src-1.0.0/build.xml abcl.jar"
+
+9. 
+
+################################
+### For emacs 23.3a
 #dir
 /usr/include/gtk-3.0
 
@@ -49,3 +69,7 @@ sudo ln -s /usr/lib/x86_64-linux-gnu/libpthread.so /usr/lib/libpthread.so
 ################## Compilation CMUCL #########
 libc6-dev-i386: /usr/include/gnu/stubs-32.h
 
+###### For rlwrap compilation #########
+LDFLAGS=-L/home/linkfly/Downloads/readline-bin/lib 
+CPPFLAGS=-I/home/linkfly/Downloads/readline-bin/include LDFLAGS=-L/home/linkfly/Downloads/readline-bin/lib ./configure --prefix /home/linkfly/Downloads/rlwrap-bin
+#######################################
