@@ -5,6 +5,7 @@
 . ./include/utils.sh
 . ./include/absolutized-pathes.sh
 . ./conf/tools.conf
+. ./conf/lisps.conf
 . ./include/correct-params.sh
 . ./core.sh
 SCRIPTS_DIR=sh

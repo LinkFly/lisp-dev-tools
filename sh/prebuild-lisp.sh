@@ -1,18 +1,39 @@
 #!/bin/sh
-
-###### Includes ########
+cd $(dirname $0)
 . ./includes.sh
-. ./core.sh
+
 
 ########
 abs_path LISP_DIR
 
-if [ $(downcase "$CUR_LISP") = "sbcl" ];
-then
-    cd $COMPILERS/$LISP_LISPS_COMPILERS/$LISP_COMPILER_DIRNAME;
-    INSTALL_ROOT=$LISP_DIR sh install.sh;
-else echo "
+COMPILER_DIR="$COMPILERS/$LISP_LISPS_COMPILERS/$LISP_COMPILER_DIRNAME"
+
+
+if [ $(elt_in_set_p "$CUR_LISP" "sbcl abcl") = "no" ]
+then echo "
 ERROR: Not implemented.
 
-FAILED.";
+FAILED."; exit 1;
 fi
+
+RESULT=1
+rm -rf $LISP_DIR && \
+mkdir --parents $LISP_DIR && \
+case $(downcase "$CUR_LISP") in
+    "sbcl")
+	cd $COMPILER_DIR;
+	INSTALL_ROOT=$LISP_DIR $LISP_INSTALL_CMD;
+	;;
+    "abcl")
+	cp $COMPILERS/$LISP_LISPS_COMPILERS/$LISP_COMPILER_DIRNAME/abcl.jar $LISP_DIR/abcl.jar;
+	cp $COMPILERS/$LISP_LISPS_COMPILERS/$LISP_COMPILER_DIRNAME/abcl-contrib.jar $LISP_DIR/abcl-contrib.jar;
+	;;
+esac && RESULT=0;
+
+if [ $RESULT = 1 ]; then 
+    rm -rf "$LISP_DIR"; 
+    echo "\nERROR: not prebuilded.\n\nFAILED."; 
+    exit 1; 
+else echo "\nPrebuilded success.\n\nOK."
+fi
+

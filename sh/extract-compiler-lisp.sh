@@ -5,7 +5,7 @@ cd $(dirname $0)
 ######### Configuring and computing variables ####
 LISPS_COMPILERS=$COMPILERS/$LISP_LISPS_COMPILERS
 COMPILER_ARCHIVE=$ARCHIVES/$LISP_BIN_ARCHIVE
-EXTRACT_CMD="tar -xjvf"
+EXTRACT_CMD=$(get_extract_begin_cmd "$COMPILER_ARCHIVE")
 
 local CUR_LISP_UP=$(uppercase $CUR_LISP)
 
@@ -47,7 +47,7 @@ FAILED."
 MES_CHECK_RES_SUCC="
 Extracted $ARCHIVE successful.
 Directory with result: $RESULT_DIR
-
+p
 OK."
 
 ARCHIVE_LOWERING_P=$LISP_BIN_ARCHIVE_LOWERING_P

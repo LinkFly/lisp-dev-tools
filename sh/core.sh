@@ -39,7 +39,6 @@ then if ! [ -f $ARCHIVES/$TOOL_ARCHIVE ];
      fi
 fi
 #########################################
-
 local LINK_REFERS_STR="\n"
 for link in $TOOL_PROVIDE_FILES;
 do
@@ -51,7 +50,7 @@ done
 local BUILDED_FILES=""
 for link in $TOOL_PROVIDE_FILES;
 do 
-BUILDED_FILES="${BUILDED_FILES};
+BUILDED_FILES="${BUILDED_FILES}
 $TOOLS_DIRNAME/$TOOL_DIR/$TOOL_RELATIVE_DIR/$link";
 done
 
@@ -95,8 +94,8 @@ local TOOL_PRE_BUILD_CMD="$(get_spec_val $TOOL_NAME _PRE_BUILD_CMD)"
 local TOOL_PRE_MAKE_CMD="$(get_spec_val $TOOL_NAME _PRE_MAKE_CMD)"
 local TOOL_PRE_INSTALL_CMD="$(get_spec_val $TOOL_NAME _PRE_INSTALL_CMD)"
 
-if [ "$TOOL_EXTRACT_CMD"="" ];
-then TOOL_EXTRACT_CMD="tar -xzvf"
+if [ "$TOOL_EXTRACT_CMD" = "" ]; then
+    TOOL_EXTRACT_CMD=$(get_extract_begin_cmd "$ARCHIVES/$TOOL_ARCHIVE");
 fi
 
 ### Call build_tool ###
@@ -264,6 +263,10 @@ then echo "$LISP_DIR/$LISP_RELATIVE_PATH --core $LISP_DIR/lib/sbcl/sbcl.core"; f
 
 if [ $(downcase "$CUR_LISP") = "cmucl" ]; 
 then echo "cd $LISP_DIR;./$LISP_RELATIVE_PATH"; fi
+
+if [ $(downcase "$CUR_LISP") = "abcl" ]; then
+    echo "cd $LISP_DIR; PATH=$UTILS:$PWD JAVA_HOME=$(dirname $(dirname $(realpath java))) java -jar abcl.jar"
+fi    
 }
 
 check_dep_libs () {

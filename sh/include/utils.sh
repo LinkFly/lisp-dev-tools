@@ -5,6 +5,18 @@
 #
 
 ######## Function definitions ######
+elt_in_set_p () {
+local ELEMENT="$1"
+local SET="$2"
+
+for lisp in $SET; do
+    if [ "$lisp" = "$ELEMENT" ]; then
+	echo "yes"; return 0; 
+    fi
+done;
+echo "no";
+}
+
 check_args () {
 local ARGS
 local ARGS_NEED
@@ -88,15 +100,19 @@ fi
 }
 
 abs_path () {
-local ABS_PATH_D
+local PATH_SYM=$1
+
 local ABS_PATH_TMP
 local ABS_PATH_ABS_P
-ABS_PATH_D=\$
-eval ABS_PATH_TMP=$ABS_PATH_D$1
+local ABS_PATH_D=\$
+
+eval ABS_PATH_TMP=$ABS_PATH_D$PATH_SYM
+if [ "$ABS_PATH_TMP" = "" ]; then return 0; fi
 ABS_PATH_ABS_P=$(abs_path_p $ABS_PATH_TMP)
-if [ $ABS_PATH_ABS_P = "no" ];
-then eval $1=$PREFIX/$ABS_PATH_TMP;
+if [ $ABS_PATH_ABS_P = "no" ]; then
+    eval $1=$PREFIX/$ABS_PATH_TMP;
 fi
+
 }
 
 get_spec_val () {
@@ -153,7 +169,26 @@ local MES_FAILED="$6"
 provide_dir_or_file f "$FILE" "$PROCESS_CMD" "$MES_START_PROCESS" "$MES_ALREADY" "$MES_SUCCESS" "$MES_FAILED"
 }
 
+get_extract_begin_cmd () {
+local FILE="$1"
+
+local TYPE=$(file --brief --mime-type $FILE)
+case "$TYPE" in
+    "application/x-gzip") 
+	echo "tar -xzvf";
+	;;
+    "application/x-bzip2")
+	echo "tar -xjvf";
+	;;
+esac
+}
+
+get_extract_cmd () {
+echo "$(get_extract_begin_cmd $1) $1"
+}
+
 extract_archive () {
+
 #### Parameters ####
 local EXTRACT_CMD="$1"
 local ARCHIVE="$2"
@@ -360,7 +395,7 @@ local PRE_MAKE_CMD="$9"
 local PRE_INSTALL_CMD="$10"
 
 local START_DIR=$PWD
-
+local RESULT
 ##### Checking archive #########
 if ! [ -f "$ARCHIVE_PATH" ] || [ "$ARCHIVE_PATH" = "" ];
 then echo "$MES_ARCHIVE_CHECK_FAIL"; return 1;
@@ -370,23 +405,38 @@ fi
 rm -rf $TMP_TOOL_DIR
 mkdir --parents $TMP_TOOL_DIR
 cd $TMP_TOOL_DIR
-$EXTRACT_SCRIPT $ARCHIVE_PATH
-cd $TMP_TOOL_DIR/$(ls $TMP_TOOL_DIR)
+RESULT=1
+$EXTRACT_SCRIPT $ARCHIVE_PATH && RESULT=0;
+if [ $RESULT = 1 ]; then
+    echo "$MES_BUILD_FAIL"; rm -rf $TMP_TOOL_DIR; exit 1;
+fi
 
-if ! [ "$PRE_BUILD_CMD" = "" ];
-then PRE_BUILD_CMD="$PRE_BUILD_CMD && ";fi
+if [ "$REQUIRED_COMPILE_P" = "yes" ]; then
+    cd $TMP_TOOL_DIR/$(ls $TMP_TOOL_DIR);
 
-if ! [ "$PRE_MAKE_CMD" = "" ];
-then PRE_MAKE_CMD="$PRE_MAKE_CMD && ";fi 
+    if ! [ "$PRE_BUILD_CMD" = "" ];
+    then PRE_BUILD_CMD="$PRE_BUILD_CMD && ";fi
 
-if ! [ "$PRE_INSTALL_CMD" = "" ];
-then PRE_INSTALL_CMD="$PRE_INSTALL_CMD && ";fi
+    if ! [ "$PRE_MAKE_CMD" = "" ];
+    then PRE_MAKE_CMD="$PRE_MAKE_CMD && ";fi 
 
-local RESULT=1
-mkdir --parents $RESULT_DIR
-eval "$PRE_BUILD_CMD./configure --prefix $RESULT_DIR $COMPILING_EXTRA_PARAMS && ${PRE_MAKE_CMD}make && ${PRE_INSTALL_CMD}make install && RESULT=0"
-if [ $RESULT = 1 ];
-then echo "$MES_BUILD_FAIL";  rm -rf $RESULT_DIR; exit 1;
+    if ! [ "$PRE_INSTALL_CMD" = "" ];
+    then PRE_INSTALL_CMD="$PRE_INSTALL_CMD && ";fi
+
+    mkdir --parents $RESULT_DIR
+    local RESULT=1
+    eval "$PRE_BUILD_CMD./configure --prefix $RESULT_DIR $COMPILING_EXTRA_PARAMS && ${PRE_MAKE_CMD}make && ${PRE_INSTALL_CMD}make install && RESULT=0"
+
+    if [ $RESULT = 1 ]; then
+	echo "$MES_BUILD_FAIL";  rm -rf $RESULT_DIR; exit 1;
+    fi
+else 
+    RESULT=1;
+    cp -r $(ls $TMP_TOOL_DIR) $RESULT_DIR && RESULT=0;
+
+    if [ $RESULT = 1 ] || [ ! -d $RESULT_DIR ]; then
+	echo "$MES_BUILD_FAIL"; rm -rf $TMP_TOOL_DIR; exit 1;
+    fi
 fi
 
 cd $START_DIR
