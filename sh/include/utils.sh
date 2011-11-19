@@ -263,11 +263,22 @@ if [ "$FILE_REALPATH" != "" ] && [ $(abs_path_p "$FILE_REALPATH") = "no" ];
 then FILE_REALPATH=$UTILS_DIR/$FILE_REALPATH
 fi
 
-########## Building if does not exist #######
-if [ $FILE_REALPATH ] && [ -f $FILE_REALPATH ]; 
+if [ $FILE_REALPATH ] && ([ -d $FILE_REALPATH ] || [ -f $FILE_REALPATH ]); 
 then echo "yes"; 
 else echo "no";
 fi
+}
+
+links_is_exist_p () {
+local LINKS="$1"
+local DIR="$2"
+for link in $LINKS
+do 
+    if ! [ "$(file_is_exist_p $link $DIR)" = "yes" ];
+    then echo "no"; return 0;
+    fi
+done
+echo "yes"
 }
 
 build_if_no () {
@@ -281,13 +292,7 @@ local MES_BUILDED_FAIL="$6"
 local MES_BUILDED_SUCC="$7"
 ########################
 
-local ALL_FILES_EXIST_P="yes"
-for link in $FILE_LINK_NAMES;
-do 
-    if ! [ "$(file_is_exist_p $link $UTILS_DIR)" = "yes" ];
-    then ALL_FILES_EXIST_P="no";
-    fi
-done
+local ALL_FILES_EXIST_P=$(links_is_exist_p "$FILE_LINK_NAMES" "$UTILS_DIR")
 
 ########## Building if does not exist #######
 if [ "$ALL_FILES_EXIST_P" = "yes" ];
@@ -393,6 +398,7 @@ local MES_BUILD_FAIL="$7"
 local PRE_BUILD_CMD="$8"
 local PRE_MAKE_CMD="$9"
 local PRE_INSTALL_CMD="$10"
+local REQUIRED_COMPILE_P="$11"
 
 local START_DIR=$PWD
 local RESULT

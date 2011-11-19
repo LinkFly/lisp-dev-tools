@@ -25,37 +25,50 @@ local TOOL_ARCHIVE=$(get_spec_val $TOOL_NAME _ARCHIVE)
 local TOOL_DEPS_ON_TOOLS="$(get_spec_val $TOOL_NAME _DEPS_ON_TOOLS)"
 local TOOL_PROVIDE_FILES="$(get_spec_val $TOOL_NAME _PROVIDE_FILES)"
 
-if [ "$TOOL_PROVIDE_FILES" = "" ];
-then TOOL_PROVIDE_FILES="$TOOL_NAME";
+local LINK_TO_TOOL_DIR_P="no"
+if [ "$TOOL_PROVIDE_FILES" = "" ]; then
+    TOOL_PROVIDE_FILES="$TOOL_DIR";
+    LINK_TO_TOOL_DIR_P="yes";
 fi
 
 echo "Processing of tool: $TOOL_NAME"
 resolve_deps "$TOOL_DEPS_ON_TOOLS"
 
 #### Providing archive if needed ####
-if [ "$(file_is_exist_p $TOOL_NAME $UTILS)" = "no" ]
+local ALL_FILES_EXIST_P=$(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS_DIR")
+if [ "$ALL_FILES_EXIST_P" = "no" ]
 then if ! [ -f $ARCHIVES/$TOOL_ARCHIVE ];
      then provide_archive_tool "$TOOL_NAME";
      fi
 fi
+
 #########################################
 local LINK_REFERS_STR="\n"
 for link in $TOOL_PROVIDE_FILES;
 do
-local REFER=$(readlink $UTILS/$link);
-local NOT_FOUND=$(if [ "$REFER" = "" ]; then echo '<not-found>'; fi);
-LINK_REFERS_STR="${LINK_REFERS_STR}\n${NOT_FOUND} ${link}: $REFER";
+    local REFER=$(readlink $UTILS/$link);
+    local NOT_FOUND=$(if [ "$REFER" = "" ]; then echo '<not-found>'; fi);
+    LINK_REFERS_STR="${LINK_REFERS_STR}\n${NOT_FOUND} ${link}: $REFER";
 done
+
+if ! [ "$TOOL_RELATIVE_DIR" = "" ]; then
+    TOOL_RELATIVE_DIR="/$TOOL_RELATIVE_DIR"
+fi
 
 local BUILDED_FILES=""
-for link in $TOOL_PROVIDE_FILES;
-do 
-BUILDED_FILES="${BUILDED_FILES}
-$TOOLS_DIRNAME/$TOOL_DIR/$TOOL_RELATIVE_DIR/$link";
-done
+if [ "$LINK_TO_TOOL_DIR_P" = "yes" ]; then
+	BUILDED_FILES="${BUILDED_FILES}
+$TOOLS_DIRNAME/$TOOL_DIR";
+else 
+    for link in $TOOL_PROVIDE_FILES;
+    do 
+	BUILDED_FILES="${BUILDED_FILES}
+$TOOLS_DIRNAME/$TOOL_DIR${TOOL_RELATIVE_DIR}/$link";
+    done
+fi
 
 ### Call build_if_no ###
-FILE_LINK_NAMES=$TOOL_PROVIDE_FILES
+FILE_LINK_NAMES="$TOOL_PROVIDE_FILES"
 UTILS_DIR=$UTILS
 BUILD_CMD="PATH=$UTILS:$PATH; build_tool $TOOL_NAME"
 BUILDED_FILES="$BUILDED_FILES"
@@ -93,6 +106,7 @@ local TOOL_EXTRACT_CMD="$(get_spec_val $TOOL_NAME _EXTRACT_CMD)"
 local TOOL_PRE_BUILD_CMD="$(get_spec_val $TOOL_NAME _PRE_BUILD_CMD)"
 local TOOL_PRE_MAKE_CMD="$(get_spec_val $TOOL_NAME _PRE_MAKE_CMD)"
 local TOOL_PRE_INSTALL_CMD="$(get_spec_val $TOOL_NAME _PRE_INSTALL_CMD)"
+local TOOL_REQUIRED_COMPILE_P="$(get_spec_val $TOOL_NAME _REQUIRED_COMPILE_P)"
 
 if [ "$TOOL_EXTRACT_CMD" = "" ]; then
     TOOL_EXTRACT_CMD=$(get_extract_begin_cmd "$ARCHIVES/$TOOL_ARCHIVE");
@@ -117,10 +131,11 @@ FAILED."
 PRE_BUILD_CMD="$TOOL_PRE_BUILD_CMD"
 PRE_MAKE_CMD=
 PRE_INSTALL_CMD="$TOOL_PRE_INSTALL_CMD"
+REQUIRED_COMPILE_P="$TOOL_REQUIRED_COMPILE_P"
 
 extract_build_install "$ARCHIVE_PATH" "$TMP_TOOL_DIR" "$EXTRACT_SCRIPT" "$RESULT_DIR" \
 "$COMPILING_EXTRA_PARAMS" "$MES_ARCHIVE_CHECK_FAIL" "$MES_BUILD_FAIL" "$PRE_BUILD_CMD" \
-"$PRE_MAKE_CMD" "$PRE_INSTALL_CMD"
+"$PRE_MAKE_CMD" "$PRE_INSTALL_CMD" "$REQUIRED_COMPILE_P"
 }
 
 provide_archive_tool () {
@@ -224,7 +239,7 @@ then
 fi
 if [ $(downcase "$CUR_LISP") = "clisp" ]; 
 then
-    local LIBSIGSEGV_DIR=$UTILS/$TOOLS_DIRNAME/$LIBSIGSEGV_TOOL_DIR;
+    local LIBSIGSEGV_DIR=$UTILS/$LIBSIGSEGV_TOOL_DIR;
     echo "PATH=$UTILS:$PATH ./configure --with-libsigsegv-prefix=${LIBSIGSEGV_DIR} --prefix $LISP_DIR && PATH=$UTILS:$PATH $LISP_BUILD_CMD && $LISP_INSTALL_CMD"; 
 fi
 if [ $(downcase "$CUR_LISP") = "sbcl" ];
@@ -235,7 +250,24 @@ if [ $(downcase "$CUR_LISP") = "cmucl" ];
 then 
     echo "cd ../;PATH=$LISP_COMPILER_DIR/$LISP_BIN_DIR:$PATH src/tools/build.sh -C \"\" -o lisp";
 fi
+if [ $(downcase "$CUR_LISP") = "wcl" ];
+then 
+    local LD_DECORATOR_CONTENT='#!/bin/sh
+CURARGS="$@"
+
+DIR_FOR_LD=/usr/bin
+echo "... Decoration calling ld from file: $0 ..."
+echo "Current args for ld: $CURARGS"
+NEW_ARGS="-L${LIBGMP_LIB_PATH} $@"
+echo "New args for ld: $NEW_ARGS"
+$DIR_FOR_LD/ld $NEW_ARGS
+';
+    local D=\$;
+    echo "cd linux/src/build;rm -rf ../../bin ../../lib;mkdir --parents generated-for-build ../../bin ../../lib;echo '$LD_DECORATOR_CONTENT' > generated-for-build/ld;chmod u+x generated-for-build/ld;PATH=$SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME/linux/src/build/generated-for-build:$PATH C_INCLUDE_PATH=$UTILS/$GMP_TOOL_DIR/include:$UTILS/$BINUTILS_TOOL_DIR/include LIBGMP_LIB_PATH=$UTILS/$GMP_TOOL_DIR/lib BINUTILS_LIB_PATH=$UTILS/$BINUTILS_TOOL_DIR/lib LD_LIBRARY_PATH=$COMPILERS/$LISP_LISPS_COMPILERS/$LISP_COMPILER_DIRNAME/$LISP_OS/lib $COMPILERS/$LISP_LISPS_COMPILERS/$LISP_COMPILER_DIRNAME/$LISP_OS/bin/wcl -m 24000 < compile-cl-script.lisp"
+fi
 }
+#echo "$(get_build_lisp_cmd)"
+#exit 1;
 
 get_install_lisp_cmd () {
 abs_path LISP_DIR
@@ -248,6 +280,9 @@ if [ $(downcase "$CUR_LISP") = "sbcl" ]; then echo "sh install.sh"; fi
 
 if [ $(downcase "$CUR_LISP") = "cmucl" ]; 
 then echo "cp -r $SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME/../build-4 $LISP_DIR/build-4;mkdir --parents $LISP_DIR/src/i18n;cp $SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME/i18n/unidata.bin $LISP_DIR/src/i18n/unidata.bin";
+fi
+if [ $(downcase "$CUR_LISP") = "wcl" ]; then 
+    echo "mv ../../bin $RESULT_DIR/bin;mv ../../lib $RESULT_DIR/lib";
 fi
 }
 
@@ -265,7 +300,11 @@ if [ $(downcase "$CUR_LISP") = "cmucl" ];
 then echo "cd $LISP_DIR;./$LISP_RELATIVE_PATH"; fi
 
 if [ $(downcase "$CUR_LISP") = "abcl" ]; then
-    echo "cd $LISP_DIR; PATH=$UTILS:$PWD JAVA_HOME=$(dirname $(dirname $(realpath java))) java -jar abcl.jar"
+    echo "cd $LISP_DIR; PATH=$UTILS:$PWD JAVA_HOME=$(dirname $(dirname $(realpath $UTILS/java))) java -jar abcl.jar"
+fi    
+
+if [ $(downcase "$CUR_LISP") = "wcl" ]; then
+    echo "LD_LIBRARY_PATH=$LISP_DIR/lib:$LD_LIBRARY_PATH $LISP_DIR/bin/wcl";
 fi    
 }
 

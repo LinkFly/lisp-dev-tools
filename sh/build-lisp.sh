@@ -20,6 +20,8 @@ resolve_deps "$LISP_DEPS_ON_TOOLS"
 local SOURCES_DIR="$LISP_SOURCES_DIR"
 local RESULT_DIR="$LISP_DIR"
 local PROCESS_CMD="$(get_build_lisp_cmd)"
+#echo "$PROCESS_CMD"
+#exit 1;
 if [ "$PROCESS_CMD" = "" ];
 then echo "
 ERROR: empty build command.
