@@ -12,6 +12,7 @@ cd $(dirname $0)
 local ARCHIVE_NAME=$1
 local URL=$2
 local RENAME_DOWNLOAD=$3
+local POST_DOWNLOAD_CMD="$4"
 
 ######### Configuring variables ####
 DOWNLOAD_SCRIPT=$SCRIPTS_DIR/download-archive.sh
@@ -25,7 +26,7 @@ else
 mkdir --parents $TMP_DOWNLOAD
 rm -f $TMP_ARCHIVE
 cd $TMP_DOWNLOAD;
-$DOWNLOAD_SCRIPT $URL $RENAME_DOWNLOAD;
+$DOWNLOAD_SCRIPT "$URL" "$RENAME_DOWNLOAD" "$POST_DOWNLOAD_CMD";
 if [ -f $TMP_ARCHIVE ];
   then 
     mkdir --parents $ARCHIVES;

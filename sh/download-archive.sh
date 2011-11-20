@@ -10,6 +10,7 @@ Running download-archive.sh ..."
 ######### Parameters ###############
 URL=$1
 RENAME_DOWNLOAD=$2
+POST_DOWNLOAD_CMD="$3"
 
 ######### Configuring and computing variables ####
 local PROVIDE_LOADER=$SCRIPTS_DIR/provide-wget.sh
@@ -37,4 +38,9 @@ fi
 $PROVIDE_LOADER
 echo "\nURL: $URL"
 $LOADER $URL $EXTRA_PARAMS
+if ! [ "$POST_DOWNLOAD_CMD" = "" ]; then
+    echo "Now evaluating POST_DOWNLOAD_CMD: $POST_DOWNLOAD_CMD";
+    PATH=$UTILS:$PATH;
+    eval "$POST_DOWNLOAD_CMD";
+fi
 echo "End running download-archive.sh"

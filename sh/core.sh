@@ -37,8 +37,11 @@ resolve_deps "$TOOL_DEPS_ON_TOOLS"
 #### Providing archive if needed ####
 local ALL_FILES_EXIST_P=$(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS_DIR")
 if [ "$ALL_FILES_EXIST_P" = "no" ]
-then if ! [ -f $ARCHIVES/$TOOL_ARCHIVE ];
-     then provide_archive_tool "$TOOL_NAME";
+then if ! [ -f $ARCHIVES/$TOOL_ARCHIVE ]; then
+	if [ "$TOOL_NAME" = "wget" ]; then 
+	    ln -fs $SCRIPTS_DIR/$WGET_ARCHIVE $ARCHIVES/$WGET_ARCHIVE;
+	else provide_archive_tool "$TOOL_NAME";
+	fi
      fi
 fi
 
@@ -209,10 +212,12 @@ CORE_BIN_DIR
 BIN_BUILD_RESULT
 BIN_ARCHIVE
 BIN_URL
+BIN_POST_DOWNLOAD_CMD
 RENAME_BIN_DOWNLOAD
 RENAME_SRC_DOWNLOAD
 SOURCE_ARCHIVE
 SOURCE_URL
+SRC_POST_DOWNLOAD_CMD
 RENAME_SRC_DOWNLOAD
 SRC_ARCHIVE_TYPE
 BIN_ARCHIVE_TYPE
@@ -262,8 +267,19 @@ NEW_ARGS="-L${LIBGMP_LIB_PATH} $@"
 echo "New args for ld: $NEW_ARGS"
 $DIR_FOR_LD/ld $NEW_ARGS
 ';
-    local D=\$;
-    echo "cd linux/src/build;rm -rf ../../bin ../../lib;mkdir --parents generated-for-build ../../bin ../../lib;echo '$LD_DECORATOR_CONTENT' > generated-for-build/ld;chmod u+x generated-for-build/ld;PATH=$SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME/linux/src/build/generated-for-build:$PATH C_INCLUDE_PATH=$UTILS/$GMP_TOOL_DIR/include:$UTILS/$BINUTILS_TOOL_DIR/include LIBGMP_LIB_PATH=$UTILS/$GMP_TOOL_DIR/lib BINUTILS_LIB_PATH=$UTILS/$BINUTILS_TOOL_DIR/lib LD_LIBRARY_PATH=$COMPILERS/$LISP_LISPS_COMPILERS/$LISP_COMPILER_DIRNAME/$LISP_OS/lib $COMPILERS/$LISP_LISPS_COMPILERS/$LISP_COMPILER_DIRNAME/$LISP_OS/bin/wcl -m 24000 < compile-cl-script.lisp"
+    echo "cd linux/src/build;rm -rf ../../bin ../../lib;mkdir --parents generated-for-build ../../bin ../../lib;echo '$LD_DECORATOR_CONTENT' > generated-for-build/ld;chmod u+x generated-for-build/ld;PATH=$SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME/linux/src/build/generated-for-build:$PATH C_INCLUDE_PATH=$UTILS/$GMP_TOOL_DIR/include:$UTILS/$BINUTILS_TOOL_DIR/include LIBGMP_LIB_PATH=$UTILS/$GMP_TOOL_DIR/lib BINUTILS_LIB_PATH=$UTILS/$BINUTILS_TOOL_DIR/lib LD_LIBRARY_PATH=$COMPILERS/$LISP_LISPS_COMPILERS/$LISP_COMPILER_DIRNAME/$LISP_OS/lib $COMPILERS/$LISP_LISPS_COMPILERS/$LISP_COMPILER_DIRNAME/$LISP_OS/bin/wcl -m 24000 < compile-cl-script.lisp";
+fi
+
+if [ $(downcase "$CUR_LISP") = "gcl" ];
+then 
+    local PDFLATEX_DECORATOR_CONTENT='#!/bin/sh
+echo "... Interception calling pdflatex from file: $0 ...
+Documentation not builded."';
+    local TEX_DECORATOR_CONTENT='#!/bin/sh
+echo "... Interception calling tex from file: $0 ...
+Documentation not builded."';  
+## --enable-ansi in configure options - failed.
+    echo "mkdir --parents generated-for-build;echo '$PDFLATEX_DECORATOR_CONTENT' > generated-for-build/pdflatex;chmod u+x generated-for-build/pdflatex;echo '$TEX_DECORATOR_CONTENT' > generated-for-build/tex;chmod u+x generated-for-build/tex;PATH=$UTILS:$PATH ./configure --prefix $LISP_DIR && PATH=$SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME/generated-for-build:$UTILS:$PATH $LISP_BUILD_CMD"
 fi
 }
 #echo "$(get_build_lisp_cmd)"
@@ -272,7 +288,7 @@ fi
 get_install_lisp_cmd () {
 abs_path LISP_DIR
 
-if [ $(downcase "$CUR_LISP") = "ecl" ] || [ $(downcase "$CUR_LISP") = "clisp" ] || [ $(downcase "$CUR_LISP") = "mkcl" ];
+if [ $(downcase "$CUR_LISP") = "ecl" ] || [ $(downcase "$CUR_LISP") = "clisp" ] || [ $(downcase "$CUR_LISP") = "mkcl" ] || [ $(downcase "$CUR_LISP") = "gcl" ];
 then echo "$LISP_INSTALL_CMD"; fi
 
 if [ $(downcase "$CUR_LISP") = "xcl" ]; then echo "cp xcl $LISP_DIR/xcl"; fi
@@ -290,7 +306,8 @@ get_run_lisp_cmd () {
 abs_path LISP_DIR
 
 if [ $(downcase "$CUR_LISP") = "xcl" ] || [ $(downcase "$CUR_LISP") = "ecl" ] || \
-    [ $(downcase "$CUR_LISP") = "clisp" ] || [ $(downcase "$CUR_LISP") = "mkcl" ]; 
+    [ $(downcase "$CUR_LISP") = "clisp" ] || [ $(downcase "$CUR_LISP") = "mkcl" ] || \
+    [ $(downcase "$CUR_LISP") = "gcl" ]; 
 then echo "$LISP_DIR/$LISP_RELATIVE_PATH"; fi
 
 if [ $(downcase "$CUR_LISP") = "sbcl" ]; 

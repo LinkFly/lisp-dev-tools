@@ -300,11 +300,14 @@ if [ "$ALL_FILES_EXIST_P" = "yes" ];
   else
     RESULT=1;
     eval "$BUILD_CMD && RESULT=0";
+
     if [ $RESULT = 0 ];
     then
 	local N=0;
 	for link in $FILE_LINK_NAMES;
 	do
+	    echo ln -s $(get_n_arg "$BUILDED_FILES" $N) $UTILS_DIR/$link;
+
 	    N=$(($N + 1));
 	    rm -f $UTILS_DIR/$link && ln -s $(get_n_arg "$BUILDED_FILES" $N) $UTILS_DIR/$link;
 	done

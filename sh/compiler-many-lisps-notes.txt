@@ -1,3 +1,21 @@
+######## For GCL compilation ##############
+configure patching:
+1) 1718: `${AWK} '{print $3}' /etc/.relid'`
+   лишний апостроф.
+sed -i s/\\/etc\\/\\.relid\'/\\/etc\\/\\.relid/ configure
+####################3
+For GCL 2.6.8
+Required: gmp4/gmp.h
+Package(?): libgmp3-dev
+
+Required: pdflatex, tex
+
+Building:
+mkdir --parents $(pwd)/generated-for-build
+
+PATH=/home/linkfly/Downloads/lisp-dev-tools/utils:$PATH ./configure --prefix $(pwd)/../gcl-bin && PATH=$(pwd)/generated-for-build:/home/linkfly/Downloads/lisp-dev-tools/utils:$PATH make && make install
+
+
 ######## For WCL compilation ##############
 Build:
 cd linux/src/build;rm -rf ../../bin ../../lib;mkdir --parents ../../bin ../../lib;PATH=/home/linkfly/Downloads/try-build-wcl:$PATH C_INCLUDE_PATH=/home/linkfly/Downloads/gmp-bin/include:/home/linkfly/Downloads/binutils-bin/include LIBGMP_LIB_PATH=/home/linkfly/Downloads/gmp-bin/lib BINUTILS_LIB_PATH=/home/linkfly/Downloads/binutils-bin/lib LD_LIBRARY_PATH=/home/linkfly/Downloads/try-build-wcl/wcl-bin/linux/lib /home/linkfly/Downloads/try-build-wcl/wcl-bin/linux/bin/wcl -m 24000 < compile-cl-script.lisp

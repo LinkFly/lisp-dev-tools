@@ -9,3 +9,6 @@ abs_path ARCHIVES
 abs_path TMP
 abs_path TMP_DOWNLOAD
 
+### Internal ###
+abs_path SCRIPTS_DIR
+
