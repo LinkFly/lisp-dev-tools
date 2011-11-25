@@ -210,6 +210,7 @@ HOME_VAR_NAME
 BIN_DIR
 CORE_BIN_DIR
 BIN_BUILD_RESULT
+BIN_IN_SOURCES
 BIN_ARCHIVE
 BIN_URL
 BIN_POST_DOWNLOAD_CMD
@@ -281,9 +282,11 @@ Documentation not builded."';
 ## --enable-ansi in configure options - failed.
     echo "mkdir --parents generated-for-build;echo '$PDFLATEX_DECORATOR_CONTENT' > generated-for-build/pdflatex;chmod u+x generated-for-build/pdflatex;echo '$TEX_DECORATOR_CONTENT' > generated-for-build/tex;chmod u+x generated-for-build/tex;PATH=$UTILS:$PATH ./configure --prefix $LISP_DIR && PATH=$SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME/generated-for-build:$UTILS:$PATH $LISP_BUILD_CMD"
 fi
+
+if [ $(downcase "$CUR_LISP") = "ccl" ]; then 
+    echo "echo '(rebuild-ccl :full t)' | PATH=$UTILS:$PATH ./lx86cl64";
+fi
 }
-#echo "$(get_build_lisp_cmd)"
-#exit 1;
 
 get_install_lisp_cmd () {
 abs_path LISP_DIR
@@ -300,6 +303,12 @@ fi
 if [ $(downcase "$CUR_LISP") = "wcl" ]; then 
     echo "mv ../../bin $RESULT_DIR/bin;mv ../../lib $RESULT_DIR/lib";
 fi
+
+if [ $(downcase "$CUR_LISP") = "ccl" ]; then 
+    echo "
+cp $SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME/$LISP_BIN_BUILD_RESULT $LISP_DIR/$LISP_BIN_BUILD_RESULT
+cp $SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME/${LISP_BIN_BUILD_RESULT}.image $LISP_DIR/${LISP_BIN_BUILD_RESULT}.image";
+fi
 }
 
 get_run_lisp_cmd () {
@@ -307,7 +316,7 @@ abs_path LISP_DIR
 
 if [ $(downcase "$CUR_LISP") = "xcl" ] || [ $(downcase "$CUR_LISP") = "ecl" ] || \
     [ $(downcase "$CUR_LISP") = "clisp" ] || [ $(downcase "$CUR_LISP") = "mkcl" ] || \
-    [ $(downcase "$CUR_LISP") = "gcl" ]; 
+    [ $(downcase "$CUR_LISP") = "gcl" ] || [ $(downcase "$CUR_LISP") = "ccl" ]; 
 then echo "$LISP_DIR/$LISP_RELATIVE_PATH"; fi
 
 if [ $(downcase "$CUR_LISP") = "sbcl" ]; 

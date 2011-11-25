@@ -1,3 +1,12 @@
+######## For CCL compilation ##############
+CCL_DEFAULT_DIRECTORY
+PATH=/home/linkfly/Downloads/lisp-dev-tools/utils:$PATH ./lx86cl64
+(ccl:rebuild-ccl :full t)
+Required: m4
+(GNU gcc or cc with ld and as; make; and m4)
+(apt-get install build-essential)
+--terminal-encoding :utf-8
+
 ######## For GCL compilation ##############
 configure patching:
 1) 1718: `${AWK} '{print $3}' /etc/.relid'`
