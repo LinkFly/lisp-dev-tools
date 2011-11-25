@@ -1,0 +1,12 @@
+#!/bin/sh
+
+echo "SBCL
+CMUCL
+XCL
+ECL
+CLISP
+MKCL
+ABCL
+WCL
+GCL
+CCL"

@@ -2,6 +2,13 @@
 cd $(dirname $0)
 . ./includes.sh
 
+###################################
+#### Checking dependecies libs ####
+local LIBS="$LISP_LIB_DEPS"
+check_dep_libs "$LIBS"
+
+#### Resolving dependencies #######
+resolve_deps "$LISP_DEPS_ON_TOOLS"
 
 ########
 abs_path LISP_DIR
