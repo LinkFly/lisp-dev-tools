@@ -16,7 +16,7 @@ abs_path LISP_DIR
 COMPILER_DIR="$COMPILERS/$LISP_LISPS_COMPILERS/$LISP_COMPILER_DIRNAME"
 
 
-if [ $(elt_in_set_p "$CUR_LISP" "sbcl abcl") = "no" ]
+if [ $(elt_in_set_p $(downcase "$CUR_LISP") "sbcl abcl") = "no" ]
 then echo "
 ERROR: Not implemented.
 
