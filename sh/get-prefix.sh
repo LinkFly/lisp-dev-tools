@@ -1,3 +1,3 @@
 #!/bin/sh
-$(dirname $0)
-echo $(dirname $(dirname $(./realpath $0)))
+cd $(dirname $0)
+echo $(dirname $(dirname $(sh realpath ${0##*/})))
