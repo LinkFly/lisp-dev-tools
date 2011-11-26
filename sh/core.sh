@@ -236,7 +236,7 @@ get_build_lisp_cmd () {
 abs_path LISP_DIR
 if [ $(downcase "$CUR_LISP") = "xcl" ]; 
 then
-    echo "LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu PATH=$UTILS:$PATH make && echo '(rebuild-lisp)' | ./xcl"; 
+    echo "PATH=$UTILS:$PATH make && echo '(rebuild-lisp)' | ./xcl"; 
 fi
 if [ $(downcase "$CUR_LISP") = "ecl" ] || [ $(downcase "$CUR_LISP") = "mkcl" ]; 
 then
