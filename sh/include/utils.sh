@@ -141,7 +141,7 @@ else
     eval "$PROCESS_CMD" && RESULT=0;    
     if [ $RESULT = 0 ];
     then echo "$MES_SUCCESS"
-    else echo "$MES_FAILED"; return 1;
+    else echo "$MES_FAILED"; exit 1;
     fi
 fi
 }
