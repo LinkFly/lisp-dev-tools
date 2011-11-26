@@ -1,0 +1,40 @@
+#!/bin/sh
+cd $(dirname $0)
+
+LINK="$1"
+
+fst_char () {
+echo $1 | cut -c 1
+}
+
+abs_path_p () {
+local TMP
+TMP=$(fst_char $1)
+if [ $TMP ]; then 
+  if [ "$TMP" = "/" ];
+  then echo "yes";
+  else echo "no";
+  fi
+fi
+}
+
+if [ "$(readlink $LINK)" = "" ]; then 
+   if [ "abs_path_p $LINK" = "yes" ]; then
+       echo "$LINK"; 
+   else
+       echo "$(pwd)/$LINK";
+   fi
+   exit 0; 
+else    
+    while :; do
+	LINK="$(readlink $LINK)";
+	if [ "$(abs_path_p $LINK)" = "no" ]; then
+	    LINK="$(pwd)/$LINK";
+	fi
+	cd $(dirname $LINK);
+	if [ "$(readlink $LINK)" = "" ]; then 
+	    echo "$LINK";
+	    exit 0;
+	fi
+    done
+fi

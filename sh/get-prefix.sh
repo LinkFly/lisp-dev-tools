@@ -1,2 +1,3 @@
 #!/bin/sh
-echo $(dirname $(dirname $(realpath $0)))
+$(dirname $0)
+echo $(dirname $(dirname $(./realpath $0)))
