@@ -231,12 +231,14 @@ do
     eval LISP_${param}="\"$(get_lisp_param $param)\""; 
 done
 ##################### end filling LISP_ variables ##############
-
 get_build_lisp_cmd () {
 abs_path LISP_DIR
 if [ $(downcase "$CUR_LISP") = "xcl" ]; 
 then
-    echo "PATH=$UTILS:$PATH make && echo '(rebuild-lisp)' | ./xcl"; 
+    local PATH_TO_LIBS='\\\\/usr\\\\/lib\\\\/x86_64-linux-gnu\\\\/';
+
+    echo "echo '\nATTENTION!!!\nPatching Makefile for correcting path to finded libpthread.so (copy will be saved as Makefile.backup';if ! [ -f kernel/Makefile.backup ];then cp kernel/Makefile kernel/Makefile.backup; fi;sed -i s/\\\\\\/usr\\\\\\/lib\\\\\\/libpthread.so/${PATH_TO_LIBS}libpthread.so/ kernel/Makefile;PATH=$UTILS:$PATH make && echo '(rebuild-lisp)' | ./xcl"; 
+#    echo "PATH=$UTILS:$PATH make && echo '(rebuild-lisp)' | ./xcl"; 
 fi
 if [ $(downcase "$CUR_LISP") = "ecl" ] || [ $(downcase "$CUR_LISP") = "mkcl" ]; 
 then

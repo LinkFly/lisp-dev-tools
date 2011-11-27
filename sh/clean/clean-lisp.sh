@@ -9,7 +9,6 @@ remove-compiler-lisp.sh
 remove-archive-lisp-src.sh
 remove-archive-lisp-bin.sh"
 
-for scr in $SCRIPTS;
-do $(dirname $0)/sh/$scr; done
+for scr in $SCRIPTS;do sh $scr;done
 
 
