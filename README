@@ -13,6 +13,11 @@ Features:
     OS/Architecture - just copy the directory to another host!
 
 Now supported: Linux Ubuntu 11.04/x86-64.
+
+Dependencies:
+For building CMUCL lisp: libc6-dev-i386 package.
+For building Emacs: libncurses-dev package.
+
 Providing 10(!) open source lisps:
 
 SBCL - Steel Bank Common Lisp	(http://www.sbcl.org/)
@@ -38,10 +43,12 @@ $ sudo apt-get -y install libc6-dev-i386
 2) GCL building only in CLTL1 compliance mode (not builded 
 with configure option --enable-ansi - bug in GCL)
 
-3) SBCL by default no building - providing precompiled binaries. For building from
+3) SBCL by default no building - provided precompiled binaries. For building from
 sources to run:
 
 $ ./rebuild-lisp
+
+4) For building fresh Emacs (without X-like GUI) required libncurses-dev package.
 
 Using:
 1) Go to the directory:
@@ -75,7 +82,7 @@ Current lisp: ccl
 $ ./get-version
 1.0.53
 
-8) Change current lisp version (attention: url includes a new version must be valid):
+8) Change current lisp version (attention: url includes the new version should be valid):
 
 $ ./change-version 1.0.52
 Current lisp version: 1.0.52
