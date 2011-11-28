@@ -260,7 +260,7 @@ if [ $(lsp_release -si) = Ubuntu ] && [ $(lsp_release -sr) = 11.04 ];then
   if ! [ -f /usr/include/gnu/stubs-32.h ];then echo '    
 ERROR: For building CMUCL in Ubuntu 11.04 please installing libc6-dev-i386.
 
-FAILED.';fi
+FAILED.';exit 1;fi
 fi
 cd ../;PATH=$LISP_COMPILER_DIR/$LISP_BIN_DIR:$PATH src/tools/build.sh -C \"\" -o lisp";
 fi
