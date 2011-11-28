@@ -8,7 +8,7 @@ Features:
   - Fast and convenient update versions of lisp-systems.
   - Full automation of downloading, configuring and building lisp-systems.
   - General interface for using many open source lisp-systems.
-  - Automation configuring Quicklisp and Slime.
+  - Automation configuring and installing (into lisp-dev-tools) Quicklisp and Slime.
   - Portable: for use on another host with the same
     OS/Architecture - just copy the directory to another host!
 
@@ -27,8 +27,9 @@ GCL(CLTL1 only) - GNU Common Lisp 	     	(http://www.gnu.org/s/gcl/)
 CCL - Clozure Common Lisp	(http://ccl.clozure.com/)
 
 Notes: 
-1) CMUCL building only for x86 architecture (required supported x86 on x86-64 architectures).
-For succesful building in Ubuntu 11.04 required libc6-dev-i386 package. To install run command:
+1) CMUCL building only for x86 architecture, so required supported x86 on x86-64 
+architectures - for succesful building in Ubuntu 11.04 required libc6-dev-i386 
+package. To install run command:
 
 $ sudo apt-get -y install libc6-dev-i386
 
@@ -36,6 +37,11 @@ $ sudo apt-get -y install libc6-dev-i386
 
 2) GCL building only in CLTL1 compliance mode (not builded 
 with configure option --enable-ansi - bug in GCL)
+
+3) SBCL by default no building - providing precompiled binaries. For building from
+sources to run:
+
+$ ./rebuild-lisp
 
 Using:
 1) Go to the directory:
@@ -71,9 +77,18 @@ $ ./get-version
 
 8) Change current lisp version (attention: url includes a new version must be valid):
 
-$ ./change-version
+$ ./change-version 1.0.52
 Current lisp version: 1.0.52
 
-9) Providing fresh emacs (required libncurses-dev package):
+9) Provide and run the lisp different version:
+
+$ VERSION=1.0.51 ./provide-lisp
+$ VERSION=1.0.51 ./run-lisp
+
+10) For rebuilding current lisp to run:
+
+$ ./rebuild-lisp
+
+11) Providing fresh emacs (required libncurses-dev package):
 
 ./provide-emacs

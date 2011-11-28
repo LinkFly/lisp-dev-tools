@@ -1,5 +1,13 @@
 #!/bin/sh
-cd $(dirname $0)/sh
+cd $(dirname $0)
+
+ref=$(readlink $(pwd))
+if ! [ -z $ref ]; then 
+    cd ../$ref/..;
+else
+    cd ..
+fi
+
 . ./includes.sh
 
 local SCRIPTS="
