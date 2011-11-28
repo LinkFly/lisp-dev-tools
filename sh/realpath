@@ -1,7 +1,13 @@
 #!/bin/sh
-cd $(dirname $0)
 
 LINK="$1"
+BEGIN_PATH="$2"
+if [ "$BEGIN_PATH" = "" ];then
+    BEGIN_PATH=$(dirname $LINK);
+    if [ "$BEGIN_PATH" = "" ] || [ "$BEGIN_PATH" = "." ];then
+	BEGIN_PATH=$PWD;
+    fi
+fi
 
 fst_char () {
 echo $1 | cut -c 1
@@ -22,14 +28,14 @@ if [ "$(readlink $LINK)" = "" ]; then
    if [ "abs_path_p $LINK" = "yes" ]; then
        echo "$LINK"; 
    else
-       echo "$(pwd)/$LINK";
+       echo "$BEGIN_PATH/$LINK";
    fi
    exit 0; 
 else    
     while :; do
-	LINK="$(readlink $LINK)";
+	LINK="$(readlink $LINK)";	
 	if [ "$(abs_path_p $LINK)" = "no" ]; then
-	    LINK="$(pwd)/$LINK";
+	    LINK="$BEGIN_PATH/$LINK";
 	fi
 	cd $(dirname $LINK);
 	if [ "$(readlink $LINK)" = "" ]; then 

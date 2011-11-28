@@ -334,7 +334,8 @@ if [ $(downcase "$CUR_LISP") = "cmucl" ];
 then echo "cd $LISP_DIR;./$LISP_RELATIVE_PATH"; fi
 
 if [ $(downcase "$CUR_LISP") = "abcl" ]; then
-    echo "cd $LISP_DIR; PATH=$UTILS:$PWD JAVA_HOME=$(dirname $(dirname $($SCRIPTS_DIR/realpath $UTILS/java))) java -jar abcl.jar"
+    JAVA_REALPATH=$($SCRIPTS_DIR/realpath $UTILS/java);
+    echo "cd $LISP_DIR; PATH=$UTILS:$PWD JAVA_HOME=$(dirname $(dirname $JAVA_REALPATH)) java -jar abcl.jar"
 fi    
 
 if [ $(downcase "$CUR_LISP") = "wcl" ]; then
