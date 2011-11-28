@@ -1,27 +1,41 @@
 Lisp Development Tools (lisp-dev-tools).
 
-Linux shell scripts for automatization of downloading, compilation and configuring lisp development tools (emacs, slime, sbcl and other lisps ...)
+     Linux shell scripts to automate the downloading, compilation
+and configuring lisp development tools (emacs, slime, sbcl and
+other lisps ...). 
+
+Features: 
+  - Fast and convenient update versions of lisp-systems.
+  - Full automation of downloading, configuring and building lisp-systems.
+  - General interface for using many open source lisp-systems.
+  - Automation configuring Quicklisp and Slime.
+  - Portable: for use on another host with the same
+    OS/Architecture - just copy the directory to another host!
 
 Now supported: Linux Ubuntu 11.04/x86-64.
 Providing 10(!) open source lisps:
 
 SBCL - Steel Bank Common Lisp	(http://www.sbcl.org/)
-CMUCL - CMU Common Lisp  	(http://www.cons.org/cmucl/)
+CMUCL(x86 only) - CMU Common Lisp  	(http://www.cons.org/cmucl/)
 XCL 	    	   		(http://armedbear.org/)
 ECL - Embedded Common Lisp 	(http://ecls.sourceforge.net/)
 CLISP        	      		(http://www.clisp.org/)
 MKCL - ManKai Common Lisp 	(http://common-lisp.net/project/mkcl/)
 ABCL - Armed Bear Common Lisp 	(http://common-lisp.net/project/armedbear/)
 WCL    	     	  	 	(http://pgc.com/commonlisp/)
-GCL - GNU Common Lisp 	     	(http://www.gnu.org/s/gcl/)
+GCL(CLTL1 only) - GNU Common Lisp 	     	(http://www.gnu.org/s/gcl/)
 CCL - Clozure Common Lisp	(http://ccl.clozure.com/)
 
 Notes: 
 1) CMUCL building only for x86 architecture (required supported x86 on x86-64 architectures).
-For succesful building in Ubuntu 11.04 required libc6-dev-i386 package (for installing
-run command: "sudo apt-get -y install libc6-dev-i386", instead apt-get preferable used aptitude)
+For succesful building in Ubuntu 11.04 required libc6-dev-i386 package. To install run command:
 
-2) GCL building only in CLTL1 compliated mode (probable bug in GCL)
+$ sudo apt-get -y install libc6-dev-i386
+
+  ... instead "apt-get" preferable to use the "aptitude".
+
+2) GCL building only in CLTL1 compliance mode (not builded 
+with configure option --enable-ansi - bug in GCL)
 
 Using:
 1) Go to the directory:
@@ -32,7 +46,7 @@ $ cd <path-to>/lisp-dev-tools
 
 $ ./provide-lisp
 
-3) Running (by default SBCL:
+3) Running (by default SBCL):
 
 $ ./run-lisp 
 
@@ -53,12 +67,13 @@ Current lisp: ccl
 7) Get current lisp version: 
 
 $ ./get-version
-1.0.52
+1.0.53
 
 8) Change current lisp version (attention: url includes a new version must be valid):
 
 $ ./change-version
 Current lisp version: 1.0.52
+
 
 
 
