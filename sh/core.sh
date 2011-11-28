@@ -115,7 +115,7 @@ if [ "$TOOL_EXTRACT_CMD" = "" ]; then
     TOOL_EXTRACT_CMD=$(get_extract_begin_cmd "$ARCHIVES/$TOOL_ARCHIVE");
 fi
 
-### Call build_tool ###
+### Call extract_build_install ###
 local ARCHIVE_PATH=$ARCHIVES/$TOOL_ARCHIVE
 local TMP_TOOL_DIR=$TMP/$TOOL_TMP_DIRNAME
 local EXTRACT_SCRIPT="$TOOL_EXTRACT_CMD"
