@@ -74,9 +74,6 @@ $ ./get-version
 $ ./change-version
 Current lisp version: 1.0.52
 
+9) Providing fresh emacs (required libncurses-dev package):
 
-
-
-
-
-
+./provide-emacs
