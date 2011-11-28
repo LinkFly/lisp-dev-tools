@@ -1,1 +1,67 @@
-Linux shell scripts for automatization download, compilation and configuring lisp development tools (emacs, slime, sbcl and other lisps ...)
+Lisp Development Tools (lisp-dev-tools).
+
+Linux shell scripts for automatization of downloading, compilation and configuring lisp development tools (emacs, slime, sbcl and other lisps ...)
+
+Now supported: Linux Ubuntu 11.04/x86-64.
+Providing 10(!) open source lisps:
+
+SBCL - Steel Bank Common Lisp	(http://www.sbcl.org/)
+CMUCL - CMU Common Lisp  	(http://www.cons.org/cmucl/)
+XCL 	    	   		(http://armedbear.org/)
+ECL - Embedded Common Lisp 	(http://ecls.sourceforge.net/)
+CLISP        	      		(http://www.clisp.org/)
+MKCL - ManKai Common Lisp 	(http://common-lisp.net/project/mkcl/)
+ABCL - Armed Bear Common Lisp 	(http://common-lisp.net/project/armedbear/)
+WCL    	     	  	 	(http://pgc.com/commonlisp/)
+GCL - GNU Common Lisp 	     	(http://www.gnu.org/s/gcl/)
+CCL - Clozure Common Lisp	(http://ccl.clozure.com/)
+
+Notes: 
+1) CMUCL building only for x86 architecture (required supported x86 on x86-64 architectures).
+For succesful building in Ubuntu 11.04 required libc6-dev-i386 package (for installing
+run command: "sudo apt-get -y install libc6-dev-i386", instead apt-get preferable used aptitude)
+
+2) GCL building only in CLTL1 compliated mode (probable bug in GCL)
+
+Using:
+1) Go to the directory:
+
+$ cd <path-to>/lisp-dev-tools
+
+2) Downloading (by default SBCL), configuring, building, and install into lisp-dev-tools (for portability):
+
+$ ./provide-lisp
+
+3) Running (by default SBCL:
+
+$ ./run-lisp 
+
+4) Providing and running other lisp (example CCL):
+
+$ LISP=ccl ./provide-lisp && LISP=ccl ./run-lisp
+
+5) Get current lisp:
+
+$ ./get-lisp
+sbcl
+
+6) Change current lisp:
+
+$ ./change-lisp ccl
+Current lisp: ccl
+
+7) Get current lisp version: 
+
+$ ./get-version
+1.0.52
+
+8) Change current lisp version (attention: url includes a new version must be valid):
+
+$ ./change-version
+Current lisp version: 1.0.52
+
+
+
+
+
+

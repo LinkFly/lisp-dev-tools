@@ -5,7 +5,7 @@ cd $(dirname $0)
 RUN_COMMAND=$(get_run_lisp_cmd)
 
 ######## Checking lisp ###########
-if [ "$(get_run_lisp_cmd)" = "" ]; then echo "ERROR: empty lisp command."; fi
+if [ "$RUN_COMMAND" = "" ]; then echo "ERROR: empty lisp command."; fi
 
 RESULT=1
 eval "XDG_CONFIG_DIRS=$PREFIX/conf $RUN_COMMAND $@" && RESULT=0
