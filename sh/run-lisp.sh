@@ -17,7 +17,7 @@ fi
 RUN_COMMAND=$(get_run_lisp_cmd)
 
 ######## Checking command ###########
-if [ $(echo $RUN_COMMAND | cut --bytes=1-5) = ERROR ];then
+if [ "$(echo $RUN_COMMAND | cut --bytes=1-5)" = "ERROR" ];then
     echo "$RUN_COMMAND";
     exit 1;
 fi
@@ -30,7 +30,7 @@ eval "XDG_CONFIG_DIRS=$PREFIX/conf $RUN_COMMAND $@" && RESULT=0
 
 if [ $RESULT = 1 ]; then
     echo "
-ERROR: Running $(uppercase $CUR_LISP) failed (if lisp isn't existing then to run provide-lisp.sh).
+ERROR: Running $(uppercase $CUR_LISP) failed (if lisp isn't existing then to run provide-lisp).
 Running command: $RUN_COMMAND 
 
 FAILED."; exit 1;

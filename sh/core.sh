@@ -18,7 +18,13 @@ provide_tool () {
 local TOOL_NAME=$1
 
 TOOL_NAME=$(downcase $TOOL_NAME)
-local D=\$
+local TOOL_VERSION=$(get_spec_val $TOOL_NAME _VERSION)
+if [ "$TOOL_VERSION" = "" ];then 
+    echo "
+ERROR: Tool $TOOL_NAME does not registered.
+
+FAILED.";exit 1;
+fi
 local TOOL_DIR=$(get_spec_val $TOOL_NAME _TOOL_DIR)
 local TOOL_RELATIVE_DIR=$(get_spec_val $TOOL_NAME _RELATIVE_DIR)
 local TOOL_ARCHIVE=$(get_spec_val $TOOL_NAME _ARCHIVE)
@@ -36,6 +42,7 @@ resolve_deps "$TOOL_DEPS_ON_TOOLS"
 
 #### Providing archive if needed ####
 local ALL_FILES_EXIST_P=$(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS_DIR")
+
 if [ "$ALL_FILES_EXIST_P" = "no" ]
 then if ! [ -f $ARCHIVES/$TOOL_ARCHIVE ]; then
 	if [ "$TOOL_NAME" = "wget" ]; then 
