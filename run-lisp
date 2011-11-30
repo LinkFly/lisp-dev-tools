@@ -1,2 +1,3 @@
 #!/bin/sh
-sh/run-lisp.sh
+cd $(dirname $0)
+sh/run-lisp.sh "$@"
