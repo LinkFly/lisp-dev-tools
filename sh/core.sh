@@ -103,6 +103,37 @@ build_if_no "$FILE_LINK_NAMES" "$UTILS_DIR" "$BUILD_CMD" "$BUILDED_FILES" \
 "$MES_ALREADY" "$MESS_BUILDED_FAIL" "$MES_BUILDED_SUCC"
 }
 
+remove_tool () {
+### Parameters ###
+local TOOL_NAME=$1
+
+local TOOL_NAME=$(downcase $TOOL_NAME)
+local TOOL_DIRNAME=$(get_spec_val $TOOL_NAME _TOOL_DIR)
+local TOOL_DIR="$UTILS/$TOOLS_DIRNAME/$TOOL_DIRNAME"
+
+### Call remove_dir ###
+DIR="$TOOL_DIR"
+MES_SUCC="
+$TOOL_DIRNAME removed successful.
+Directory (that was deleted): $TOOL_DIR
+
+OK."
+
+MES_FAIL="
+$TOOL_DIRNAME removed failed.
+Directory (that was not deleted): $TOOL_DIRNAME
+
+FAILED."
+
+MES_ABSENCE="
+Tool $TOOL_NAME (directory name: $TOOL_DIRNAME) already does not exist.
+Directory (than does not exist): $TOOL_DIR
+
+ALREADY."
+
+remove_dir "$DIR" "$MES_SUCC" "$MES_FAIL" "$MES_ABSENCE"
+}
+
 build_tool () {
 local TOOL_NAME="$1"
 
