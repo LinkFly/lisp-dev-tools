@@ -189,8 +189,10 @@ echo $(get_spec_val $CUR_LISP _$REST_PARAM_PART)
 ########## Created general "LISP_" parameters ########## 
 local ALL_LISP_PARAMS="
 VERSION
+HOME_SITE
 ARCH
 OS
+ENABLE_QUICKLISP
 DIRNAME
 LISPS_DIR
 DIR
@@ -203,6 +205,7 @@ LISPS_COMPILERS
 COMPILER_DIRNAME
 NO_BUILDING_P
 SELF_COMPILATION_P
+LOAD_OPTION
 PREBUILD_CMD
 BUILD_CMD
 INSTALL_CMD
@@ -320,26 +323,40 @@ fi
 }
 
 get_run_lisp_cmd () {
+local LOAD_QUICKLISP
 abs_path LISP_DIR
+
+if [ "$LISP_ENABLE_QUICKLISP" = "yes" ];then
+    if ! [ -f "$QUICKLISP/setup.lisp" ];then
+	echo "
+ERROR: quicklisp can't be enabled - file $QUICKLISP/setup.lisp not found.
+Please to run ./provide-quicklisp
+
+FAILED."; exit 1;
+    fi
+    LOAD_QUICKLISP=" $LISP_LOAD_OPTION $QUICKLISP/setup.lisp";
+fi
 
 if [ $(downcase "$CUR_LISP") = "xcl" ] || [ $(downcase "$CUR_LISP") = "ecl" ] || \
     [ $(downcase "$CUR_LISP") = "clisp" ] || [ $(downcase "$CUR_LISP") = "mkcl" ] || \
     [ $(downcase "$CUR_LISP") = "gcl" ] || [ $(downcase "$CUR_LISP") = "ccl" ]; 
-then echo "$LISP_DIR/$LISP_RELATIVE_PATH"; fi
+then 
+    echo "$LISP_DIR/${LISP_RELATIVE_PATH}${LOAD_QUICKLISP}"; 
+fi
 
 if [ $(downcase "$CUR_LISP") = "sbcl" ]; 
-then echo "$LISP_DIR/$LISP_RELATIVE_PATH --core $LISP_DIR/lib/sbcl/sbcl.core"; fi
+then echo "$LISP_DIR/$LISP_RELATIVE_PATH --core $LISP_DIR/lib/sbcl/sbcl.core${LOAD_QUICKLISP}"; fi
 
 if [ $(downcase "$CUR_LISP") = "cmucl" ]; 
-then echo "cd $LISP_DIR;./$LISP_RELATIVE_PATH"; fi
+then echo "cd $LISP_DIR;./${LISP_RELATIVE_PATH}${LOAD_QUICKLISP}"; fi
 
 if [ $(downcase "$CUR_LISP") = "abcl" ]; then
     JAVA_REALPATH=$($SCRIPTS_DIR/realpath $UTILS/java);
-    echo "cd $LISP_DIR; PATH=$UTILS:$PWD JAVA_HOME=$(dirname $(dirname $JAVA_REALPATH)) java -jar abcl.jar"
+    echo "cd $LISP_DIR; PATH=$UTILS:$PWD JAVA_HOME=$(dirname $(dirname $JAVA_REALPATH)) java -jar abcl.jar${LOAD_QUICKLISP}"
 fi    
 
 if [ $(downcase "$CUR_LISP") = "wcl" ]; then
-    echo "LD_LIBRARY_PATH=$LISP_DIR/lib:$LD_LIBRARY_PATH $LISP_DIR/bin/wcl";
+    echo "LD_LIBRARY_PATH=$LISP_DIR/lib:$LD_LIBRARY_PATH $LISP_DIR/bin/wcl${LOAD_QUICKLISP}";
 fi    
 }
 

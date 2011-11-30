@@ -23,3 +23,9 @@ then
 local LISP_OS_PARAM=$(uppercase $CUR_LISP)_OS;
 eval $LISP_OS_PARAM="$OS"
 fi
+
+if ! [ "$ENABLE_QUICKLISP" = "" ];
+then
+local LISP_OS_PARAM=$(uppercase $CUR_LISP)_ENABLE_QUICKLISP;
+eval $LISP_OS_PARAM="$ENABLE_QUICKLISP"
+fi

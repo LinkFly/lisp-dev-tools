@@ -10,6 +10,7 @@ local PROVIDE_SOURCES_LISP=$SCRIPTS_DIR/provide-sources-lisp.sh
 local PROVIDE_BUILD_SCRIPT=$SCRIPTS_DIR/provide-build-lisp.sh
 local PROVIDE_PREBUILD_SCRIPT=$SCRIPTS_DIR/provide-prebuilded-lisp.sh
 local BUILD_OR_PREBUILD_SCRIPT #computing latter
+local PROVIDE_QUICKLISP_SCRIPT #computing latter
 ######### Computing variables ####
 abs_path LISP_DIR
 
@@ -38,11 +39,15 @@ else
     PROVIDE_SOURCES="echo 'nop' > /dev/null";
 fi
 
+if [ "$LISP_ENABLE_QUICKLISP" = "yes" ];then
+    PROVIDE_QUICKLISP_SCRIPT=" && $SCRIPTS_DIR/provide-quicklisp.sh"
+fi
+
 ######## Download compiler, get compiler, download ################
 ######## sources, get sources and building lisp if needed #########
 DIR=$LISP_DIR
 
-PROCESS_SCRIPT="$PROVIDE_SELF_COMPILER && $PROVIDE_SOURCES && $BUILD_OR_PREBUILD_SCRIPT"
+PROCESS_SCRIPT="$PROVIDE_SELF_COMPILER && $PROVIDE_SOURCES && ${BUILD_OR_PREBUILD_SCRIPT}${PROVIDE_QUICKLISP_SCRIPT}"
 
 MES_START_PROCESS="
 Providing $CUR_LISP_UP $LISP_DIRNAME ...
