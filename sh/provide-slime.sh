@@ -2,9 +2,7 @@
 cd $(dirname $0)
 . ./includes.sh
 
-./provide-lisp.sh
-./provide-emacs.sh
-./provide-quicklisp.sh
+./provide-lisp.sh && ./provide-emacs.sh && ./provide-quicklisp.sh || exit 1
 
 echo '(ql:quickload "quicklisp-slime-helper")' | ./run-lisp.sh
 echo '
