@@ -132,8 +132,11 @@ FAILED."; exit 1;
     LOAD_QUICKLISP=" $LISP_LOAD_OPTION $QUICKLISP/setup.lisp";
 fi
 
+if [ $(downcase "$CUR_LISP") = "clisp" ];then
+    echo echo "$LISP_DIR/${LISP_RELATIVE_PATH}${LOAD_QUICKLISP} -ansi"; 
+fi
 if [ $(downcase "$CUR_LISP") = "xcl" ] || [ $(downcase "$CUR_LISP") = "ecl" ] || \
-    [ $(downcase "$CUR_LISP") = "clisp" ] || [ $(downcase "$CUR_LISP") = "mkcl" ] || \
+    [ $(downcase "$CUR_LISP") = "mkcl" ] || \
     [ $(downcase "$CUR_LISP") = "gcl" ] || [ $(downcase "$CUR_LISP") = "ccl" ]; 
 then 
     echo "$LISP_DIR/${LISP_RELATIVE_PATH}${LOAD_QUICKLISP}"; 
