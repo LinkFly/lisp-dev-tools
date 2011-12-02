@@ -9,7 +9,10 @@
 . ./conf/lisps.conf
 . ./include/correct-params.sh
 . ./internal-conf/internal-lisps.conf
+. ./created-general-lisp-params.sh
 . ./core.sh
+. ./get-build-install-run-cmds.sh
+
 
 
 
