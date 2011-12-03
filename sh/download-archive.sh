@@ -35,7 +35,8 @@ FAILED."; exit 1;
 fi
 
 ########## Downloading #############
-$PROVIDE_LOADER
+$PROVIDE_LOADER || exit 1
+
 echo "\nURL: $URL"
 $LOADER $URL $EXTRA_PARAMS
 if ! [ "$POST_DOWNLOAD_CMD" = "" ]; then

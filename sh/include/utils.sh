@@ -171,8 +171,8 @@ provide_dir_or_file f "$FILE" "$PROCESS_CMD" "$MES_START_PROCESS" "$MES_ALREADY"
 
 get_extract_begin_cmd () {
 local FILE="$1"
-
 local TYPE=$(file --brief --mime-type $FILE)
+
 case "$TYPE" in
     "application/x-gzip") 
 	echo "tar -xzvf";
@@ -302,8 +302,7 @@ if [ "$ALL_FILES_EXIST_P" = "yes" ];
   then echo "$MES_ALREADY";
   else
     RESULT=1;
-    eval "$BUILD_CMD && RESULT=0";
-
+    eval "$BUILD_CMD && RESULT=0";    
     if [ $RESULT = 0 ];
     then
 	local N=0;
@@ -316,7 +315,7 @@ if [ "$ALL_FILES_EXIST_P" = "yes" ];
 	done
 	echo "$MES_BUILDED_SUCC";
     else echo "$MES_BUILDED_FAIL"; return 1;
-    fi
+    fi    
 fi
 }
 
@@ -405,6 +404,7 @@ local PRE_BUILD_CMD="$8"
 local PRE_MAKE_CMD="$9"
 local PRE_INSTALL_CMD="$10"
 local REQUIRED_COMPILE_P="$11"
+local CONFIGURE_VARS="$12"
 
 local START_DIR=$PWD
 local RESULT
@@ -419,6 +419,7 @@ mkdir --parents $TMP_TOOL_DIR
 cd $TMP_TOOL_DIR
 RESULT=1
 $EXTRACT_SCRIPT $ARCHIVE_PATH && RESULT=0;
+
 if [ $RESULT = 1 ]; then
     echo "$MES_BUILD_FAIL"; rm -rf $TMP_TOOL_DIR; exit 1;
 fi
@@ -435,9 +436,12 @@ if [ "$REQUIRED_COMPILE_P" = "yes" ]; then
     if ! [ "$PRE_INSTALL_CMD" = "" ];
     then PRE_INSTALL_CMD="$PRE_INSTALL_CMD && ";fi
 
+    if ! [ "$CONFIGURE_VARS" = "" ];
+    then CONFIGURE_VARS="$CONFIGURE_VARS ";fi
+
     mkdir --parents $RESULT_DIR
     local RESULT=1
-    eval "PATH=$UTILS:$PATH $PRE_BUILD_CMD./configure --prefix $RESULT_DIR $COMPILING_EXTRA_PARAMS && PATH=$UTILS:$PATH ${PRE_MAKE_CMD}make && ${PRE_INSTALL_CMD}make install && RESULT=0"
+    eval "PATH=$UTILS:$PATH ${PRE_BUILD_CMD}${CONFIGURE_VARS}./configure --prefix $RESULT_DIR $COMPILING_EXTRA_PARAMS && PATH=$UTILS:$PATH ${PRE_MAKE_CMD}make && ${PRE_INSTALL_CMD}make install && RESULT=0"
 
     if [ $RESULT = 1 ]; then
 	echo "$MES_BUILD_FAIL";  rm -rf $RESULT_DIR; exit 1;
