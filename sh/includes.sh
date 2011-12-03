@@ -1,4 +1,5 @@
 #!/bin/sh
+cd $(dirname $0)
 
 ##### Include scripts #####
 . ./conf/dirs.conf
