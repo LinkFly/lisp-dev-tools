@@ -65,12 +65,12 @@ echo "$(echo $1 | sed 's/\//\\\//g')"
 }
 
 get_n_arg () {
+
 ### Parameters ###
 local ARRAY="$1"
 local POS=$2
-##########
-local D=\$
-echo $(eval "echo "$ARRAY" | awk '{print $D$POS}'")
+#########
+echo $(echo "$ARRAY" | cut --fields=$POS --delimiter=" ")
 }
 
 vardef () {
@@ -308,8 +308,6 @@ if [ "$ALL_FILES_EXIST_P" = "yes" ];
 	local N=0;
 	for link in $FILE_LINK_NAMES;
 	do
-	    echo ln -s $(get_n_arg "$BUILDED_FILES" $N) $UTILS_DIR/$link;
-
 	    N=$(($N + 1));
 	    rm -f $UTILS_DIR/$link && ln -s $(get_n_arg "$BUILDED_FILES" $N) $UTILS_DIR/$link;
 	done
