@@ -1,4 +1,3 @@
-
 (load (concat (getenv "QUICKLISP") "/slime-helper.el"))
 (if (string-equal (getenv "CUR_LISP") "clisp")
   (load (concat (genenv "LISP_DIR") "/share/emacs/site-lisp/clisp-coding.el")))
