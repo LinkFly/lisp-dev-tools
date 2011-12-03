@@ -133,8 +133,9 @@ FAILED."; exit 1;
 fi
 
 if [ $(downcase "$CUR_LISP") = "clisp" ];then
-    echo echo "$LISP_DIR/${LISP_RELATIVE_PATH}${LOAD_QUICKLISP} -ansi"; 
+    echo "$LISP_DIR/${LISP_RELATIVE_PATH}${LOAD_QUICKLISP} -ansi"; 
 fi
+
 if [ $(downcase "$CUR_LISP") = "xcl" ] || [ $(downcase "$CUR_LISP") = "ecl" ] || \
     [ $(downcase "$CUR_LISP") = "mkcl" ] || \
     [ $(downcase "$CUR_LISP") = "gcl" ] || [ $(downcase "$CUR_LISP") = "ccl" ]; 
