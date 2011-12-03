@@ -70,7 +70,9 @@ get_n_arg () {
 local ARRAY="$1"
 local POS=$2
 #########
-echo $(echo "$ARRAY" | cut --fields=$POS --delimiter=" ")
+
+echo $(printf "$ARRAY" | cut --fields=$POS --delimiter="
+")
 }
 
 vardef () {
