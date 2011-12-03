@@ -418,8 +418,6 @@ rm -rf $TMP_TOOL_DIR
 mkdir --parents $TMP_TOOL_DIR
 cd $TMP_TOOL_DIR
 RESULT=1
-#echo "$(pwd)"
-#echo "$EXTRACT_SCRIPT $ARCHIVE_PATH && RESULT=0";exit 1
 $EXTRACT_SCRIPT $ARCHIVE_PATH && RESULT=0;
 
 if [ $RESULT = 1 ]; then
