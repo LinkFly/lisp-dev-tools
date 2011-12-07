@@ -1,7 +1,7 @@
 Lisp Development Tools (lisp-dev-tools).
 
      Linux shell scripts to automate the downloading, compilation
-and configuring lisp development tools (emacs, slime, sbcl and
+and configuring Common Lisp development tools (Emacs, Slime, SBCL and
 other lisps ...). 
 
 Features: 
@@ -16,86 +16,146 @@ Now supported: Linux Ubuntu 11.04/x86-64.
 
 Dependencies:
 For building CMUCL lisp: libc6-dev-i386 package.
-For building Emacs: libncurses-dev package.
 
 Providing 10(!) open source lisps:
 
 SBCL - Steel Bank Common Lisp	(http://www.sbcl.org/)
-CMUCL(x86 only) - CMU Common Lisp  	(http://www.cons.org/cmucl/)
+CMUCL(x86 only)-CMU Common Lisp (http://www.cons.org/cmucl/)
 XCL 	    	   		(http://armedbear.org/)
 ECL - Embedded Common Lisp 	(http://ecls.sourceforge.net/)
 CLISP        	      		(http://www.clisp.org/)
 MKCL - ManKai Common Lisp 	(http://common-lisp.net/project/mkcl/)
 ABCL - Armed Bear Common Lisp 	(http://common-lisp.net/project/armedbear/)
 WCL    	     	  	 	(http://pgc.com/commonlisp/)
-GCL(CLTL1 only) - GNU Common Lisp 	     	(http://www.gnu.org/s/gcl/)
+GCL(CLTL1 only)-GNU Common Lisp (http://www.gnu.org/s/gcl/)
 CCL - Clozure Common Lisp	(http://ccl.clozure.com/)
 
+---------------------------------------------
 Notes: 
-1) CMUCL building only for x86 architecture, so required supported x86 on x86-64 
-architectures - for succesful building in Ubuntu 11.04 required libc6-dev-i386 
-package. To install run command:
+      1) CMUCL building only for x86 architecture, so required supported 
+x86 on x86-64 architectures - for succesful building in Ubuntu 11.04 
+required libc6-dev-i386 package (therefore this package also required for
+using command: ./provide-all-lisps). To install run command:
 
 $ sudo apt-get -y install libc6-dev-i386
 
   ... instead "apt-get" preferable to use the "aptitude".
 
-2) GCL building only in CLTL1 compliance mode (not builded 
+      2) GCL building only in CLTL1 compliance mode (not builded 
 with configure option --enable-ansi - bug in GCL)
 
-3) SBCL by default no building - provided precompiled binaries. For building from
-sources to run:
+      3) SBCL by default no building - provided precompiled binaries. For
+ building from sources to run:
 
 $ ./rebuild-lisp
 
-4) For building fresh Emacs (without X-like GUI) required libncurses-dev package.
-
-Using:
-1) Go to the directory:
+---------------------------------------------
+Using (simple examples):
+	1) Go to the directory:
 
 $ cd <path-to>/lisp-dev-tools
 
-2) Downloading (by default SBCL), configuring, building, and install into lisp-dev-tools (for portability):
+	2) Preparation for use Emacs/Slime, SBCL (by default pre-builded binaries), and Quicklisp (if Emacs not found in /usr/bin/emacs then automation downloading it's fresh sources, configuring, building, and installing (into lisp-dev-tools):
+
+$ ./provide-slime	
+
+  	3) Running Slime (appropriate running: SBCL (by default), Emacs, and loading Quicklisp):
+
+$ ./run-slime
+
+------------------------------------------
+Using (advanced examples):
+
+	1) Downloading (by default pre-builded binaries SBCL), configuring, building, and install into lisp-dev-tools (for portability):
 
 $ ./provide-lisp
 
-3) Running (by default SBCL):
+	2) Running lisp (by default binaries SBCL):
 
 $ ./run-lisp 
 
-4) Providing and running other lisp (example CCL):
+  	3) Providing and running other lisp (example CCL):
 
 $ LISP=ccl ./provide-lisp && LISP=ccl ./run-lisp
 
-5) Get current lisp:
+  	4) Get current lisp:
 
 $ ./get-lisp
 sbcl
 
-6) Change current lisp:
+	5) Change current lisp:
 
 $ ./change-lisp ccl
 Current lisp: ccl
 
-7) Get current lisp version: 
+	6) Get current lisp version: 
 
 $ ./get-version
 1.0.53
 
-8) Change current lisp version (attention: url includes the new version should be valid):
+	7) Change current lisp version (attention: url includes the new version should be valid):
 
 $ ./change-version 1.0.52
 Current lisp version: 1.0.52
 
-9) Provide and run the lisp different version:
+	8) Provide and run the lisp different version:
 
 $ VERSION=1.0.51 ./provide-lisp
 $ VERSION=1.0.51 ./run-lisp
 
-10) For rebuilding current lisp to run:
+  	9) For rebuilding current lisp to run:
 
 $ ./rebuild-lisp
 
-11) Providing fresh emacs (required libncurses-dev package):
+	10) Providing fresh Emacs (if Emacs not found in /usr/bin/emacs):
 
 ./provide-emacs
+
+	11) Running Emacs without Slime (for running Slime into running Emacs to run M-x slime):
+
+$ ./run-emacs	
+
+--------------------------------------------------------------
+Else examples:
+
+	1) Getting all supported lisps:
+
+$ ./get-all-lisps
+SBCL
+CMUCL
+XCL
+ECL
+CLISP
+MKCL
+ABCL
+WCL
+GCL
+CCL
+
+	2) Getting command for building or installing or running current lisp:
+
+$ ./get-providing-cmd <build | install | run>
+
+  	3) Removing current lisp or Emacs or Slime:
+
+./remove-emacs
+./remove-lisp
+./remove-slime
+
+	4) Providing all supported lisps:
+
+./provide-all-lisps
+
+--------------------------------------------------------------
+Reset all changes:
+
+      	  1) Remove all changes relating to the current lisp:
+
+$ ./clean/clean-lisp.sh
+
+      	  2) Remove all changes (all archives, binaries, sources, and etc.):
+
+$ ./clean/clean-all.sh
+
+--------------------------------------------------------------
+	
