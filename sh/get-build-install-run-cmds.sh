@@ -2,6 +2,8 @@
 
 get_build_lisp_cmd () {
 abs_path LISP_DIR
+local LISP_COMPILER_DIR="$COMPILERS/$LISP_LISPS_COMPILERS/$LISP_COMPILER_DIRNAME"
+
 if [ $(downcase "$CUR_LISP") = "xcl" ]; 
 then
     local PATH_TO_LIBS='\\\\/usr\\\\/lib\\\\/x86_64-linux-gnu\\\\/';
