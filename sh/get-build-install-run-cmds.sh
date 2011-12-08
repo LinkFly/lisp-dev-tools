@@ -8,11 +8,13 @@ then
 
     echo "
 echo '\nATTENTION!!!\nPatching Makefile for correcting path to finded libpthread.so (copy will be saved as Makefile.backup'
-if ! [ -f kernel/Makefile.backup ];then
-    cp kernel/Makefile kernel/Makefile.backup;
-fi
-sed -i s/\\\\\\/usr\\\\\\/lib\\\\\\/libpthread.so/${PATH_TO_LIBS}libpthread.so/ kernel/Makefile
-PATH=$UTILS:$PATH make && echo '(rebuild-lisp)' | ./xcl"; 
+if [ \"$(lsb_release -si)\" = \"Ubuntu\" ] && [ \"$(lsb_release -sr)\" = \"11.04\" ];then
+  if ! [ -f kernel/Makefile.backup ];then
+      cp kernel/Makefile kernel/Makefile.backup;
+  fi
+  sed -i s/\\\\\\/usr\\\\\\/lib\\\\\\/libpthread.so/${PATH_TO_LIBS}libpthread.so/ kernel/Makefile
+  PATH=$UTILS:$PATH make && echo '(rebuild-lisp)' | ./xcl
+fi"; 
 fi
 
 if [ $(downcase "$CUR_LISP") = "ecl" ] || [ $(downcase "$CUR_LISP") = "mkcl" ]; 
