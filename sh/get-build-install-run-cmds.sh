@@ -7,14 +7,16 @@ then
     local PATH_TO_LIBS='\\\\/usr\\\\/lib\\\\/x86_64-linux-gnu\\\\/';
 
     echo "
-echo '\nATTENTION!!!\nPatching Makefile for correcting path to finded libpthread.so (copy will be saved as Makefile.backup'
 if [ \"$(lsb_release -si)\" = \"Ubuntu\" ] && [ \"$(lsb_release -sr)\" = \"11.04\" ];then
+  echo '\nATTENTION!!!\nPatching Makefile for correcting path to finded libpthread.so (copy will be saved as Makefile.backup'
+
   if ! [ -f kernel/Makefile.backup ];then
       cp kernel/Makefile kernel/Makefile.backup;
   fi
+
   sed -i s/\\\\\\/usr\\\\\\/lib\\\\\\/libpthread.so/${PATH_TO_LIBS}libpthread.so/ kernel/Makefile
-  PATH=$UTILS:$PATH make && echo '(rebuild-lisp)' | ./xcl
-fi"; 
+fi
+PATH=$UTILS:$PATH make && echo '(rebuild-lisp)' | ./xcl"; 
 fi
 
 if [ $(downcase "$CUR_LISP") = "ecl" ] || [ $(downcase "$CUR_LISP") = "mkcl" ]; 
