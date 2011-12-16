@@ -12,10 +12,14 @@ Features:
   - Portable: for use on another host with the same
     OS/Architecture - just copy the directory to another host!
 
-Now supported: Linux Ubuntu 11.04/x86-64.
+Now supported: "Ubuntu 11.04/x86-64" and "Debian 6.0.3/x86-64".
 
 Dependencies:
 For building CMUCL lisp: libc6-dev-i386 package.
+(into "Ubuntu 11.04/x86-64" and "Debian 6.0.3/x86-64").
+
+Required packages for compilation lisps and tools/libs 
+(into "Debian 6.0.3/x86-64"): make, g++
 
 Providing 10(!) open source lisps:
 
