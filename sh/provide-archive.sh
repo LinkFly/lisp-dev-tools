@@ -9,10 +9,10 @@ CUR_PATH=$DIR
 cd $(dirname $0)
 
 ######### Parameters ###############
-local ARCHIVE_NAME=$1
-local URL=$2
-local RENAME_DOWNLOAD=$3
-local POST_DOWNLOAD_CMD="$4"
+ARCHIVE_NAME=$1
+URL=$2
+RENAME_DOWNLOAD=$3
+POST_DOWNLOAD_CMD="$4"
 
 ######### Configuring variables ####
 DOWNLOAD_SCRIPT=$SCRIPTS_DIR/download-archive.sh

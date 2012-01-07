@@ -3,21 +3,21 @@ cd $(dirname $0)
 . ./includes.sh
 
 ######### Configuring variables ####
-local PROVIDE_ARCHIVE_LISP_BIN=$SCRIPTS_DIR/provide-archive-lisp-bin.sh
-local PROVIDE_COMPILER_LISP=$SCRIPTS_DIR/provide-compiler-lisp.sh
-local PROVIDE_ARCHIVE_LISP_SOURCE=$SCRIPTS_DIR/provide-archive-lisp-src.sh
-local PROVIDE_SOURCES_LISP=$SCRIPTS_DIR/provide-sources-lisp.sh
-local PROVIDE_BUILD_SCRIPT=$SCRIPTS_DIR/provide-build-lisp.sh
-local PROVIDE_PREBUILD_SCRIPT=$SCRIPTS_DIR/provide-prebuilded-lisp.sh
-local BUILD_OR_PREBUILD_SCRIPT #computing latter
-local PROVIDE_QUICKLISP_SCRIPT #computing latter
+PROVIDE_ARCHIVE_LISP_BIN=$SCRIPTS_DIR/provide-archive-lisp-bin.sh
+PROVIDE_COMPILER_LISP=$SCRIPTS_DIR/provide-compiler-lisp.sh
+PROVIDE_ARCHIVE_LISP_SOURCE=$SCRIPTS_DIR/provide-archive-lisp-src.sh
+PROVIDE_SOURCES_LISP=$SCRIPTS_DIR/provide-sources-lisp.sh
+PROVIDE_BUILD_SCRIPT=$SCRIPTS_DIR/provide-build-lisp.sh
+PROVIDE_PREBUILD_SCRIPT=$SCRIPTS_DIR/provide-prebuilded-lisp.sh
+BUILD_OR_PREBUILD_SCRIPT #computing latter
+PROVIDE_QUICKLISP_SCRIPT #computing latter
 ######### Computing variables ####
 abs_path LISP_DIR
 
-local BUILD_OR_PREBUILD_SCRIPT
-local PROVIDE_SELF_COMPILER
-local PROVIDE_SOURCES
-local CUR_LISP_UP=$(uppercase $CUR_LISP)
+BUILD_OR_PREBUILD_SCRIPT
+PROVIDE_SELF_COMPILER
+PROVIDE_SOURCES
+CUR_LISP_UP=$(uppercase $CUR_LISP)
 
 if [ "$LISP_NO_BUILDING_P" = "yes" ];
 then BUILD_OR_PREBUILD_SCRIPT=$PROVIDE_PREBUILD_SCRIPT;

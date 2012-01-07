@@ -13,10 +13,10 @@ RENAME_DOWNLOAD=$2
 POST_DOWNLOAD_CMD="$3"
 
 ######### Configuring and computing variables ####
-local PROVIDE_LOADER=$SCRIPTS_DIR/provide-wget.sh
-local LOADER=$UTILS/wget
-local CHECK_URL_CMD="$UTILS/wget --spider"
-local EXTRA_PARAMS
+PROVIDE_LOADER=$SCRIPTS_DIR/provide-wget.sh
+LOADER=$UTILS/wget
+CHECK_URL_CMD="$UTILS/wget --spider"
+EXTRA_PARAMS
 
 if ! [ "$RENAME_DOWNLOAD" = "" ];
 then EXTRA_PARAMS="--output-document $RENAME_DOWNLOAD"; 
@@ -24,7 +24,7 @@ fi
 
 ########## Checking URL #############
 echo "\nChecking URL $URL ...\n"
-local RESULT=1;
+RESULT=1;
 $CHECK_URL_CMD $URL && RESULT=0
 if [ $RESULT = 0 ];
 then echo "OK.";

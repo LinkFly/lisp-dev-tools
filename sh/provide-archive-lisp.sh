@@ -14,7 +14,7 @@ MES_FAILED="ERROR: checking params failed - first argument must be \"src\" or \"
 check_args "$ARGS" "$ARGS_NEED" "$MES_CHECK_START" "$MES_SUCCESS" "$MES_FAILED" || return 1
 
 ######### Configuring variables ####
-local PROVIDE_ARCHIVE_SCRIPT=$SCRIPTS_DIR/provide-archive.sh
+PROVIDE_ARCHIVE_SCRIPT=$SCRIPTS_DIR/provide-archive.sh
 
 ######## Computing variables #######
 if [ $SRC_OR_BIN = "src" ];
@@ -35,7 +35,7 @@ RENAME_DOWNLOAD=$LISP_RENAME_BIN_DOWNLOAD
 POST_DOWNLOAD_CMD="$LISP_BIN_POST_DOWNLOAD_CMD"
 fi
 
-local CUR_LISP_UP=$(uppercase $CUR_LISP)
+CUR_LISP_UP=$(uppercase $CUR_LISP)
 ######## Providing lisp archive if needed #########
 FILE=$LISP_DIR
 
