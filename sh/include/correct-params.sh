@@ -4,7 +4,7 @@ if ! [ "$LISP" = "" ];
 then CUR_LISP=$LISP;
 fi
 
-local D=\$;
+D=\$;
 
 if ! [ "$VERSION" = "" ];
 then

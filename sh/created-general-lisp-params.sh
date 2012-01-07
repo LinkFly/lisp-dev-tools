@@ -5,7 +5,7 @@ local REST_PARAM_PART="$1"
 echo $(get_spec_val $CUR_LISP _$REST_PARAM_PART)
 }
 
-local ALL_LISP_PARAMS="
+ALL_LISP_PARAMS="
 VERSION
 HOME_SITE
 ARCH
