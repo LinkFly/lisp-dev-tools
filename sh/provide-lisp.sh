@@ -9,14 +9,15 @@ PROVIDE_ARCHIVE_LISP_SOURCE=$SCRIPTS_DIR/provide-archive-lisp-src.sh
 PROVIDE_SOURCES_LISP=$SCRIPTS_DIR/provide-sources-lisp.sh
 PROVIDE_BUILD_SCRIPT=$SCRIPTS_DIR/provide-build-lisp.sh
 PROVIDE_PREBUILD_SCRIPT=$SCRIPTS_DIR/provide-prebuilded-lisp.sh
+
 BUILD_OR_PREBUILD_SCRIPT= #computing latter
 PROVIDE_QUICKLISP_SCRIPT= #computing latter
+PROVIDE_SELF_COMPILER= #computing latter
+PROVIDE_SOURCES= #computing latter
+
 ######### Computing variables ####
 abs_path LISP_DIR
 
-BUILD_OR_PREBUILD_SCRIPT
-PROVIDE_SELF_COMPILER
-PROVIDE_SOURCES
 CUR_LISP_UP=$(uppercase $CUR_LISP)
 
 if [ "$LISP_NO_BUILDING_P" = "yes" ];
