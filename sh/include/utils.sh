@@ -332,9 +332,12 @@ local MES_ALREADY="$6"
 local MES_NOT_EXIST_SRC_FAIL="$7"
 local MES_START_BUILDING="$8"
 local MES_BUILDING_SUCC="$9"
-local MES_BUILDING_FAIL="$10"
-local MES_COPING_RESULT_SUCC="$11"
-local MES_COPING_RESULT_FAIL="$12"
+shift
+local MES_BUILDING_FAIL="$9"
+shift
+local MES_COPING_RESULT_SUCC="$9"
+shift
+local MES_COPING_RESULT_FAIL="$9"
 
 local CURPATH="$PWD"
 ########## Checking not builded ###########
@@ -402,9 +405,12 @@ local MES_BUILD_FAIL="$7"
 #### Optional parameters ####
 local PRE_BUILD_CMD="$8"
 local PRE_MAKE_CMD="$9"
-local PRE_INSTALL_CMD="$10"
-local REQUIRED_COMPILE_P="$11"
-local CONFIGURE_VARS="$12"
+shift
+local PRE_INSTALL_CMD="$9"
+shift
+local REQUIRED_COMPILE_P="$9"
+shift
+local CONFIGURE_VARS="$9"
 
 local START_DIR=$PWD
 local RESULT
