@@ -4,7 +4,7 @@ cd $(dirname $0)
 
 ###################################
 #### Checking dependecies libs ####
-local LIBS="$LISP_LIB_DEPS"
+LIBS="$LISP_LIB_DEPS"
 check_dep_libs "$LIBS"
 
 #### Resolving dependencies #######
