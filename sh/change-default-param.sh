@@ -2,8 +2,8 @@
 cd $(dirname $0)
 . ./includes.sh
 
-local D=\$
-local TMP=$1
+D=\$
+TMP=$1
 eval TMP=$D$1
 
 PARAM=$1
