@@ -10,7 +10,7 @@ fi
 
 . ./includes.sh
 
-local SCRIPTS="
+SCRIPTS="
 remove-lisp.sh
 remove-sources-lisp.sh
 remove-compiler-lisp.sh

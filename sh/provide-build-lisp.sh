@@ -3,12 +3,12 @@ cd $(dirname $0)
 . ./includes.sh
 
 ######### Configuring variables #######
-local BUILD_SCRIPT=$SCRIPTS_DIR/build-lisp.sh
+BUILD_SCRIPT=$SCRIPTS_DIR/build-lisp.sh
 
 ########## Computing variables ########
 abs_path LISP_DIR
 
-local CUR_LISP_UP=$(uppercase $CUR_LISP)
+CUR_LISP_UP=$(uppercase $CUR_LISP)
 
 ########## Building sbcl if needed ####
 DIR=$LISP_DIR

@@ -3,9 +3,9 @@ cd $(dirname $0)
 . ./includes.sh
 
 ######### Computing variables ######
-local LISPS_COMPILERS=$COMPILERS/$LISP_LISPS_COMPILERS
-local COMPILER_DIR=$LISPS_COMPILERS/$LISP_COMPILER_DIRNAME
-local CUR_LISP_UP=$(uppercase $CUR_LISP)
+LISPS_COMPILERS=$COMPILERS/$LISP_LISPS_COMPILERS
+COMPILER_DIR=$LISPS_COMPILERS/$LISP_COMPILER_DIRNAME
+CUR_LISP_UP=$(uppercase $CUR_LISP)
 
 ######### Removing if is exist #####
 

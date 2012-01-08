@@ -3,7 +3,7 @@ cd $(dirname $0)
 . ./includes.sh
 
 ##### Parameters #####
-local SRC_OR_BIN=$1
+SRC_OR_BIN=$1
 if [ "$SRC_OR_BIN" = "" ]; then SRC_OR_BIN=src; fi
 
 ######## Checking  parameters ######
