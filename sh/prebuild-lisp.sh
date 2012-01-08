@@ -39,8 +39,14 @@ esac && RESULT=0;
 
 if [ $RESULT = 1 ]; then 
     rm -rf "$LISP_DIR"; 
-    echo "\nERROR: not prebuilded.\n\nFAILED."; 
+    echo "
+ERROR: not prebuilded.
+
+FAILED."; 
     exit 1; 
-else echo "\nPrebuilded success.\n\nOK."
+else echo "
+Prebuilded success.
+
+OK."
 fi
 

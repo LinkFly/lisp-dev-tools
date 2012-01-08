@@ -4,8 +4,10 @@ cd $(dirname $0)/..
 crapi () {
 resapi=${1%.*}
 printf '#!' > $resapi;
-printf "/bin/sh\n" >> $resapi;
-printf 'cd $(dirname $0)\n' >> $resapi;
+printf "/bin/sh
+" >> $resapi;
+printf 'cd $(dirname $0)
+' >> $resapi;
 local args='$@';
 printf "sh/$1 \"$args\"" >> $resapi; 
 printf "" >> $resapi; 

@@ -53,12 +53,14 @@ then if ! [ -f $ARCHIVES/$TOOL_ARCHIVE ]; then
 fi
 
 #########################################
-local LINK_REFERS_STR="\n"
+local LINK_REFERS_STR="
+"
 for link in $TOOL_PROVIDE_FILES;
 do
     local REFER=$(readlink $UTILS/$link);
     local NOT_FOUND=$(if [ "$REFER" = "" ]; then echo '<not-found>'; fi);
-    LINK_REFERS_STR="${LINK_REFERS_STR}\n${NOT_FOUND} ${link}: $REFER";
+    LINK_REFERS_STR="${LINK_REFERS_STR}
+${NOT_FOUND} ${link}: $REFER";
 done
 
 if ! [ "$TOOL_RELATIVE_DIR" = "" ]; then

@@ -2,7 +2,8 @@
 cd $(dirname $0)
 . ./includes.sh
 
-echo "\nRunning provide-archive.sh ..."
+echo "
+Running provide-archive.sh ..."
 
 ######## Correcting path $$$$$$$$$$$
 CUR_PATH=$DIR
@@ -21,7 +22,10 @@ TMP_ARCHIVE=$TMP_DOWNLOAD/$ARCHIVE_NAME
 
 ######### Downloading if needed ######
 if [ -f $ARCHIVE_PATH ];
-then echo "$ARCHIVE_NAME already downloaded ... \n\nALREADY.";
+then echo "
+$ARCHIVE_NAME already downloaded ... 
+
+ALREADY.";
 else 
 mkdir --parents $TMP_DOWNLOAD
 rm -f $TMP_ARCHIVE

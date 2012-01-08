@@ -23,7 +23,9 @@ then EXTRA_PARAMS="--output-document $RENAME_DOWNLOAD";
 fi
 
 ########## Checking URL #############
-echo "\nChecking URL $URL ...\n"
+echo "
+Checking URL $URL ...
+"
 RESULT=1;
 $CHECK_URL_CMD $URL && RESULT=0
 if [ $RESULT = 0 ];
@@ -37,7 +39,8 @@ fi
 ########## Downloading #############
 $PROVIDE_LOADER || exit 1
 
-echo "\nURL: $URL"
+echo "
+URL: $URL"
 $LOADER $URL $EXTRA_PARAMS
 if ! [ "$POST_DOWNLOAD_CMD" = "" ]; then
     echo "Now evaluating POST_DOWNLOAD_CMD: $POST_DOWNLOAD_CMD";

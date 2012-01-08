@@ -10,7 +10,9 @@ then
 
     echo "
 if [ \"$(lsb_release -si)\" = \"Ubuntu\" ] && [ \"$(lsb_release -sr)\" = \"11.04\" ];then
-  echo '\nATTENTION!!!\nPatching Makefile for correcting path to finded libpthread.so (copy will be saved as Makefile.backup'
+  echo '
+ATTENTION!!!
+Patching Makefile for correcting path to finded libpthread.so (copy will be saved as Makefile.backup'
 
   if ! [ -f kernel/Makefile.backup ];then
       cp kernel/Makefile kernel/Makefile.backup;

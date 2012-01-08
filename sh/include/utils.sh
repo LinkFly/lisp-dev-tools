@@ -370,7 +370,8 @@ else echo "$MES_BUILDING_FAIL"; return 1;
 fi
 
 ######## Coping results #######################
-echo "\nCoping results into $RESULT_DIR ..."
+echo "
+Coping results into $RESULT_DIR ..."
 mkdir --parents "$RESULT_DIR"
 RESULT=1
 eval "$INSTALL_CMD && RESULT=0" 
