@@ -1,5 +1,5 @@
 (let ((slime-helper (concat (getenv "QUICKLISP") "/slime-helper.el")))
-  (when (and slime-helper
+  (when (and (file-exists-p slime-helper)
 	     (not (boundp 'init-slime.el-loaded)))
     (load slime-helper)
     (if (string-equal (getenv "CUR_LISP") "clisp")
