@@ -38,7 +38,9 @@ if [ "$TOOL_PROVIDE_FILES" = "" ]; then
 fi
 
 echo "Processing of tool: $TOOL_NAME"
-resolve_deps "$TOOL_DEPS_ON_TOOLS" || exit 1
+if [ $(links_is_exist_p "$FILE_LINK_NAMES" "$UTILS_DIR") = "no" ];then
+    resolve_deps "$TOOL_DEPS_ON_TOOLS" || exit 1;
+fi
 
 #### Providing archive if needed ####
 local ALL_FILES_EXIST_P=$(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS_DIR")
