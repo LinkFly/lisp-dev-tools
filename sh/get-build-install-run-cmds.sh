@@ -33,8 +33,10 @@ fi
 
 if [ $(downcase "$CUR_LISP") = "clisp" ]; 
 then
-    local LIBSIGSEGV_DIR=$UTILS/$LIBSIGSEGV_TOOL_DIR;
-    echo "PATH=$UTILS:$PATH ./configure --with-libsigsegv-prefix=${LIBSIGSEGV_DIR} --prefix $LISP_DIR && PATH=$UTILS:$PATH $LISP_BUILD_CMD && $LISP_INSTALL_CMD"; 
+#    local LIBSIGSEGV_DIR=$UTILS/$LIBSIGSEGV_TOOL_DIR;
+    local NCURSES_DIR=$UTILS/$NCURSES_TOOL_DIR
+#    echo "PATH=$UTILS:$PATH ./configure --with-libsigsegv-prefix=${LIBSIGSEGV_DIR} --prefix $LISP_DIR && PATH=$UTILS:$PATH $LISP_BUILD_CMD && $LISP_INSTALL_CMD"; 
+    echo "make distclean;rm -f src/config.cache;CPPFLAGS=-I${NCURSES_DIR}/include LDFLAGS=-L${NCURSES_DIR}/lib PATH=$UTILS:$PATH ./configure --ignore-absence-of-libsigsegv --prefix $LISP_DIR && PATH=$UTILS:$PATH $LISP_BUILD_CMD"; 
 fi
 
 if [ $(downcase "$CUR_LISP") = "sbcl" ];
