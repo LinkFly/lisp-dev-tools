@@ -379,7 +379,7 @@ eval "$INSTALL_CMD && RESULT=0"
 ######### Checking coping building result #####
 if [ $RESULT = 0 ] && [ -d "$RESULT_DIR" ];
 then echo "$MES_COPING_RESULT_SUCC";
-else echo "$MES_COPING_RESULT_FAIL"; remove -rf "$RESULT_DIR"; exit 1;
+else echo "$MES_COPING_RESULT_FAIL"; rm -rf "$RESULT_DIR"; exit 1;
 fi
 cd "$CURPATH"
 }
