@@ -9,3 +9,4 @@ lisp-libs/*
 tmp/*
 tmp-download/*
 utils/tools/*
+emacs-libs/*
