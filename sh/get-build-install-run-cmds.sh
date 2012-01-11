@@ -161,7 +161,7 @@ then
 fi
 
 if [ $(downcase "$CUR_LISP") = "sbcl" ];then
-    echo "$LISP_DIR/$LISP_RELATIVE_PATH${LISP_BEGIN_OPTIONS} --core $LISP_DIR/lib/sbcl/sbcl.core${LOAD_QUICKLISP}";
+    echo "$LISP_DIR/$LISP_RELATIVE_PATH --core $LISP_DIR/lib/sbcl/sbcl.core${LISP_BEGIN_OPTIONS}${LOAD_QUICKLISP}";
 fi
 
 if [ $(downcase "$CUR_LISP") = "cmucl" ];then

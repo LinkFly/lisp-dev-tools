@@ -2,6 +2,14 @@
 cd $(dirname $0)
 . ./includes.sh
 
+### Variable GET_CMD_P initialized into run-lisp script file ###
+GET_CMD_P=$GET_CMD_P
+
+### Correcting XDG_CONFIG_DIRS if not setting ###
+if [ "$XDG_CONFIG_DIRS" = "" ];
+then XDG_CONFIG_DIRS="$PREFIX/conf";
+fi
+
 abs_path LISP_DIR
 
 ######## Checking lisp ###########
@@ -25,8 +33,13 @@ fi
 if [ "$RUN_COMMAND" = "" ]; then echo "ERROR: empty lisp command."; fi
 #####################################
 
+if [ "$GET_CMD_P" = "yes" ];then
+    printf "XDG_CONFIG_DIRS='$XDG_CONFIG_DIRS' %s %s" "$RUN_COMMAND" "$@";
+    exit 0;
+fi
+
 RESULT=1
-eval "XDG_CONFIG_DIRS=$PREFIX/conf $RUN_COMMAND $@" && RESULT=0
+eval $(printf "XDG_CONFIG_DIRS=$PREFIX/conf %s %s" "$RUN_COMMAND" "$@") && RESULT=0
 
 if [ $RESULT = 1 ]; then
     echo "

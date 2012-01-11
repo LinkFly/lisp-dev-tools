@@ -1,3 +1,26 @@
 #!/bin/sh
 cd $(dirname $0)
-sh/run-lisp.sh "$@"
+
+### Getting command line without running lisp ###
+# If GET_CMD_P=yes file sh/run_lisp.sh to do
+# output command line 
+#################################
+
+prepare_args () {
+### Using: ###
+### ./script2 "$(prepare_args "$@")"
+##############
+
+local ARGS=""
+local FST="yes"
+for arg in "$@";do
+if [ -z "$FST" ];then
+    ARGS="$ARGS ";
+else FST=""
+fi
+ARGS="$ARGS"$(printf "'%s'" "$arg");
+done
+printf "%s" "$ARGS"
+}
+
+GET_CMD_P=$GET_CMD_P sh/run-lisp.sh "$(prepare_args "$@")"

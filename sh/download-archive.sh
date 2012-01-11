@@ -16,7 +16,7 @@ POST_DOWNLOAD_CMD="$3"
 PROVIDE_LOADER=$SCRIPTS_DIR/provide-wget.sh
 LOADER=$UTILS/wget
 CHECK_URL_CMD="$UTILS/wget --spider"
-EXTRA_PARAMS
+EXTRA_PARAMS=
 
 if ! [ "$RENAME_DOWNLOAD" = "" ];
 then EXTRA_PARAMS="--output-document $RENAME_DOWNLOAD"; 
