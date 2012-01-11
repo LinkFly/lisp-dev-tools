@@ -1,5 +1,5 @@
 #!/bin/sh
-cd $(dirname $0)
+cd "$(dirname "$0")"
 . ./includes.sh
 
 LISP_VERSION_PARAM=$(uppercase $CUR_LISP)_VERSION

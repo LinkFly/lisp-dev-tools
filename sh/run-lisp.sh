@@ -1,5 +1,5 @@
 #!/bin/sh
-cd $(dirname $0)
+cd "$(dirname "$0")"
 . ./includes.sh
 
 ### Variable GET_CMD_P initialized into run-lisp script file ###

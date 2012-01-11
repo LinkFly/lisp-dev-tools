@@ -1,5 +1,5 @@
 #!/bin/sh
-cd $(dirname $0)
+cd "$(dirname "$0")"
 
 ref=$(readlink $(pwd))
 if ! [ -z $ref ]; then 

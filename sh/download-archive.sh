@@ -1,6 +1,6 @@
 #!/bin/sh
 CUR_PATH=$PWD
-cd $(dirname $0)
+cd "$(dirname "$0")"
 . ./includes.sh
 cd $CUR_PATH
 

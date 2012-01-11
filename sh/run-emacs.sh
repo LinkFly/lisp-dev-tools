@@ -1,5 +1,5 @@
 #!/bin/sh
-cd $(dirname $0)
+cd "$(dirname "$0")"
 . ./includes.sh
 
 if [ -f $EMACS_LIBS/init.el ];then

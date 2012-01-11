@@ -1,5 +1,5 @@
 #!/bin/sh
-cd $(dirname $0)
+cd "$(dirname "$0")"
 . ./includes.sh
 
 ./provide-lisp.sh && ./provide-emacs.sh && ./provide-quicklisp.sh || exit 1

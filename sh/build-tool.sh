@@ -1,4 +1,4 @@
 #!/bin/sh
-cd $(dirname $0)
+cd "$(dirname "$0")"
 . ./includes.sh
 build_tool $1

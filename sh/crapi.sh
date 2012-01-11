@@ -1,12 +1,12 @@
 #!/bin/sh
-cd $(dirname $0)/..
+cd "$(dirname "$0")/.."
 
 crapi () {
 resapi=${1%.*}
 printf '#!' > $resapi;
 printf "/bin/sh
 " >> $resapi;
-printf 'cd $(dirname $0)
+printf 'cd "$(dirname "$0")"
 ' >> $resapi;
 local args='$@';
 printf "sh/$1 \"$args\"" >> $resapi; 

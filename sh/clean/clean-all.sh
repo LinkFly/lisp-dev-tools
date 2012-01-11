@@ -1,5 +1,5 @@
 #!/bin/sh
-cd $(dirname $0)/sh
+cd "$(dirname "$0")/sh"
 . ./includes.sh
 
 echo "Cleaning all ..."

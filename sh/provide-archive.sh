@@ -1,5 +1,5 @@
 #!/bin/sh
-cd $(dirname $0)
+cd "$(dirname "$0")"
 . ./includes.sh
 
 echo "
@@ -7,7 +7,7 @@ Running provide-archive.sh ..."
 
 ######## Correcting path $$$$$$$$$$$
 CUR_PATH=$DIR
-cd $(dirname $0)
+cd "$(dirname "$0")"
 
 ######### Parameters ###############
 ARCHIVE_NAME=$1

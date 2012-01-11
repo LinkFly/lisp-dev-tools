@@ -1,5 +1,5 @@
 #!/bin/sh
-cd $(dirname $0)
+cd "$(dirname "$0")"
 
 ### Getting command line without running lisp ###
 # If GET_CMD_P=yes file sh/run_lisp.sh to do
