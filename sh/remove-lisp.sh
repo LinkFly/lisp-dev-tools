@@ -6,7 +6,7 @@ cd "$(dirname "$0")"
 abs_path LISP_DIR
 
 #### Build sbcl if needed #####
-echo "Removing sbcl-$LISP_VERSION ..."
+echo "Removing $LISP_DIRNAME ..."
 if [ -d $LISP_DIR ];
 then rm -rf $LISP_DIR && echo "
 LISP removed successful.
