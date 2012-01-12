@@ -1,5 +1,8 @@
-1. Providing tool make (for using on Debian 6 x86-64).
-2. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
-3. Providing g++ for XCL building and ncurses building on Debian 6 x86-64.
-4. In get-build-install-run-cmds.sh: change of checking on Ubuntu 11.04 - to added checking on x86-64.
-done. 5. Выяснить как закоммитить в git пустую папку utils/tools продолжая в ней игнорировать все файлы.
+1. Discovery - why downloading EMACS, although it presence true link - utils/emacs -> /usr/bin/emacs.
+2. Correct providing WGET and EMACS tool.
+3. Finding - why was bad message about bad parameter EXTRA_PARAMS.
+
+------------- Else tasks --------------
+1. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
+2. Providing g++ for XCL building and ncurses building on Debian 6 x86-64.
+3. In get-build-install-run-cmds.sh: change of checking on Ubuntu 11.04 - to added checking on x86-64.
