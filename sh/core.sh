@@ -16,6 +16,7 @@ fi
 provide_tool () {
 ### Parameters ###
 local TOOL_NAME=$1
+mkdir --parents "$UTILS/$TOOLS_DIRNAME"
 
 TOOL_NAME=$(downcase $TOOL_NAME)
 local TOOL_VERSION=$(get_spec_val $TOOL_NAME _VERSION)
