@@ -2,4 +2,4 @@
 2. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
 3. Providing g++ for XCL building and ncurses building on Debian 6 x86-64.
 4. In get-build-install-run-cmds.sh: change of checking on Ubuntu 11.04 - to added checking on x86-64.
-5. Выяснить как закоммитить в git пустую папку utils/tools продолжая в ней игнорировать все файлы.
+done. 5. Выяснить как закоммитить в git пустую папку utils/tools продолжая в ней игнорировать все файлы.
