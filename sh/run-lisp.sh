@@ -39,7 +39,7 @@ if [ "$GET_CMD_P" = "yes" ];then
 fi
 
 RESULT=1
-eval $(printf "XDG_CONFIG_DIRS=$PREFIX/conf %s %s" "$RUN_COMMAND" "$@") && RESULT=0
+eval "$(printf "XDG_CONFIG_DIRS='$XDG_CONFIG_DIRS' %s %s" "$RUN_COMMAND" "$@")" && RESULT=0
 
 if [ $RESULT = 1 ]; then
     echo "
