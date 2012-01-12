@@ -2,6 +2,7 @@
 2. Correct providing WGET and EMACS tool.
 3. Finding - why was bad message about bad parameter EXTRA_PARAMS.
 4. Make informative message on try run ./rebuild-lisp without before runned ./provide-lisp (or ./provide-slime).
+5. Write to README and README_ru about not working ./rebuild-lisp into Gentoo.
 
 ------------- Else tasks --------------
 1. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
