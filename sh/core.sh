@@ -48,6 +48,7 @@ local ALL_FILES_EXIST_P=$(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS_DIR")
 if [ "$ALL_FILES_EXIST_P" = "no" ]
 then if ! [ -f $ARCHIVES/$TOOL_ARCHIVE ]; then
 	if [ "$TOOL_NAME" = "wget" ]; then 
+	    mkdir --parents "$ARCHIVES";
 	    ln -fs $SCRIPTS_DIR/$WGET_ARCHIVE $ARCHIVES/$WGET_ARCHIVE;
 	else provide_archive_tool "$TOOL_NAME";
 	fi
