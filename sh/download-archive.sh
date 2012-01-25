@@ -22,6 +22,9 @@ if ! [ "$RENAME_DOWNLOAD" = "" ];
 then EXTRA_PARAMS="--output-document $RENAME_DOWNLOAD"; 
 fi
 
+########## Providing wget ###########
+$PROVIDE_LOADER || exit 1
+
 ########## Checking URL #############
 echo "
 Checking URL $URL ...
@@ -37,8 +40,6 @@ FAILED."; exit 1;
 fi
 
 ########## Downloading #############
-$PROVIDE_LOADER || exit 1
-
 echo "
 URL: $URL"
 $LOADER $URL $EXTRA_PARAMS
