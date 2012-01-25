@@ -185,6 +185,9 @@ case "$TYPE" in
     "application/x-xz")
 	echo "tar -xJvf";
 	;;
+    "application/x-symlink")
+	echo $(get_extract_begin_cmd $("$SCRIPTS_DIR/realpath" "$1"))
+	;;
 esac
 }
 
