@@ -451,7 +451,7 @@ if [ "$REQUIRED_COMPILE_P" = "yes" ]; then
 
     mkdir --parents $RESULT_DIR
     local RESULT=1
-    eval "PATH=$UTILS:$PATH ${PRE_BUILD_CMD}${CONFIGURE_VARS}./configure --prefix $RESULT_DIR $COMPILING_EXTRA_PARAMS && PATH=$UTILS:$PATH ${PRE_MAKE_CMD}make && ${PRE_INSTALL_CMD}make install && RESULT=0"
+    eval "PATH=$UTILS:$PATH ${PRE_BUILD_CMD}${CONFIGURE_VARS}./configure --prefix=$RESULT_DIR $COMPILING_EXTRA_PARAMS && PATH=$UTILS:$PATH ${PRE_MAKE_CMD}make && ${PRE_INSTALL_CMD}make install && RESULT=0"
 
     if [ $RESULT = 1 ]; then
 	echo "$MES_BUILD_FAIL";  rm -rf $RESULT_DIR; exit 1;

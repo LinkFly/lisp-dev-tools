@@ -7,6 +7,8 @@
 7. Make checking need programs (example: gcc) before any operations.
 8. Added to recomendation - installing wget and emacs (if don't installing this, then lisp-dev-tools
 extract its wget archive, building and install it, also downloading emacs, and building and install it).
+9. Replace into provide-tool (in core.sh) handling providing special archives for tools: wget and openssl (on case ala switch).
+10.
 
 ------------- Else tasks --------------
 1. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
@@ -19,4 +21,4 @@ $ sbcl --noinform --dynamic-space-size 8192 --no-sysinit --eval "(let ((a (make-
     ... where "sbcl" changed to "run-lisp".
 
 5. Change creating symbolic link (in archives) to wget archive (in sh/) - for portability.
-
+6. Prompt error if ./provide-tool.sh call with empty parameter.

@@ -38,7 +38,7 @@ if [ "$TOOL_PROVIDE_FILES" = "" ]; then
 fi
 
 echo "Processing of tool: $TOOL_NAME"
-if [ $(links_is_exist_p "$FILE_LINK_NAMES" "$UTILS_DIR") = "no" ];then
+if [ $(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS_DIR") = "no" ];then
     resolve_deps "$TOOL_DEPS_ON_TOOLS" || exit 1;
 fi
 
@@ -48,9 +48,12 @@ local ALL_FILES_EXIST_P=$(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS_DIR")
 if [ "$ALL_FILES_EXIST_P" = "no" ]
 then if ! [ -f $ARCHIVES/$TOOL_ARCHIVE ]; then
 	if [ "$TOOL_NAME" = "wget" ]; then 
-	    mkdir --parents "$ARCHIVES";
-	    ln -fs $SCRIPTS_DIR/$WGET_ARCHIVE $ARCHIVES/$WGET_ARCHIVE;
-	else provide_archive_tool "$TOOL_NAME";
+	    ln -fs $SCRIPTS_DIR/$WGET_ARCHIVE $ARCHIVES/$WGET_ARCHIVE;	
+	else 
+	    if [ "$TOOL_NAME" = "openssl" ]; then 
+		ln -fs $SCRIPTS_DIR/$OPENSSL_ARCHIVE $ARCHIVES/$OPENSSL_ARCHIVE;
+	    else provide_archive_tool "$TOOL_NAME";
+	    fi
 	fi
      fi
 fi
