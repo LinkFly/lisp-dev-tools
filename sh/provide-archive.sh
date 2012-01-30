@@ -10,9 +10,9 @@ CUR_PATH=$DIR
 cd "$(dirname "$0")"
 
 ######### Parameters ###############
-ARCHIVE_NAME=$1
-URL=$2
-RENAME_DOWNLOAD=$3
+ARCHIVE_NAME="$1"
+URL="$2"
+RENAME_DOWNLOAD="$3"
 POST_DOWNLOAD_CMD="$4"
 
 ######### Configuring variables ####
