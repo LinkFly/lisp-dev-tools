@@ -38,9 +38,13 @@ if [ "$TOOL_PROVIDE_FILES" = "" ]; then
 fi
 
 echo "Processing of tool: $TOOL_NAME"
-if [ $(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS_DIR") = "no" ];then
-    resolve_deps "$TOOL_DEPS_ON_TOOLS" || exit 1;
+if [ $(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS_DIR") = "yes" ];then
+  echo "
+All file/files that providing by tool $TOOL_NAME is present by symbolic link/links into $UTILS_DIR (link/links: $TOOL_PROVIDE_FILES).
+
+ALREADY."; exit 0;
 fi
+resolve_deps "$TOOL_DEPS_ON_TOOLS" || exit 1;
 
 #### Providing archive if needed ####
 local ALL_FILES_EXIST_P=$(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS_DIR")
