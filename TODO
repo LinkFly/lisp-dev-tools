@@ -8,7 +8,7 @@
 8. Added to recomendation - installing wget and emacs (if don't installing this, then lisp-dev-tools
 extract its wget archive, building and install it, also downloading emacs, and building and install it).
 9. Replace into provide-tool (in core.sh) handling providing special archives for tools: wget and openssl (on case ala switch).
-10.
+10. On ./clean-all - recovering default symbolic links into utils. Analyzing true way for handling links.
 
 ------------- Else tasks --------------
 1. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
