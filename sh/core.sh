@@ -43,7 +43,7 @@ if [ $(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS") = "yes" ];then
 Tool $TOOL_NAME already provided.
 Provided concrete files (links into directory $UTILS): $TOOL_PROVIDE_FILES
 
-ALREADY."; exit 0;
+ALREADY."; return 0;
 fi
 resolve_deps "$TOOL_DEPS_ON_TOOLS" || exit 1;
 
