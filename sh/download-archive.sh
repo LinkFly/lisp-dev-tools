@@ -14,7 +14,7 @@ POST_DOWNLOAD_CMD="$3"
 
 ######### Configuring and computing variables ####
 PROVIDE_LOADER=$SCRIPTS_DIR/provide-wget.sh
-LOADER=$UTILS/wget
+LOADER="$UTILS/wget --no-check-certificate"
 CHECK_URL_CMD="$UTILS/wget --spider"
 EXTRA_PARAMS=
 
