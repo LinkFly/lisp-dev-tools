@@ -40,7 +40,8 @@ fi
 echo "Processing of tool: $TOOL_NAME"
 if [ $(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS") = "yes" ];then
   echo "
-File(files) that providing by tool $TOOL_NAME is present by symbolic link(links) into $UTILS (link(links): $TOOL_PROVIDE_FILES).
+Tool $TOOL_NAME already provided.
+Provided concrete files (links into directory $UTILS): $TOOL_PROVIDE_FILES
 
 ALREADY."; exit 0;
 fi
