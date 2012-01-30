@@ -1,14 +1,14 @@
-1. Discovery - why downloading EMACS, although it presence true link - utils/emacs -> /usr/bin/emacs.
-2. Correct providing WGET and EMACS tool.
+done. 1. Discovery - why downloading EMACS, although it presence true link - utils/emacs -> /usr/bin/emacs.
+done. 2. Correct providing WGET and EMACS tool.
 3. Finding - why was bad message about bad parameter EXTRA_PARAMS.
 4. Make informative message on try run ./rebuild-lisp without before runned ./provide-lisp (or ./provide-slime).
 5. Write to README and README_ru about not working ./rebuild-lisp into Gentoo.
 6. Write to README and README_ru about gcc required on "ubuntu server x64 10.10"
-7. Make checking need programs (example: gcc) before any operations.
+7. Make checking need programs (example: gcc, g++) before any operations.
 8. Added to recomendation - installing wget and emacs (if don't installing this, then lisp-dev-tools
 extract its wget archive, building and install it, also downloading emacs, and building and install it).
 9. Replace into provide-tool (in core.sh) handling providing special archives for tools: wget and openssl (on case ala switch).
-10. On ./clean-all - recovering default symbolic links into utils. Analyzing true way for handling links.
+10. On ./clean-all - recovering default symbolic links into utils. Analyzing true way for handling links
 
 ------------- Else tasks --------------
 1. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
