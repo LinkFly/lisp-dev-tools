@@ -38,9 +38,9 @@ if [ "$TOOL_PROVIDE_FILES" = "" ]; then
 fi
 
 echo "Processing of tool: $TOOL_NAME"
-if [ $(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS_DIR") = "yes" ];then
+if [ $(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS") = "yes" ];then
   echo "
-All file/files that providing by tool $TOOL_NAME is present by symbolic link/links into $UTILS_DIR (link/links: $TOOL_PROVIDE_FILES).
+File(files) that providing by tool $TOOL_NAME is present by symbolic link(links) into $UTILS (link(links): $TOOL_PROVIDE_FILES).
 
 ALREADY."; exit 0;
 fi
