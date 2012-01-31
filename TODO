@@ -8,8 +8,9 @@ done. 2. Correct providing WGET and EMACS tool.
 8. Added to recomendation - installing wget and emacs (if don't installing this, then lisp-dev-tools
 extract its wget archive, building and install it, also downloading emacs, and building and install it).
 9. Replace into provide-tool (in core.sh) handling providing special archives for tools: wget and openssl (on case ala switch).
-10. On ./clean-all - recovering default symbolic links into utils. Analyzing true way for handling links
-11. Added depends on time for sbcl building (think about to do this with design).
+10. On ./clean-all - recovering default symbolic links into utils. Analyzing true way for handling links.
+11. Added depends on 'time' for sbcl building (think about to do this with design).     	  	   
+12. (Think about)Split functionals: create ./provide-swank command. It will be using by ./provide-slime command. Also added SWANK_PORT variable for ./run-lisp command.
 
 ------------- Else tasks --------------
 1. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
