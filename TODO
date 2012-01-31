@@ -9,6 +9,7 @@ done. 2. Correct providing WGET and EMACS tool.
 extract its wget archive, building and install it, also downloading emacs, and building and install it).
 9. Replace into provide-tool (in core.sh) handling providing special archives for tools: wget and openssl (on case ala switch).
 10. On ./clean-all - recovering default symbolic links into utils. Analyzing true way for handling links
+11. Added depends on time for sbcl building (think about to do this with design).
 
 ------------- Else tasks --------------
 1. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
