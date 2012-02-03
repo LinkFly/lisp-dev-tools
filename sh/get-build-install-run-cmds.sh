@@ -44,7 +44,9 @@ then
     if ! [ "$LISP_PREBUILD_CMD" = "" ];then
 	LISP_PREBUILD_CMD="$LISP_PREBUILD_CMD;";
     fi
-    echo "${LISP_PREBUILD_CMD}PATH=$UTILS:$LISP_COMPILER_DIR/$LISP_BIN_DIR:$PATH $LISP_HOME_VAR_NAME=$LISP_COMPILER_DIR/$LISP_CORE_BIN_DIR $LISP_BUILD_CMD --prefix=$LISP_DIR"
+    echo "${LISP_PREBUILD_CMD}PATH=$UTILS:
+
+$LISP_COMPILER_DIR/$LISP_BIN_DIR:$PATH $LISP_HOME_VAR_NAME=$LISP_COMPILER_DIR/$LISP_CORE_BIN_DIR $LISP_BUILD_CMD --prefix=$LISP_DIR"
 fi
 
 if [ $(downcase "$CUR_LISP") = "cmucl" ];
@@ -56,7 +58,7 @@ ERROR: For building CMUCL in Ubuntu 11.04 please installing libc6-dev-i386.
 
 FAILED.';exit 1;fi
 fi
-cd ../;PATH=$LISP_COMPILER_DIR/$LISP_BIN_DIR:$PATH src/tools/build.sh -C \"\" -o lisp";
+cd ../;PATH=$UTILS:$LISP_COMPILER_DIR/$LISP_BIN_DIR:$PATH src/tools/build.sh -C \"\" -o lisp";
 fi
 
 if [ $(downcase "$CUR_LISP") = "wcl" ];
