@@ -14,6 +14,8 @@ extract its wget archive, building and install it, also downloading emacs, and b
 13. Add to notes in README: into gentoo LiveDVD12 not compiling elisp sources for Slime if 256 or 512 Mb RAM. But if 768 - all ok.
 14. Add to notes in README: for ubuntu-server 10.10 need gcc - (first for openssl: ./provide-lisp -> wget -> openssl)
 15. Separating for lisps DEPS_ON_TOOLS for prebuilded and compiled.
+16. Add to notes in README: need g++ for ncurses (./provide-emacs -> ncurses).
+17. Correct error rebuilding other version lisp, example: VERSION=1.0.54 ./rebuild-lisp
 
 ------------- Else tasks --------------
 1. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
