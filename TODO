@@ -12,6 +12,8 @@ extract its wget archive, building and install it, also downloading emacs, and b
 11. Added depends on 'time' for sbcl building (think about to do this with design).     	  	   
 12. (Think about)Split functionals: create ./provide-swank command. It will be using by ./provide-slime command. Also added SWANK_PORT variable for ./run-lisp command.tools.conf
 13. Add to notes in README: into gentoo LiveDVD12 not compiling elisp sources for Slime if 256 or 512 Mb RAM. But if 768 - all ok.
+14. Add to notes in README: for ubuntu-server 10.10 need gcc - (first for openssl: ./provide-lisp -> wget -> openssl)
+15. Separating for lisps DEPS_ON_TOOLS for prebuilded and compiled.
 
 ------------- Else tasks --------------
 1. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
