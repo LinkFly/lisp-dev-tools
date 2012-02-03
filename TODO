@@ -10,7 +10,8 @@ extract its wget archive, building and install it, also downloading emacs, and b
 9. Replace into provide-tool (in core.sh) handling providing special archives for tools: wget and openssl (on case ala switch).
 10. On ./clean-all - recovering default symbolic links into utils. Analyzing true way for handling links.
 11. Added depends on 'time' for sbcl building (think about to do this with design).     	  	   
-12. (Think about)Split functionals: create ./provide-swank command. It will be using by ./provide-slime command. Also added SWANK_PORT variable for ./run-lisp command.
+12. (Think about)Split functionals: create ./provide-swank command. It will be using by ./provide-slime command. Also added SWANK_PORT variable for ./run-lisp command.tools.conf
+13. Add to notes in README: into gentoo LiveDVD12 not compiling elisp sources for Slime if 256 or 512 Mb RAM. But if 768 - all ok.
 
 ------------- Else tasks --------------
 1. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
@@ -24,3 +25,4 @@ $ sbcl --noinform --dynamic-space-size 8192 --no-sysinit --eval "(let ((a (make-
 
 5. Change creating symbolic link (in archives) to wget archive (in sh/) - for portability.
 6. Prompt error if ./provide-tool.sh call with empty parameter.
+7. If tool already provided - show more informative message (show point target of link).
