@@ -50,7 +50,7 @@ fi
 if [ $(downcase "$CUR_LISP") = "cmucl" ];
 then 
     echo "
-if [ \"$(lsb_release -si)\" = \"Ubuntu\" ] && [ \"$(lsb_release -sr)\" = \"11.04\" ];then
+if [ \"$(type lsb_release &> /dev/null && echo yes))\" = yes ] && [ \"$(lsb_release -si)\" = \"Ubuntu\" ] && [ \"$(lsb_release -sr)\" = \"11.04\" ];then
   if ! [ -f /usr/include/gnu/stubs-32.h ];then echo '    
 ERROR: For building CMUCL in Ubuntu 11.04 please installing libc6-dev-i386.
 
