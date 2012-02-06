@@ -8,6 +8,10 @@ CUR_LISP_UP=$(uppercase $CUR_LISP)
 LISP_SOURCES_DIR=$SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME
 LISP_COMPILER_DIR=$COMPILERS/$LISP_LISPS_COMPILERS/$LISP_COMPILER_DIRNAME
 
+if [ "$1" = "rebuild" ];then
+    REBUILD_P=yes;
+fi
+
 ###################################
 #### Checking dependecies libs ####
 LIBS="$LISP_LIB_DEPS"
@@ -15,6 +19,10 @@ check_dep_libs "$LIBS"
 
 #### Resolving dependencies #######
 resolve_deps "$LISP_DEPS_ON_TOOLS"
+
+if [ "$REBUILD_P" = yes ];then
+    resolve_deps "$LISP_REBUILD_DEPS_ON_TOOLS"
+fi
 
 #### Call build ####
 SOURCES_DIR="$LISP_SOURCES_DIR"
