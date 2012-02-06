@@ -12,7 +12,11 @@ Features:
   - Portable: for use on another host with the same
     OS/Architecture - just copy the directory to another host!
 
-Now supported: "Ubuntu 11.04/x86-64" and "Debian 6.0.3/x86-64".
+Now supported: 
+ - Ubuntu 11.04/x86-64 
+ - Ubuntu Server 10.10/x86-64
+ - Debian 6.0.4/x86-64 (into Debian 6.0.3/x86-64 also working must be)
+ - Gentoo (from livedvd-amd64-multilib-2012)
 
 Dependencies:
 For building CMUCL lisp: libc6-dev-i386 package.

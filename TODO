@@ -18,6 +18,7 @@ extract its wget archive, building and install it, also downloading emacs, and b
 17. Correct error rebuilding other version lisp, example: VERSION=1.0.54 ./rebuild-lisp
 18. Added to notes: for compiling CMUCL in Fedora 16 required glibc.i686 package (sudo yum install glibc.i686).
 19. Added checking glibc.i686 for fedora 16 x86-64.
+20. Added new supported platform info to README_ru.
 
 ------------- Else tasks --------------
 1. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
@@ -32,3 +33,4 @@ $ sbcl --noinform --dynamic-space-size 8192 --no-sysinit --eval "(let ((a (make-
 5. Change creating symbolic link (in archives) to wget archive (in sh/) - for portability.
 6. Prompt error if ./provide-tool.sh call with empty parameter.
 7. If tool already provided - show more informative message (show point target of link).
+8. Added --exclude to ./provide-all-lisps
