@@ -7,9 +7,9 @@ local LISP_COMPILER_DIR="$COMPILERS/$LISP_LISPS_COMPILERS/$LISP_COMPILER_DIRNAME
 if [ $(downcase "$CUR_LISP") = "xcl" ]; 
 then
     local PATH_TO_LIBS='\\\\/usr\\\\/lib\\\\/x86_64-linux-gnu\\\\/';
-
+    local D='$';
     echo "
-if [ \"$(lsb_release -si)\" = \"Ubuntu\" ] && [ \"$(lsb_release -sr)\" = \"11.04\" ];then
+if [ \"$D(type lsb_release &> /dev/null && echo yes))\" = yes ] && [ \"$D(lsb_release -si)\" = \"Ubuntu\" ] && [ \"$D(lsb_release -sr)\" = \"11.04\" ];then
   echo '
 ATTENTION!!!
 Patching Makefile for correcting path to finded libpthread.so (copy will be saved as Makefile.backup'
@@ -49,8 +49,9 @@ fi
 
 if [ $(downcase "$CUR_LISP") = "cmucl" ];
 then 
+    local D='$';
     echo "
-if [ \"$(type lsb_release &> /dev/null && echo yes))\" = yes ] && [ \"$(lsb_release -si)\" = \"Ubuntu\" ] && [ \"$(lsb_release -sr)\" = \"11.04\" ];then
+if [ \"$D(type lsb_release &> /dev/null && echo yes))\" = yes ] && [ \"$D(lsb_release -si)\" = \"Ubuntu\" ] && [ \"$D(lsb_release -sr)\" = \"11.04\" ];then
   if ! [ -f /usr/include/gnu/stubs-32.h ];then echo '    
 ERROR: For building CMUCL in Ubuntu 11.04 please installing libc6-dev-i386.
 

@@ -16,6 +16,8 @@ extract its wget archive, building and install it, also downloading emacs, and b
 15. Separating for lisps DEPS_ON_TOOLS for prebuilded and compiled.
 16. Add to notes in README: need g++ for ncurses (./provide-emacs -> ncurses).
 17. Correct error rebuilding other version lisp, example: VERSION=1.0.54 ./rebuild-lisp
+18. Added to notes: for compiling CMUCL in Fedora 16 required glibc.i686 package (sudo yum install glibc.i686).
+19. Added checking glibc.i686 for fedora 16 x86-64.
 
 ------------- Else tasks --------------
 1. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
