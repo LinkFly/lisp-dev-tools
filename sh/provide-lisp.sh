@@ -2,6 +2,9 @@
 cd "$(dirname "$0")"
 . ./includes.sh
 
+#### Resolving dependencies #######
+resolve_deps "$LISP_DEPS_ON_TOOLS"
+
 ######### Configuring variables ####
 PROVIDE_ARCHIVE_LISP_BIN=$SCRIPTS_DIR/provide-archive-lisp-bin.sh
 PROVIDE_COMPILER_LISP=$SCRIPTS_DIR/provide-compiler-lisp.sh

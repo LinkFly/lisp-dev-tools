@@ -17,9 +17,6 @@ fi
 LIBS="$LISP_LIB_DEPS"
 check_dep_libs "$LIBS"
 
-#### Resolving dependencies #######
-resolve_deps "$LISP_DEPS_ON_TOOLS"
-
 if [ "$REBUILD_P" = yes ];then
     resolve_deps "$LISP_REBUILD_DEPS_ON_TOOLS"
 fi
