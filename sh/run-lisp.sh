@@ -2,13 +2,35 @@
 cd "$(dirname "$0")"
 . ./includes.sh
 
-### Variable GET_CMD_P initialized into run-lisp script file ###
-GET_CMD_P=$GET_CMD_P
+### Used: ####
+# GET_CMD_P - if "yes" then showing command line
+#    for running lisp (without lisp starting)
+############## 
 
-### Correcting XDG_CONFIG_DIRS if not setting ###
-if [ "$XDG_CONFIG_DIRS" = "" ];
-then XDG_CONFIG_DIRS="$PREFIX/conf";
+correct_quote () {
+echo "$1" | sed "s/'/'\"'\"'/g;s/^.*$/'&'/"
+}
+
+prepare_args () {
+### Using: ###
+### ./script2 "$(prepare_args "$@")"
+##############
+
+local ARGS=""
+local FST="yes"
+local CURARG=
+for arg in "$@";do
+if [ -z "$FST" ];then
+    ARGS="$ARGS ";
+else FST=""
 fi
+ARGS="$ARGS"$(correct_quote "$arg");
+done
+printf "%s" "$ARGS"
+}
+
+### Correcting XDG_CONFIG_DIRS ###
+XDG_CONFIG_DIRS="'$PREFIX/conf:$XDG_CONFIG_DIRS'"
 
 abs_path LISP_DIR
 
@@ -33,13 +55,16 @@ fi
 if [ "$RUN_COMMAND" = "" ]; then echo "ERROR: empty lisp command."; fi
 #####################################
 
+FULL_RUN_CMD="XDG_CONFIG_DIRS=$XDG_CONFIG_DIRS $RUN_COMMAND $(prepare_args "$@")"
+
+### Variable GET_CMD_P initialized into run-lisp script file ###
 if [ "$GET_CMD_P" = "yes" ];then
-    printf "XDG_CONFIG_DIRS='$XDG_CONFIG_DIRS' %s %s" "$RUN_COMMAND" "$@";
+    echo "$FULL_RUN_CMD";
     exit 0;
 fi
 
 RESULT=1
-eval "$(printf "XDG_CONFIG_DIRS='$XDG_CONFIG_DIRS' %s %s" "$RUN_COMMAND" "$@")" && RESULT=0
+eval "$FULL_RUN_CMD" && RESULT=0
 
 if [ $RESULT = 1 ]; then
     echo "
