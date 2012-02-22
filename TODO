@@ -41,3 +41,24 @@ $ sbcl --noinform --dynamic-space-size 8192 --no-sysinit --eval "(require 'sb-po
 9. Remove into run-lisp.sh depends on "ERROR" into error messages (error return of functions: get_run_lisp_cmd and get_load_quicklisp_args).
 10. Enclose core file for lisps into quotes.
 11. Added anticipatory quicklisp loading (on required).
+
+-------- Milestones (mark with tags then when) ----------
+0.0.2:
+	- testing run-lisp on /bin/bash
+	- correct README and README_ru.
+	- create CHANGELOG, NEWS and NEWS_ru
+			
+0.0.3:
+	- 
+
+0.0.4:
+	-
+
+0.0.5:
+	-
+
+0.1:
+	- separated lisps on: older, modern and raw (too new)
+	- create general interface to lisp systems (--common-load --common-eval ... else some))
+
+
