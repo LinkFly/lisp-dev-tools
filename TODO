@@ -24,9 +24,9 @@ extract its wget archive, building and install it, also downloading emacs, and b
 1. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
 2. Providing g++ for XCL building and ncurses building on Debian 6 x86-64.
 3. In get-build-install-run-cmds.sh: change of checking on Ubuntu 11.04 - to added checking on x86-64.
-done 1/2. 4. Make success evaluted code, what like this:
+done. 4. Make success evaluted code, what like this:
 
-$ sbcl --noinform --dynamic-space-size 8192 --no-sysinit --eval "(let ((a (make-array (* 2 (expt 1024 3)) :initial-element 1 :element-type '(unsigned-byte 8)))) (time (print (sb-posix:fork))) (quit))"     
+$ sbcl --noinform --dynamic-space-size 8192 --no-sysinit --eval "(require 'sb-posix)" --eval "(let ((a (make-array (* 2 (expt 1024 2)) :initial-element 1 :element-type '(unsigned-byte 8)))) (time (print (sb-posix:fork))) (quit))"
 
     ... where "sbcl" changed to "run-lisp".
 
@@ -38,3 +38,6 @@ $ sbcl --noinform --dynamic-space-size 8192 --no-sysinit --eval "(let ((a (make-
 6. Prompt error if ./provide-tool.sh call with empty parameter.
 7. If tool already provided - show more informative message (show point target of link).
 8. Added --exclude to ./provide-all-lisps
+9. Remove into run-lisp.sh depends on "ERROR" into error messages (error return of functions: get_run_lisp_cmd and get_load_quicklisp_args).
+10. Enclose core file for lisps into quotes.
+11. Added anticipatory quicklisp loading (on required).

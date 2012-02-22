@@ -131,14 +131,7 @@ cp $SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME/${LISP_BIN_BUILD_RESULT}.i
 fi
 }
 
-get_run_lisp_cmd () {
-local LOAD_QUICKLISP
-abs_path LISP_DIR
-
-if ! [ -z "$LISP_BEGIN_OPTIONS" ];then
-    LISP_BEGIN_OPTIONS=" $LISP_BEGIN_OPTIONS";
-fi
-
+get_load_quicklisp_args () {
 if [ "$LISP_ENABLE_QUICKLISP" = "yes" ];then
     if ! [ -f "$QUICKLISP/setup.lisp" ];then
 	echo "
@@ -147,38 +140,46 @@ Please to run ./provide-quicklisp
 
 FAILED."; exit 1;
     fi
-    LOAD_QUICKLISP=" $LISP_LOAD_OPTION $QUICKLISP/setup.lisp";
+    echo " '$LISP_LOAD_OPTION' '$QUICKLISP/setup.lisp'";
+fi
+}
+
+get_run_lisp_cmd () {
+abs_path LISP_DIR
+
+if ! [ -z "$LISP_BEGIN_OPTIONS" ];then
+    LISP_BEGIN_OPTIONS=" $LISP_BEGIN_OPTIONS";
 fi
 
 if [ $(downcase "$CUR_LISP") = "clisp" ];then
-    echo "$LISP_DIR/${LISP_RELATIVE_PATH}${LISP_BEGIN_OPTIONS}${LOAD_QUICKLISP} -ansi"; 
+    echo "$LISP_DIR/${LISP_RELATIVE_PATH}${LISP_BEGIN_OPTIONS} -ansi"; 
 fi
 
 if [ $(downcase "$CUR_LISP") = "xcl" ] || [ $(downcase "$CUR_LISP") = "ecl" ] || \
     [ $(downcase "$CUR_LISP") = "mkcl" ] || \
     [ $(downcase "$CUR_LISP") = "gcl" ] || [ $(downcase "$CUR_LISP") = "ccl" ]; 
 then 
-    echo "$LISP_DIR/${LISP_RELATIVE_PATH}${LISP_BEGIN_OPTIONS}${LOAD_QUICKLISP}"; 
+    echo "$LISP_DIR/${LISP_RELATIVE_PATH}${LISP_BEGIN_OPTIONS}"; 
 fi
 
 if [ $(downcase "$CUR_LISP") = "sbcl" ];then
-    echo "$LISP_DIR/$LISP_RELATIVE_PATH --core $LISP_DIR/lib/sbcl/sbcl.core${LISP_BEGIN_OPTIONS}${LOAD_QUICKLISP}";
+    echo "$LISP_DIR/$LISP_RELATIVE_PATH --core $LISP_DIR/lib/sbcl/sbcl.core${LISP_BEGIN_OPTIONS}";
 fi
 
 if [ $(downcase "$CUR_LISP") = "cmucl" ];then
     echo "
 cd $LISP_DIR
-./${LISP_RELATIVE_PATH}${LISP_BEGIN_OPTIONS}${LOAD_QUICKLISP}";
+./${LISP_RELATIVE_PATH}${LISP_BEGIN_OPTIONS}";
 fi
 
 if [ $(downcase "$CUR_LISP") = "abcl" ];then
     JAVA_REALPATH=$($SCRIPTS_DIR/realpath $UTILS/java);
     echo "
 cd $LISP_DIR
-PATH=$UTILS:$PWD JAVA_HOME=$(dirname $(dirname $JAVA_REALPATH)) java -jar abcl.jar${LISP_BEGIN_OPTIONS}${LOAD_QUICKLISP}"
+PATH=$UTILS:$PWD JAVA_HOME=$(dirname $(dirname $JAVA_REALPATH)) java -jar abcl.jar${LISP_BEGIN_OPTIONS}"
 fi    
 
 if [ $(downcase "$CUR_LISP") = "wcl" ];then
-    echo "LD_LIBRARY_PATH=$UTILS/$GMP_TOOL_DIR/lib:$LISP_DIR/lib:$LD_LIBRARY_PATH $LISP_DIR/${LISP_RELATIVE_PATH}${LISP_BEGIN_OPTIONS}${LOAD_QUICKLISP}";
+    echo "LD_LIBRARY_PATH=$UTILS/$GMP_TOOL_DIR/lib:$LISP_DIR/lib:$LD_LIBRARY_PATH $LISP_DIR/${LISP_RELATIVE_PATH}${LISP_BEGIN_OPTIONS}";
 fi    
 }
