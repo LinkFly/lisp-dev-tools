@@ -74,7 +74,7 @@ $ sbcl --noinform --dynamic-space-size 8192 --no-sysinit --eval "(require 'sb-po
 
 0.3:
 	- Added support Fedora16.
-	- Added Arch.
+	- Added support Arch.
 	- ...
 
 0.4:
