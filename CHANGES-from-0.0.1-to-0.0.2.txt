@@ -1,0 +1,616 @@
+Changes in version 0.0.2 (after 0.0.1).
+----------------------------------------------------
+commit b9f6b4eb527634912f9a416e3c9c8bcb75978783
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Feb 27 17:40:37 2012 +0400
+
+    smallfix
+
+commit 9e0a9e15fdab770caec6895324469ffd30d81d96
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Feb 27 17:40:00 2012 +0400
+
+    detalization TODO proceed
+
+commit f8aaa85c04a068313f144a8b94f9dbcc62cf6ef0
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Feb 27 04:43:43 2012 +0400
+
+    Corrected README and README_ru. Corrected TODO proceed. Added providing lisp compiler for rebuild-lisp.sh. Added tasks and milestones to TODO.
+
+commit 0db6da7f7906cd19d5510d7066bcc32450bc2612
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Wed Feb 22 16:49:45 2012 +0400
+
+    TODO correcting proceed. Added experimental/common-interface.sh for create general interface for run-lisp (common args for load, eval and ...)
+
+commit 92981bf1c40e577876abcf8372cc5a546d4b216b
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Wed Feb 22 04:59:19 2012 +0400
+
+    remove status.csv reserv (temporary) file.
+
+commit 0ec848d6e6dcee9553627949162affbd1ab0e32e
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Wed Feb 22 04:46:41 2012 +0400
+
+    Added function get_load_quicklisp_args (using into run-lisp.sh). Moved loading quicklisp code to end args (for run lisps).  Added tasks.
+
+commit e6f0f8a28d5f24decc6c551d575f69493e02b69b
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Wed Feb 22 03:37:03 2012 +0400
+
+    bugfix in transfer args from run-lisp to lisp system
+
+commit d265e85ae001bbac971f29333dfc253d23e7fdec
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Feb 20 15:23:44 2012 +0400
+
+    notes about problem to TODO
+
+commit f389c7cfda5df00d68b55c4501eab30c0a4646a6
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Feb 6 11:43:02 2012 -0800
+
+    added unlzma to utils
+
+commit f82e4fb7ad7c32ea60c6fbe0680eade9c80bac1d
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Feb 6 11:39:42 2012 -0800
+
+    small change strategy resolve dependencies for lisps
+
+commit 757d4652c4e9d731c7fe5e70fb2dfaec73fd9e37
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Feb 6 11:08:16 2012 -0800
+
+    Added tool lzma. Added depends on lzma (unlzma) for GCL
+
+commit 37894d62e159fdae19d978e0f3cd454fc253fa0d
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Feb 6 11:02:28 2012 -0800
+
+    Upgrade README TODO and add status.csv file with info about platform support
+
+commit d04e20e2a97536424e43b4863a25002c485b3e61
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Feb 6 03:13:25 2012 -0800
+
+    Added parameter LISP_REBUILD_DEPS_ON_TOOLS (this is providing sbcl lisp without downloading and compiling time)
+
+commit 96076201db1beb2ef72176a1dab18109e3ca21e2
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Feb 6 01:05:39 2012 -0800
+
+    Corrected using lsb_release (and checking existing it)
+
+commit 09ff50361389c89a348b6f4240fe52ea680e840a
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Sun Feb 5 23:59:40 2012 -0800
+
+    smallfix: don't try lsb_release if this is command not existing
+
+commit c7fde3028e0fdf35309411cb0bd9e7ed87a8c94e
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Sun Feb 5 15:42:39 2012 -0800
+
+    small bugfix: were not building command for sbcl
+
+commit b9c623625f42e656bd55e7085486511771f0df20
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Sun Feb 5 15:34:17 2012 -0800
+
+    smallfix
+
+commit 8c1086b991c0237a02d865b81625ec15bc18ce21
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Sun Feb 5 15:03:15 2012 -0800
+
+    bugfix: remove old wget key for checking 'https..' url
+
+commit ad9b047e0ae7a20d09f14030c95ac7aca47092f9
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Sun Feb 5 15:01:08 2012 -0800
+
+    bugfix: remove old wget key for downloading from https..
+
+commit 75f577fda4830575bd076be84f5ec448028093f4
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Sun Feb 5 14:40:02 2012 -0800
+
+    correct links
+
+commit d9306fbe9cbc0fab468db2833e6556df8718b7db
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Sun Feb 5 14:35:29 2012 -0800
+
+    remove openssl archive
+
+commit a2b788ff1d9edd63d90327fe984e3867a261e2e1
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Sun Feb 5 14:34:42 2012 -0800
+
+    remove SSL support - now wget building without ssl. remove support emacs beta - now downloading and building emacs 23.4 - stable release.
+
+commit 7e60c5456a51d6d100c01389ef072e135140297f
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Fri Feb 3 12:51:10 2012 -0800
+
+    add two tasks
+
+commit a63d3d753d60750388d3a04a9dc2e6dae0181c62
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Fri Feb 3 12:43:40 2012 -0800
+
+    Added to build path for CMUCL utils directory
+
+commit c1490aaf8a1449b29a4e841668dd079922c5b572
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Fri Feb 3 11:39:25 2012 -0800
+
+    added task about separate DEPS_ON_TOOLS for prebuilded and builded lisps
+
+commit 405a5446b57646c286c201e57463c0962c778575
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Fri Feb 3 11:37:34 2012 -0800
+
+    added deps on 'time' for rebuilding sbcl
+
+commit 7c55f6d8c909d1c5c5ad78e032f41b9a889c6b3a
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Fri Feb 3 11:18:51 2012 -0800
+
+    added some actial tasks
+
+commit 4506e4673f71bbdb0a074232be2f53ff4ff73d9a
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Tue Jan 31 11:08:03 2012 -0800
+
+    think about as convinience load swank port and start it on concrete swank port
+
+commit 1759287c352b22a0abfa2953f0ef89e93223e020
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Tue Jan 31 10:50:49 2012 -0800
+
+    Added utils directory to PATH variable environment for builded command SBCL
+
+commit f5a4ab12b673af4eb8c815e6f371f61922cd5e01
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Tue Jan 31 10:47:43 2012 -0800
+
+    Added task: added depends on 'time' for ./rebuild-lisp for SBCL
+
+commit d717519c759e1e5f02779b35ac93208541e628d2
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Tue Jan 31 01:33:10 2012 -0800
+
+    added depends on bc for CMUCL
+
+commit 20e2006c59711cbd094bd4523835236b3a5e45f5
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Tue Jan 31 01:28:53 2012 -0800
+
+    added tools for CMUCL building (mainly bc, but bc depends on flex)
+
+commit df65aefcd53f2284f5832b3740d56ae704eee409
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Tue Jan 31 00:20:50 2012 -0800
+
+    correct URL for downloading 'time' sources archive
+
+commit 01c5300a32c39dd35613ca2ffc64331dca42a4c6
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Jan 30 22:05:09 2012 -0800
+
+    added dependency on time tool for cmucl
+
+commit c07c958d0d1f8c801e206eb45898aeb8521f5c20
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Jan 30 22:04:27 2012 -0800
+
+    added time tool for CMUCL building
+
+commit e7bcdafe2faec562a80e36daae936d069124fdb5
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Jan 30 11:33:54 2012 -0800
+
+    smallfix
+
+commit 254d04362607870a29449375fba4a8d3ab799e44
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Jan 30 07:48:32 2012 -0800
+
+    bugfix in handling tool is present
+
+commit 7a66eff0e03603d9e3776c31226a31e9ca544f2b
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Jan 30 07:40:44 2012 -0800
+
+    Correct already message
+
+commit cd9d6b327d1db442dbe644a7f8fb3c08c96367cd
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Jan 30 07:35:09 2012 -0800
+
+    Bugfix: now if providing files present into utils directory, then tool not providing
+
+commit c106f12747dd69dc5596956b67eb0d8861beff36
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Jan 30 07:17:32 2012 -0800
+
+    added --no-check-certificate also for checking correct url
+
+commit 1c871fe35b9db20e626b47c8f12c430634869260
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Jan 30 07:16:32 2012 -0800
+
+    Fix not need actioins if files providing by tool is present
+
+commit 1025d1b8b8b89d25a6ef320fc3edb8a692a43038
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Jan 30 05:28:31 2012 -0800
+
+    fix potencial bug
+
+commit 440e4985fb3c4d50120040bd9ff45cdf31628f3b
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Jan 30 05:27:52 2012 -0800
+
+    fix for downloading emacs from github.com
+
+commit e2057d19670f72c762ee5a5c3537f7c1b97e69e5
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Jan 30 05:27:03 2012 -0800
+
+    Added task for correct cleaning (recovering)
+
+commit 18bd337fcde9721cd598cfd9555b6da22aeeabd1
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Jan 30 04:57:04 2012 -0800
+
+    added new tool xz
+
+commit b64b10f42986ffa34035004066a9ab3a0663fbdb
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Fri Jan 27 00:37:19 2012 +0400
+
+    fixed: openssl archive now present
+
+commit 443ad13ef315c5b5337b2cc5570c659416ed979c
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Fri Jan 27 00:29:26 2012 +0400
+
+    Downgrade wget and now it building with support ssh (for access https protocol). Added openssl base tool
+
+commit 87471af52e6edaaed75a8c5191cc8b0746a96083
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Jan 26 17:39:39 2012 +0400
+
+    Added two tasks to TODO
+
+commit 7684f676100e4153b56de2b9f1e06691491f95ee
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Jan 26 17:21:28 2012 +0400
+
+    Added else option to wget tool conf for bugfixed. Added notes about required gcc to tasks list.
+
+commit 561925571f960f1a46f3ef3b46688772439c6279
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Jan 26 17:05:42 2012 +0400
+
+    bugfux - added parameter for wget tool for fixed
+
+commit 9c340e2c5930e95e122493ac24f94817ca03391c
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Wed Jan 25 15:38:22 2012 +0400
+
+    Correct symbolic links handling into archives dir
+
+commit ea9c0eb0bb3fb872436336f4ec7fa4dff99ee515
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Wed Jan 25 14:01:09 2012 +0400
+
+    correct tasks
+
+commit 8079f53a3cc953442e30d006d542600c19941e60
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Wed Jan 25 11:49:00 2012 +0400
+
+    delete old tmp file and fixed existing 'configs' directory
+
+commit 83e3d5c0eaf92756778dd0ee4e500e4daae0a32b
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Wed Jan 25 11:38:58 2012 +0400
+
+    created archives/.gitignore for existing directory 'archives' into lisp-dev-tools
+
+commit 978b548a7d59fc501df386d86a5abf9e3a089dd1
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Wed Jan 25 11:35:50 2012 +0400
+
+    bugfix: now archives directory creating before will be create symbolic link on wget archive
+
+commit 5820ea1071c74e5605429d6df25752efc4c64ff9
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Wed Jan 25 11:25:24 2012 +0400
+
+    bugfix: auto building wget if it absence into os fixed
+
+commit be6d755f9c75e032ed7bb06b86fe160637a93aaf
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Jan 12 19:46:02 2012 +0400
+
+    Added task
+
+commit 7c052a9d6e8ea3281abc891e78e53305428ee711
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Jan 12 10:17:08 2012 +0400
+
+    Added task about creating error messages on try rebuilding lisp without provided lisp
+
+commit 696f4e7bbb7a0bc727b2dbd92d200f410ad76848
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Jan 12 08:17:22 2012 +0400
+
+    Actualized task list
+
+commit 3b473667e00cc14405121094f52fdc9e661575ca
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Jan 12 07:25:21 2012 +0400
+
+    Done task about commit empty dir utils/tools
+
+commit 0991a4d761c2fd653bbc96b8f36b11a128e5c668
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Jan 12 07:22:07 2012 +0400
+
+    added empty tools
+
+commit c1c981ed24dfa1029a89cd47208419fe9475601b
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Jan 12 07:17:48 2012 +0400
+
+    downgrade sbcl lisp version to 1.0.53 - not passed tests for sb-posix in 1.0.54 version
+
+commit bf9920745bc9747eb5974b7277e5b597ede6cb0a
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Jan 12 06:37:17 2012 +0400
+
+    Added task - researching as commiting empty dir with ignore files and make utils/tools directory for correct providing jre tool
+
+commit 8acde057ec48aea3de46befe50aa1aaf04d196f5
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Jan 12 06:26:41 2012 +0400
+
+    undo last commit
+
+commit b210e9b1f291cb915eebdf54259b4a26873d28e5
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Jan 12 06:17:51 2012 +0400
+
+    added tools dir
+
+commit 275bf395fe1fc5ffb76b04ea42e0404dcb9a53c1
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Jan 12 06:03:46 2012 +0400
+
+    smallfix - changed removing lisp message
+
+commit fb3f8783b5897a52ba1e330a7ab9d95f23a085da
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Jan 12 05:38:01 2012 +0400
+
+    two bugfixes in running lisps
+
+commit cbebaa6bdda1a6d2ad82d89f024d04686d8a2975
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Jan 12 02:43:15 2012 +0400
+
+    Fix potencial bugs with handling path'es
+
+commit b2073b4f6a99a961ff4eb80f63ce56a68a81a056
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Jan 12 02:06:28 2012 +0400
+
+    Correcting command line transition for run-lisp and run-lisp.sh. Added variable GET_CMD_P for run-lisp and run-lisp.sh for getting command-line without running lisp-system. Replace value LISP_BEGIN_OPTIONS variable to after --core ...sbcl.core for correct starting. Added feature for user setting their value for variable XDG_CONFIG_DIRS (this is maybe setting for ASDF)
+
+commit e428566d41b4a50904d427db6e858de9b73628df
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Wed Jan 11 10:24:09 2012 +0400
+
+    Bugfix searching libgmp.so.3 for wcl building and running
+
+commit 5d18cacebe1de067019bc31600d82651a5cfa7bf
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Wed Jan 11 09:45:19 2012 +0400
+
+    Added SBCL_BEGEGIN_OPTIONS parameter for lisps. By it can added running parameters to begin command line. Bugfix into correcting parameters. Deleted init-slime.el and correcting generated init-slime.el into provide-slime.sh. Corrected remove-slime.sh - remove not needed messages and remove init-slime.el
+
+commit 5c21679ae7821c357ba0c13dacdf9e1d52e9a53a
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Wed Jan 11 06:32:58 2012 +0400
+
+    Solved sbcl bugify specific requirement - availability .git directory for building sbcl. Now ./rebuild-lisp working for sbcl.
+
+commit b603aec267cb42d8a6d5e45a0b5e6a07a780794e
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Wed Jan 11 02:35:16 2012 +0400
+
+    cleaning before building for MKCL
+
+commit 23925e2656183c54b3fc5a76ce2956b0bcf829ea
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Wed Jan 11 01:21:29 2012 +0400
+
+    disable dependency on libsigsegv for clisp. Added dependency on ncurses for clisp. Also fixes handling pathes for clisp
+
+commit f63c816701440c29f78b1b63116f25a59a185de2
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Wed Jan 11 00:09:32 2012 +0400
+
+    Bugfix ecl build and install (for gentoo)
+
+commit 1ee033be9b109fe482ace6a080e4552e0792e9de
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Tue Jan 10 22:02:17 2012 +0400
+
+    small bugfix
+
+commit 3f486ca3f3ad58b1cf381f0723761d547a1bfe26
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Jan 8 10:39:11 2012 +0400
+
+    Bugfix - now not resolved dependencies tools when providing tool already existing.
+
+commit d61e7dd9a962c0ef20f93455eaa8f9bfe301f571
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Jan 8 10:00:40 2012 +0400
+
+    Removed all local special words to placed not into functions
+
+commit d6aa525c93d13696070651b4bed75bdcd1272a4e
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Jan 8 09:38:50 2012 +0400
+
+    Else removed local special word not into functions
+
+commit b6d235de367d46edbccbda0a9a3641e1bb168e95
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Jan 8 09:37:27 2012 +0400
+
+    Else removed local special word not into functions
+
+commit 0154577e54f1796dbb2fb5cd58033f9fd4a350b4
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Jan 8 09:35:39 2012 +0400
+
+    Else removed local special word not into functions
+
+commit 3e38cc8136b47ee2d8d90be603d6082f0da5e0d9
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Jan 8 09:01:38 2012 +0400
+
+    Else remove local special word not into function
+
+commit 671b6777472dd81cd35141533f8af63017698312
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Jan 8 07:43:02 2012 +0400
+
+    bugfix checking file existing
+
+commit ed7c7d320ddb0ea9e6140e2699c65f737ed10d9a
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Jan 8 07:35:49 2012 +0400
+
+    Corrected init-slime.el for case is not found slime-helper.el. Remove twice loaded init-slime.el
+
+commit bb316a048821ee2a2be9066f4cc69bce6b9c146a
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Jan 8 06:25:37 2012 +0400
+
+    Corrected newstring into prompt messages
+
+commit c4c251e16d7cbd65348a45f0b52c3d03e7e1d90a
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Jan 8 04:12:17 2012 +0400
+
+    Correct great 10 function parameters by shift
+
+commit 4dcbc27b6d54bb39d0635d5a3c6cc6273162c4bf
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Jan 8 03:35:43 2012 +0400
+
+    correct PRE_MAKE_CMD argument for call extract_build_install
+
+commit 1c8c02855b333cec4992185f6fd74954c5f2b7cb
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Jan 8 02:51:50 2012 +0400
+
+    Else correct declare variables
+
+commit 598e5f0a81f19235d387c0a7cf0ea3acc6e0259f
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Jan 8 02:48:36 2012 +0400
+
+    Else correct declare variables
+
+commit 8c890dca59358453135a3787d02f08889db6f63b
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Jan 8 02:45:38 2012 +0400
+
+    Correct declare variables
+
+commit 484f9bed6615ff9aac479bae5afe1d20be60be03
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Jan 8 02:43:11 2012 +0400
+
+    Correct else bad using some local keyword.
+
+commit b597a1e52cd1ce54cc1269d00dc11d5a3c043ca9
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Jan 8 02:39:00 2012 +0400
+
+    Correct bad using some local keyword.
+
+commit 4e2fca7f3858c09a959c3156729602ce5a25a9eb
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Fri Dec 16 08:09:30 2011 +0400
+
+    Added notes for working into Debian 6.0.3/x86-64
+
+commit 127915a48e41ff05dac8d3a66912efe12679f6ad
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Thu Dec 8 19:58:25 2011 +0400
+
+    bugfix: LISP_COMPILER_DIR must be defined.
+
+commit 12b466ffb76aa58d12ff54f19a306fcb0806274d
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Thu Dec 8 16:23:38 2011 +0400
+
+    bugfix in correct patching Makefile for XCL building.
+
+commit 86b57d936b6d7bbefae9d84673caa3fe8b2c080d
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Thu Dec 8 16:18:36 2011 +0400
+
+    added task: checking on x86-64 also
+
+commit 5bf1ec8fed7072926560367ee0718ccf61e87a04
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Thu Dec 8 16:15:13 2011 +0400
+
+    Correct patching Makefile for XCL building: now patching only for Ubuntu 11.04
+
+commit 0d9481a1930e944690da38d55c2e79f7f14d8b8f
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Thu Dec 8 16:11:19 2011 +0400
+
+    Correct task
+
+commit 8576c4e1ba22654daf2f901e00d0f6ccaaa9b5b5
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Thu Dec 8 15:58:39 2011 +0400
+
+    Added task: providing g++ for XCL building
+
+commit e2577379b4ba24afc759b74a9c818191fbdea99b
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Thu Dec 8 15:52:29 2011 +0400
+
+    Added task: bugfix ncurses building on Debian
+
+commit 45f87e4a6a12f9740539292148654706b437f26a
+Merge: 4ad256a 0d01ce7
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Thu Dec 8 15:30:57 2011 +0400
+
+    Merge branch 'master' of https://github.com/LinkFly/lisp-dev-tools
+
+commit 4ad256af95999f89197246b41fcdede4f1ddc790
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Thu Dec 8 15:26:41 2011 +0400
+
+    Added task list
+
+------------------------------
