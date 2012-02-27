@@ -7,5 +7,6 @@ resolve_deps "$LISP_DEPS_ON_TOOLS"
 
 ./provide-archive-lisp-src.sh
 ./provide-sources-lisp.sh
+./provide-compiler-lisp.sh
 ./remove-lisp.sh
 ./build-lisp.sh rebuild

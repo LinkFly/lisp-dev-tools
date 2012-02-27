@@ -1,24 +1,26 @@
 done. 1. Discovery - why downloading EMACS, although it presence true link - utils/emacs -> /usr/bin/emacs.
 done. 2. Correct providing WGET and EMACS tool.
-3. Finding - why was bad message about bad parameter EXTRA_PARAMS.
-4. Make informative message on try run ./rebuild-lisp without before runned ./provide-lisp (or ./provide-slime).
-5. Write to README and README_ru about not working ./rebuild-lisp into Gentoo.
-6. Write to README and README_ru about gcc required on "ubuntu server x64 10.10"
-7. Make checking need programs (example: gcc, g++) before any operations.
-8. Added to recomendation - installing wget and emacs (if don't installing this, then lisp-dev-tools
+undo. 3. Finding - why was bad message about bad parameter EXTRA_PARAMS.
+undo. 4. Make informative message on try run ./rebuild-lisp without before runned ./provide-lisp (or ./provide-slime).
+done. 5. Write to README and README_ru about not working ./rebuild-lisp into Gentoo.
+done. 6. Write to README and README_ru about gcc required on "ubuntu server x64 10.10"
+7. Make checking need programs (example: make, gcc, g++) before any operations.
+done. 8. Added to recomendation - installing wget and emacs (if don't installing this, then lisp-dev-tools
 extract its wget archive, building and install it, also downloading emacs, and building and install it).
-9. Replace into provide-tool (in core.sh) handling providing special archives for tools: wget and openssl (on case ala switch).
+undo. 9. Replace into provide-tool (in core.sh) handling providing special archives for tools: wget and openssl (on case ala switch).
 10. On ./clean-all - recovering default symbolic links into utils. Analyzing true way for handling links.
-11. Added depends on 'time' for sbcl rebuilding, but not ./provide-lisp (think about to do this with design).     	  	   
+done. 11. Added depends on 'time' for sbcl rebuilding, but not ./provide-lisp (think about to do this with design).     	  	   
 12. (Think about)Split functionals: create ./provide-swank command. It will be using by ./provide-slime command. Also added SWANK_PORT variable for ./run-lisp command.tools.conf
-13. Add to notes in README: into gentoo LiveDVD12 not compiling elisp sources for Slime if 256 or 512 Mb RAM. But if 768 - all ok.
-14. Add to notes in README: for ubuntu-server 10.10 need gcc - (first for openssl: ./provide-lisp -> wget -> openssl)
-15. Separating for lisps DEPS_ON_TOOLS for prebuilded and compiled.
-16. Add to notes in README: need g++ for ncurses (./provide-emacs -> ncurses).
+done. 13. Add to notes in README: into gentoo LiveDVD12 not compiling elisp sources for Slime if 256 or 512 Mb RAM. But if 768 - all ok.
+done. 14. Add to notes in README: for ubuntu-server 10.10 need gcc.
+done. 15. Separating for lisps DEPS_ON_TOOLS for prebuilded and compiled.
+done. 16. Add to notes in README: need g++ for ncurses (./provide-emacs -> ncurses).
 17. Correct error rebuilding other version lisp, example: VERSION=1.0.54 ./rebuild-lisp
-18. Added to notes: for compiling CMUCL in Fedora 16 required glibc.i686 package (sudo yum install glibc.i686).
-19. Added checking glibc.i686 for fedora 16 x86-64.
+18. Added to notes (when Fedora 16 will be supported OS): for compiling CMUCL in Fedora 16 required glibc.i686 package (sudo yum install glibc.i686).
+19. (when Fedora 16 will be supported OS) Added checking glibc.i686 for Fedora 16 x86-64.
 20. Added new supported platform info to README_ru.
+done. 21. Add to README (and README_ru) describe variable GET_CMD_P (need for getting command line), used by run-lisp.
+done. 22. Add to note (if added describe GET_CMD_P) in README (and README_ru) about strange syntax for <'> and suggest using (quote ...) instead.
 
 ------------- Else tasks --------------
 1. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
@@ -41,11 +43,15 @@ $ sbcl --noinform --dynamic-space-size 8192 --no-sysinit --eval "(require 'sb-po
 9. Remove into run-lisp.sh depends on "ERROR" into error messages (error return of functions: get_run_lisp_cmd and get_load_quicklisp_args).
 10. Enclose core file for lisps into quotes.
 11. Added anticipatory quicklisp loading (on required).
+12. Separated lisps on: older, modern and raw.
+13. Added warning when using older or raw lisps. And added --common-warn-off common arg for disable warning about older and raw of lisp.
+14. Not building ncurses if it already existing into OS.
 
 -------- Milestones (mark with tags then when) ----------
 0.0.2:
 	- testing run-lisp on /bin/bash
-	- correct README and README_ru.
+	done. - correct README and README_ru.
+	partially. - upgrade TODO
 	- create CHANGELOG, NEWS and NEWS_ru
 			
 0.0.3:
@@ -58,7 +64,10 @@ $ sbcl --noinform --dynamic-space-size 8192 --no-sysinit --eval "(require 'sb-po
 	-
 
 0.1:
-	- separated lisps on: older, modern and raw (too new)
-	- create general interface to lisp systems (--common-load --common-eval ... else some))
+	- separated lisps on: older, modern and raw (too new) and add handling of older and raw lisp (add warning and disable warning).
+	- create general interface to lisp systems (--common-load --common-eval (see experimental/common-interface.sh))
+	- ...
 
-
+0.2:
+	- decorate README and README_ru
+	- ...

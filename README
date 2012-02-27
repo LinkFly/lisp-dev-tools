@@ -1,4 +1,5 @@
 Lisp Development Tools (lisp-dev-tools).
+(REAME in russian, see the README_ru)
 
      Linux shell scripts to automate the downloading, compilation
 and configuring Common Lisp development tools (Emacs, Slime, SBCL and
@@ -20,10 +21,10 @@ Now supported:
 
 Dependencies:
 For building CMUCL lisp: libc6-dev-i386 package.
-(into "Ubuntu 11.04/x86-64" and "Debian 6.0.3/x86-64").
+(into "Ubuntu 11.04/x86-64" and "Debian 6.0.4/x86-64").
 
 Required packages for compilation lisps and tools/libs 
-(into "Debian 6.0.3/x86-64"): make, g++
+(into "Debian 6.0.4/x86-64"): make, g++
 
 Providing 10(!) open source lisps:
 
@@ -39,23 +40,42 @@ GCL(CLTL1 only)-GNU Common Lisp (http://www.gnu.org/s/gcl/)
 CCL - Clozure Common Lisp	(http://ccl.clozure.com/)
 
 ---------------------------------------------
+See EXAMPLES after Recommendation and Notes.
+
+Recomendations:
+    - Install wget and emacs packages, if they do not, then lisp-dev-tools 
+system will build their own (extract its wget archive, building and installing
+it into lisp-dev-tools, also downloading emacs, building and install it also 
+into lisp-dev-tools).
+
 Notes: 
       1) CMUCL building only for x86 architecture, so required supported 
 x86 on x86-64 architectures - for succesful building in Ubuntu 11.04 
 required libc6-dev-i386 package (therefore this package also required for
-using command: ./provide-all-lisps). To install run command:
-
+using command: ./provide-all-lisps). To install run command: 
 $ sudo apt-get -y install libc6-dev-i386
+       ... instead "apt-get" preferable to use the "aptitude".
+      
+      2) If executed ./run-lisp with command line contained <'> (apostrophe) and
+using GET_CMD_P=yes, then return strange syntax into command line (but valid
+for copied, pasted into shell and executed). To avoid this - using (quote some) 
+instead 'some.
 
-  ... instead "apt-get" preferable to use the "aptitude".
-
-      2) GCL building only in CLTL1 compliance mode (not builded 
+      3) GCL building only in CLTL1 compliance mode (not builded 
 with configure option --enable-ansi - bug in GCL)
 
-      3) SBCL by default no building - provided precompiled binaries. For
- building from sources to run:
+      4) SBCL by default no building - provided precompiled binaries. For
+ building from sources to run: ./rebuild-lisp
 
-$ ./rebuild-lisp
+      5) ./rebuild-lisp not working into Gentoo.
+
+      6) For Ubuntu Server 10.10/x86-64 required gcc package (not installed by default).
+
+      7) For Gentoo (from livedvd-amd64-multilib-2012) not comping elisp sources (for 
+compiling Slime) if 256 or 512 MB RAM, but if 768MB - all ok.
+
+      8) If Emacs not found into OS (not found /usr/bin/emacs), then it building, and 
+required g++ (for building need library - "ncurses").
 
 ---------------------------------------------
 Using (simple examples):
@@ -123,6 +143,12 @@ $ ./rebuild-lisp
 
 $ ./run-emacs	
 
+  	12) Getting command line for calling lisp system without executed it:
+
+$ GET_CMD_P=yes ./run-lisp --eval "(print 999)" --eval "(quit)"
+XDG_CONFIG_DIRS='/media/COMMON_LISP/lisp-dev-tools/conf:/etc/xdg/xdg-gnome:/etc/xdg' /media/COMMON_LISP/lisp-dev-tools/lisp/sbcl/sbcl-1.0.53/bin/sbcl --core /media/COMMON_LISP/lisp-dev-tools/lisp/sbcl/sbcl-1.0.53/lib/sbcl/sbcl.core '--eval' '(print 999)' '--eval' '(quit)' '--load' '/media/COMMON_LISP/lisp-dev-tools/lisp-libs/quicklisp/setup.lisp'
+
+            ... this output may be copied, pasted into the shell and executed successfully.
 --------------------------------------------------------------
 Else examples:
 
