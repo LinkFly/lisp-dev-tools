@@ -50,34 +50,22 @@ $ sbcl --noinform --dynamic-space-size 8192 --no-sysinit --eval "(require 'sb-po
 -------- Milestones (mark with tags then when) ----------
 0.0.2:
 	- testing run-lisp on /bin/bash
-	- (done)correct README and README_ru.
-	- (partially)upgrade TODO
+	- correct README and README_ru.
+	- upgrade TODO
 	- create CHANGELOG, NEWS and NEWS_ru
 			
-0.0.3:
-	- 
-
-0.0.4:
-	-
-
-0.0.5:
-	-
-
-0.1:
+0.0.3
 	- separated lisps on: older, modern and raw (too new) and add handling of older and raw lisp (add warning and disable warning).
 	- create general interface to lisp systems (--common-load --common-eval (see experimental/common-interface.sh))	
 	- add provide-swank and run-swank
 
-0.2:
+0.0.4:
 	- decorate README and README_ru
 	- ...
 
-0.3:
+0.0.5:
 	- Added support Fedora16.
 	- Added support Arch.
-	- ...
-
-0.4:
 	- Added support x86 OSes.
 	- ...
 
@@ -86,8 +74,9 @@ $ sbcl --noinform --dynamic-space-size 8192 --no-sysinit --eval "(require 'sb-po
 1.0:
 	- ...
 
-1.1:
+...
 
+2.0:
 	- Added "high-isolation" mode. Encapsulated all using standard program into
 directory (example: root/usr/bin) and corrected PATH (when providing or running lisps 
 and tools in "high-isolation" mode) to using the directory (contained symbolic links
