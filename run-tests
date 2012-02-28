@@ -1,19 +1,28 @@
 #!/bin/sh
 cd "$(dirname "$0")"
 
-# Test running lisp-system:
+CONST_ALREADY=10
+
+PASS=0
+FAIL=0
+ALREADY=0
+TESTS_AMOUNT=0
+
 general_test () {
 local PROVIDE="$1"
 local IF_OK="$2"
 printf "test $PROVIDE ... "
 local RESULT="$($PROVIDE 2>/dev/null | tail -n1)"
+TESTS_AMOUNT=$((TESTS_AMOUNT + 1))
 
 if test "ALREADY." = "$RESULT";then
-printf "OK(ALREADY)";echo;return 0;
+ALREADY=$(($ALREADY + 1))
+printf "PASS(ALREADY)";echo;return $CONST_ALREADY;
 fi
 
 if test "OK." = "$RESULT";then
-    printf "OK";echo;
+    PASS=$(($PASS + 1))
+    printf "PASS";echo;
 
     if test "$IF_OK" != "";then 
 	general_test "$IF_OK";
@@ -22,7 +31,9 @@ if test "OK." = "$RESULT";then
 return 0;
 fi
 
-echo FAIL;return 1;
+FAIL=$(($FAIL + 1))
+echo FAIL
+return 1
 }
 
 test_provide_lisp () {
@@ -35,16 +46,46 @@ general_test "./provide-emacs"
 
 # Test running lisp-system:
 test_run_lisp () {
-printf "test ./run-lisp ... "
-if test "$(./run-lisp --eval "(progn (format t \"~%Test running lisp-system~%Printed symbol SOME:~%\") (princ 'SYMBOL) (terpri))" \
- --eval "(quit)" | tail -n1)" = "SYMBOL";then
-printf OK;
-else echo FAIL;return 1;
+printf "test ./run-lisp <some_parameters> ... "
+local RESULT="$(./run-lisp --eval "(progn (format t \"~%Test running lisp-system~%Printed symbol SOME:~%\") (princ 'SYMBOL) (terpri))" \
+ --eval "(quit)" | tail -n1)"
+TESTS_AMOUNT=$((TESTS_AMOUNT + 1))
+
+if test "$RESULT" = "SYMBOL"
+then
+    PASS=$((PASS + 1))
+    printf PASS
+else 
+    FAIL=$((FAIL + 1))
+    echo FAIL
+    return 1
 fi
 echo
 }
 
-general_test ./provide-lisp
+general_test "./sh/provide-tool.sh wget" "./sh/remove-tool wget"
+PROVIDE_LISP_RES=$(general_test ./provide-lisp)
+
 test_run_lisp
+if test "$PROVIDE_LISP_RES" != "$CONST_ALREADY"
+then general_test ./remove-lisp
+fi
+
 general_test ./provide-emacs ./remove-emacs	
+general_test ./sh/provide-quicklisp.sh ./remove-quicklisp.sh
 general_test ./provide-slime ./remove-slime
+
+echo "
+tests amount = $TESTS_AMOUNT
+tests passed = $PASS
+tests already = $ALREADY
+tests failed = $FAIL"
+
+if test "$(($PASS + $ALREADY))" = "$TESTS_AMOUNT"
+then echo "All tests passed.
+
+OK."
+else echo "Not all tests passed.
+
+FAILED."
+fi

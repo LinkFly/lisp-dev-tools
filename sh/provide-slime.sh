@@ -7,7 +7,7 @@ echo "
 Slime already providing.
 Initialization file: $EMACS_LIBS/init-slime.el
 
-ALREADY.";exit 0;
+ALREADY."; exit 0;
 fi
 
 ./provide-lisp.sh && ./provide-emacs.sh && ./provide-quicklisp.sh || exit 1
