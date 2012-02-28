@@ -2,6 +2,14 @@
 cd "$(dirname "$0")"
 . ./includes.sh
 
+if test -f "$EMACS_LIBS/init-slime.el";then
+echo "
+Slime already providing.
+Initialization file: $EMACS_LIBS/init-slime.el
+
+ALREADY."
+fi
+
 ./provide-lisp.sh && ./provide-emacs.sh && ./provide-quicklisp.sh || exit 1
 
 echo '(ql:quickload "quicklisp-slime-helper")' | ./run-lisp.sh
@@ -17,4 +25,6 @@ echo '
     (set-language-environment "utf-8")
     (setq inferior-lisp-program "run-lisp")
     (setq init-slime.el-loaded t)))' \
-> $EMACS_LIBS/init-slime.el && echo "ELisp code lines for run the SLIME - copied into $EMACS_LIBS/init-slime.el"
+> "$EMACS_LIBS/init-slime.el" && echo;echo "ELisp code lines for run the SLIME - copied into $EMACS_LIBS/init-slime.el
+
+OK."

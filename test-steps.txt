@@ -2,4 +2,5 @@
 2) ./provide-lisp
 3) ./run-lisp
 4) ./provide-emacs
+5) ./provide-slime
 
