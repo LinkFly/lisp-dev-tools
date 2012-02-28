@@ -44,7 +44,7 @@ fi
 echo
 }
 
-general_test ./provide-lisp ./remove-lisp
+general_test ./provide-lisp
 test_run_lisp
 general_test ./provide-emacs ./remove-emacs	
 general_test ./provide-slime ./remove-slime

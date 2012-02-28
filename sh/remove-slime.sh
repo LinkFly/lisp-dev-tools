@@ -9,4 +9,6 @@ echo '(progn
 
 rm -f "$QUICKLISP/slime-helper.el"
 rm -f "$EMACS_LIBS/init-slime.el"
-echo "SLIME removed."
+echo "SLIME removed.
+
+OK."
