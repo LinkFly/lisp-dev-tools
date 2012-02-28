@@ -171,9 +171,20 @@ local MES_FAILED="$6"
 provide_dir_or_file f "$FILE" "$PROCESS_CMD" "$MES_START_PROCESS" "$MES_ALREADY" "$MES_SUCCESS" "$MES_FAILED"
 }
 
+is_symlink_p () {
+if test "$(readlink "$1")" == "";then
+    echo no;
+else echo yes;
+fi
+}
+
 get_extract_begin_cmd () {
 local FILE="$1"
-local TYPE=$(file --brief --mime-type $FILE)
+if test "$(is_symlink_p $FILE)" == "yes";then
+    echo $(get_extract_begin_cmd "$("$SCRIPTS_DIR/realpath" "$FILE")")
+fi
+
+local TYPE=$(file --brief --mime-type "$FILE")
 
 case "$TYPE" in
     "application/x-gzip") 
@@ -184,9 +195,6 @@ case "$TYPE" in
 	;;
     "application/x-xz")
 	echo "tar -xJvf";
-	;;
-    "application/x-symlink")
-	echo $(get_extract_begin_cmd $("$SCRIPTS_DIR/realpath" "$1"))
 	;;
 esac
 }
