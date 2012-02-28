@@ -1,0 +1,37 @@
+#!/bin/sh
+cd "$(dirname "$0")"
+
+# Test running lisp-system:
+general_providing_test () {
+local PROVIDE="$1"
+printf "test $PROVIDE ... "
+local RESULT="$($PROVIDE | tail -n1)"
+if test "ALREADY." = "$RESULT" || test "OK." = "$RESULT";then
+printf OK;
+else echo FAIL;return 1;
+fi
+echo
+}
+
+test_provide_lisp () {
+general_providing_test "./provide-lisp"
+}
+
+test_provide_emacs () {
+general_providing_test "./provide-emacs"
+}
+
+# Test running lisp-system:
+test_run_lisp () {
+printf "test ./run-lisp ... "
+if test "$(./run-lisp --eval "(progn (format t \"~%Test running lisp-system~%Printed symbol SOME:~%\") (princ 'SYMBOL) (terpri))" \
+ --eval "(quit)" | tail -n1)" = "SYMBOL";then
+printf OK;
+else echo FAIL;return 1;
+fi
+echo
+}
+
+test_provide_lisp
+test_run_lisp
+test_provide_emacs

@@ -5,7 +5,7 @@
 "Debian 6.0.3";"yes";"yes";"yes";"yes";"yes";"yes";"yes";"yes";"yes";"yes"
 "Debian 6.0.4";"yes";"yes";"yes";"yes";"yes";"yes";"yes";"yes";"yes";"yes"
 "Ubuntu 11.04";"yes";"yes";"yes";"yes";"yes";"yes";"yes";"yes";"yes";"yes"
-;;;;;;;;;;
+"Arch*";;;;;;;;;;
 ;;;;;;;;;;
 "Linux x86-64 / REBUILD";"sbcl";"cmucl";"xcl";"ecl";"clisp";"mkcl";"abcl";"wcl";"gcl";"ccl"
 "ubuntu server 10.10";"yes";;;;;;;;;
@@ -24,3 +24,7 @@
 "Debian 6.0.3";"yes";;;;;;;;;
 "Debian 6.0.4";"yes";;;;;;;;"(";
 "Ubuntu 11.04";"yes";;;;;;;;;
+;;;;;;;;;;
+;;;;;;;;;;
+"Notes";;;;;;;;;;
+"* Arch  (from archlinux-2011.08.19-netinstall-x86_64.iso) (prepared updated 28.02.2012, installed gcc-libs-multilib, gcc-multilib, lib32-glibc )";;;;;;;;;;
