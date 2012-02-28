@@ -62,7 +62,7 @@ $CUR_LISP_UP already exist.
 Run run-lisp.sh for using, or run rebuild-lisp.sh for retry build). 
 Directory: $LISP_DIR
 
-OK.";
+ALREADY.";
 
 MES_SUCCESS="
 $CUR_LISP_UP $LISP_DIRNAME provided successful.

@@ -2,23 +2,35 @@
 cd "$(dirname "$0")"
 
 # Test running lisp-system:
-general_providing_test () {
+general_test () {
 local PROVIDE="$1"
+local IF_OK="$2"
 printf "test $PROVIDE ... "
-local RESULT="$($PROVIDE | tail -n1)"
-if test "ALREADY." = "$RESULT" || test "OK." = "$RESULT";then
-printf OK;
-else echo FAIL;return 1;
+local RESULT="$($PROVIDE 2>/dev/null | tail -n1)"
+
+if test "ALREADY." = "$RESULT";then
+printf "OK(ALREADY)";echo;return 0;
 fi
-echo
+
+if test "OK." = "$RESULT";then
+    printf "OK";echo;
+
+    if test "$IF_OK" != "";then 
+	general_test "$IF_OK";
+    fi 	
+
+return 0;
+fi
+
+echo FAIL;return 1;
 }
 
 test_provide_lisp () {
-general_providing_test "./provide-lisp"
+general_test "./provide-lisp"
 }
 
 test_provide_emacs () {
-general_providing_test "./provide-emacs"
+general_test "./provide-emacs"
 }
 
 # Test running lisp-system:
@@ -32,6 +44,6 @@ fi
 echo
 }
 
-test_provide_lisp
+general_test ./provide-lisp ./remove-lisp
 test_run_lisp
-test_provide_emacs
+general_test ./provide-emacs ./remove-emacs	
