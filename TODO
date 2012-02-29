@@ -43,7 +43,7 @@ $ sbcl --noinform --dynamic-space-size 8192 --no-sysinit --eval "(require 'sb-po
 9. Remove into run-lisp.sh depends on "ERROR" into error messages (error return of functions: get_run_lisp_cmd and get_load_quicklisp_args).
 10. Enclose core file for lisps into quotes.
 11. Added anticipatory quicklisp loading (on required).
-12. Separated lisps on: older, modern and raw.
+done. 12. Separated lisps on: older, modern and young.
 13. Added warning when using older or raw lisps. And added --common-warn-off common arg for disable warning about older and raw of lisp.
 14. Not building ncurses if it already existing into OS.
 
@@ -55,7 +55,8 @@ $ sbcl --noinform --dynamic-space-size 8192 --no-sysinit --eval "(require 'sb-po
 	- create CHANGELOG, NEWS and NEWS_ru
 			
 0.0.3
-	- separated lisps on: older, modern and raw (too new) and add handling of older and raw lisp (add warning and disable warning).
+	done. - separated lisps on: older, modern and raw (too new) 
+	- add handling of older and raw lisp (add warning and disable warning).
 	- create general interface to lisp systems (--common-load --common-eval (see experimental/common-interface.sh))	
 	- add provide-swank and run-swank
 

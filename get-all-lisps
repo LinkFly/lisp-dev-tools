@@ -1,3 +1,4 @@
 #!/bin/sh
 cd "$(dirname "$0")"
+RUNNED_SCRIPT="get-all-lisps"
 sh/get-all-lisps.sh "$@"

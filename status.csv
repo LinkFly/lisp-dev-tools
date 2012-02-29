@@ -26,5 +26,5 @@
 "Ubuntu 11.04";"yes";;;;;;;;;
 ;;;;;;;;;;
 ;;;;;;;;;;
-"Notes";;;;;;;;;;
+"Notes:";;;;;;;;;;
 "* Arch  (from archlinux-2011.08.19-netinstall-x86_64.iso) (prepared updated 28.02.2012, installed gcc-libs-multilib, gcc-multilib, lib32-glibc )";;;;;;;;;;
