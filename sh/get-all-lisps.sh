@@ -9,7 +9,11 @@ usage () {
 echo "Using: 
 $RUNNED_SCRIPT [ --exclude-modern | --include-young | --include-obsolete | --include-all | --exclude=\"LISP1 LISP2 ...\" ]*
 Example:
-$RUNNED_SCRIPT --include-young --exclude=\"SBCL CLISP\""
+$RUNNED_SCRIPT --include-young --exclude=\"SBCL CLISP ABCL ECL\"
+CCL
+XCL
+MKCL"
+exit 0
 }
 
 MODERN_LISPS="SBCL
@@ -29,6 +33,10 @@ GCL
 WCL"
 
 EXCLUDE_LISPS=
+
+uppercase () {
+echo $1 | tr 'a-z' 'A-Z'
+}
 
 while test "$1" != ""
 do
@@ -52,7 +60,6 @@ do
 	    ;;
 	--include-obsolete)
 	    OBSOLETE_LISPS="$FOR_OBSOLETE_LISPS"
-	    echo "obsolete: $OBSOLETE_LISPS"
 	    ;;
 	*)
 	    arg="$1"
@@ -62,7 +69,7 @@ do
 		test "$value" != "--exclude" && \
 		test "$param" = "--exclude"
 	    then
-		EXCLUDE_LISPS="$value"
+		EXCLUDE_LISPS="$(uppercase "$value")"
 	    fi
 	    ;;
     esac

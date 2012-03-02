@@ -7,26 +7,101 @@ cd "$(dirname "$0")"
 #    for running lisp (without lisp starting)
 ############## 
 
+TMP=
+trap "if test -n '$TMP';then rm '$tmp';fi" EXIT 
+
+EVAL_OPTIONS="
+SBCL=--eval
+CCL=--eval
+ECL=-eval
+ABCL=--eval
+CLISP=emulate_by_load"
+
+LOAD_OPTIONS="
+SBCL=--load"
+
+get_val_by_key () {
+local key="$1"
+local keys_vals="$2"
+for kv in $keys_vals
+do     
+    if test "$key" = "${kv%=*}"
+    then
+	echo "${kv#*=}"
+	break
+    fi
+done
+}
+
+HANDLED_ARG=
+handling_common_param () {
+### Changed variables: ###
+# HANDLED_ARG - saved result into it
+##########################
+
+HANDLED_ARG=
+
+case "$1" in 
+    "'--common-eval'")
+	HANDLED_ARG="$(get_val_by_key $(uppercase $CUR_LISP) "$EVAL_OPTIONS")"
+	
+	if test "$HANDLED_ARG" = "emulate_by_load"
+	then 
+	    exit 1 #not worked
+	fi	
+	    ;;
+    "'--common-load'")
+	HANDLED_ARG="$(get_val_by_key $(uppercase $CUR_LISP) "$LOAD_OPTIONS")"
+	    ;;
+    *)
+	    HANDLED_ARG="$1"
+	    ;;
+esac
+}
+
+#echo $(handling_common_param '--common-eval')
+#exit 1
+
 correct_quote () {
 echo "$1" | sed "s/'/'\"'\"'/g;s/^.*$/'&'/"
 }
 
+CORRECTED_ARGS=
+
 prepare_args () {
+### Changed vars: ###
+# CORRECTED_ARGS
+#####################
+
 ### Using: ###
 ### ./script2 "$(prepare_args "$@")"
 ##############
-
 local ARGS=""
 local FST="yes"
-local CURARG=
-for arg in "$@";do
-if [ -z "$FST" ];then
-    ARGS="$ARGS ";
-else FST=""
-fi
-ARGS="$ARGS"$(correct_quote "$arg");
+local handle_next_param_p=
+
+for arg in "$@"
+do
+    if [ -z "$FST" ]
+    then
+	ARGS="$ARGS "
+    else FST=""
+    fi
+
+#    if test "$handle_next_param_p" = "yes"	
+#    then
+#	
+#	handle_next_param_p=no
+#    else handle_next_param_p=$(is_handle_next_param_p "$arg")
+#    fi
+    
+    ## Save handling result into HANDLED_ARG
+    handling_common_param "$(correct_quote "$arg")"
+    ARGS="$ARGS""$HANDLED_ARG";
 done
-printf "%s" "$ARGS"
+
+#printf "%s" "$ARGS"
+CORRECTED_ARGS="$ARGS"
 }
 
 ### Correcting XDG_CONFIG_DIRS ###
@@ -63,7 +138,13 @@ if [ "$(echo $LOAD_QUICKLISP_ARGS | cut --bytes=1-5)" = "ERROR" ];then
     exit 1;
 fi
 
-FULL_RUN_CMD="XDG_CONFIG_DIRS=$XDG_CONFIG_DIRS $RUN_COMMAND $(prepare_args "$@")${LOAD_QUICKLISP_ARGS}"
+## Filled CORRECTED_ARGS
+prepare_args "$@"
+
+## Handling CORRECTED_ARGS for support common parameters: --common-[load | eval | quit]
+
+
+FULL_RUN_CMD="XDG_CONFIG_DIRS=$XDG_CONFIG_DIRS $RUN_COMMAND $CORRECTED_ARGS${LOAD_QUICKLISP_ARGS}"
 
 ### Variable GET_CMD_P initialized into run-lisp script file ###
 if [ "$GET_CMD_P" = "yes" ];then
