@@ -133,7 +133,7 @@ fi
 
 get_load_quicklisp_args () {
 if [ "$LISP_ENABLE_QUICKLISP" = "yes" ];then
-    if ! [ -f "$QUICKLISP/setup.lisp" ];then
+    if ! [ -f "$QUICKLISP/setup.lisp" ] && [ -z "$1" ];then
 	echo "
 ERROR: quicklisp can't be enabled - file $QUICKLISP/setup.lisp not found.
 Please to run ./provide-quicklisp
