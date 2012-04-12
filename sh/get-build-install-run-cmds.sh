@@ -9,7 +9,7 @@ then
     local PATH_TO_LIBS='\\\\/usr\\\\/lib\\\\/x86_64-linux-gnu\\\\/';
     local D='$';
     echo "
-if [ \"$D(type lsb_release &> /dev/null && echo yes))\" = yes ] && [ \"$D(lsb_release -si)\" = \"Ubuntu\" ] && [ \"$D(lsb_release -sr)\" = \"11.04\" ];then
+if [ \"$D(type lsb_release > /dev/null && echo yes)\" = yes ] && [ \"$D(lsb_release -si)\" = \"Ubuntu\" ] && [ \"$D(lsb_release -sr)\" = \"11.04\" ] && [ \"$D(arch)\" = \"x86_64\" ];then
   echo '
 ATTENTION!!!
 Patching Makefile for correcting path to finded libpthread.so (copy will be saved as Makefile.backup'
