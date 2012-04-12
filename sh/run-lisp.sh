@@ -7,8 +7,17 @@ cd "$(dirname "$0")"
 #    for running lisp (without lisp starting)
 ############## 
 
-TMP=
-trap "if test -n '$TMP';then rm '$tmp';fi" EXIT 
+abs_path LISP_DIR
+
+######## Checking lisp ###########
+if ! [ -d "$LISP_DIR" ]; then
+    echo "
+ERROR: Running $(uppercase $CUR_LISP) failed - lisp does not exist (please to run provide-lisp)
+Directory (that does not exist): $LISP_DIR
+
+FAILED."; exit 1;
+fi
+##################################
 
 EVAL_OPTIONS="
 SBCL=--eval
@@ -19,6 +28,9 @@ CLISP=emulate_by_load"
 
 LOAD_OPTIONS="
 SBCL=--load
+CCL=--load
+ECL=-load
+ABCL=--load
 CLISP=-i"
 
 get_val_by_key () {
@@ -34,14 +46,22 @@ do
 done
 }
 
+### Shared variables ###
 IF_EMULATE_BY_LOAD= 
 NEXT_ARG_SEXPR_P=no
 HANDLED_ARG=
+
+CORRECTED_ARGS=
+########################
+
+WAS_COMMON_QUIT_P=no
 handling_common_param () {
 ### Changed variables: ###
 # HANDLED_ARG - saved result into it
-# IF_EMULATE_BY_LOAD - changed prepared code for running
+# IF_EMULATE_BY_LOAD - changed prepared code for running (initialization)
+# NEXT_ARG_SEXPR_P - set in "yes", if need handling next arg 
 ##########################
+local TMP_HANDLED_ARG=
 
 HANDLED_ARG=
 
@@ -49,8 +69,10 @@ case "$1" in
     "'--common-eval'")
 	HANDLED_ARG="$(get_val_by_key $(uppercase $CUR_LISP) "$EVAL_OPTIONS")"
 	
+	### Emulation eval by load ###
 	if test "$HANDLED_ARG" = "emulate_by_load"
 	then 
+
 	    if test -z "$IF_EMULATE_BY_LOAD"
 	    then IF_EMULATE_BY_LOAD='ACC_TMP_FILES=;
 add_tmp_file() { ACC_TMP_FILES="$ACC_TMP_FILES $1"; }
@@ -59,12 +81,33 @@ trap "del_tmp_files" EXIT;
 
 ';
 	    fi
-	    NEXT_ARG_SEXPR_P=yes
-	    HANDLED_ARG="$(get_val_by_key $(uppercase $CUR_LISP) "$LOAD_OPTIONS")"
+
+	    if test "$WAS_COMMON_QUIT_P" = "yes"
+	    then
+		WAS_COMMON_QUIT_P=no
+		TMP_HANDLED_ARG="$(get_val_by_key $(uppercase $CUR_LISP) "$LOAD_OPTIONS")"
+		save_sexpr_and_prepare_for_load "'(quit)'"
+		HANDLED_ARG="$TMP_HANDLED_ARG $HANDLED_ARG"
+	    else
+		NEXT_ARG_SEXPR_P=yes
+		HANDLED_ARG="$(get_val_by_key $(uppercase $CUR_LISP) "$LOAD_OPTIONS")"
+	    fi
+
+	else ## if not emulate_by_load
+	    if test "$WAS_COMMON_QUIT_P" = "yes"
+	    then
+		WAS_COMMON_QUIT_P=no
+		HANDLED_ARG="$HANDLED_ARG '(quit)'" 
+	    fi
 	fi	
+	###############################    
 	    ;;
     "'--common-load'")
 	HANDLED_ARG="$(get_val_by_key $(uppercase $CUR_LISP) "$LOAD_OPTIONS")"
+	    ;;
+    "'--common-quit'")
+	WAS_COMMON_QUIT_P=yes
+	handling_common_param "'--common-eval'"
 	    ;;
     *)
 	    HANDLED_ARG="$1"
@@ -72,6 +115,7 @@ trap "del_tmp_files" EXIT;
 esac
 }
 
+### Emulation eval by load ###
 NUMBER_TMPFILE=0
 save_sexpr_and_prepare_for_load () {
 ### Changed variables: ###
@@ -90,15 +134,11 @@ add_tmp_file $D$CUR_TMPFILE_VARNAME
 "
 HANDLED_ARG="$D$CUR_TMPFILE_VARNAME"
 }
-
-#echo $(handling_common_param '--common-eval')
-#exit 1
+##############################
 
 correct_quote () {
 echo "$1" | sed "s/'/'\"'\"'/g;s/^.*$/'&'/"
 }
-
-CORRECTED_ARGS=
 
 prepare_args () {
 ### Changed vars: ###
@@ -109,53 +149,34 @@ prepare_args () {
 ### ./script2 "$(prepare_args "$@")"
 ##############
 local ARGS=""
-local FST="yes"
 local handle_next_param_p=
 
 for arg in "$@"
 do
-    if [ -z "$FST" ]
+    if ! [ -z "$ARGS" ]
     then
 	ARGS="$ARGS "
-    else FST=""
     fi
 
-#    if test "$handle_next_param_p" = "yes"	
-#    then
-#	
-#	handle_next_param_p=no
-#    else handle_next_param_p=$(is_handle_next_param_p "$arg")
-#    fi
-    
     ## Save handling result into HANDLED_ARG
     if test "$NEXT_ARG_SEXPR_P" = "yes"
     then
+	### Emulation eval by load ###
 	save_sexpr_and_prepare_for_load "$(correct_quote "$arg")"
 	NEXT_ARG_SEXPR_P=no
+	##############################
     else
 	handling_common_param "$(correct_quote "$arg")"
     fi	
     ARGS="$ARGS""$HANDLED_ARG";
 done
 
-#printf "%s" "$ARGS"
 CORRECTED_ARGS="$ARGS"
 }
 
 ### Correcting XDG_CONFIG_DIRS ###
 XDG_CONFIG_DIRS="'$PREFIX/conf:$XDG_CONFIG_DIRS'"
 
-abs_path LISP_DIR
-
-######## Checking lisp ###########
-if ! [ -d "$LISP_DIR" ]; then
-    echo "
-ERROR: Running $(uppercase $CUR_LISP) failed - lisp does not exist (please to run provide-lisp)
-Directory (that does not exist): $LISP_DIR
-
-FAILED."; exit 1;
-fi
-##################################
 
 RUN_COMMAND=$(get_run_lisp_cmd)
 
