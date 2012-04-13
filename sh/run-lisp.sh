@@ -24,14 +24,24 @@ SBCL=--eval
 CCL=--eval
 ECL=-eval
 ABCL=--eval
-CLISP=emulate_by_load"
+CLISP=emulate_by_load
+XCL=
+MKCL=-eval
+CMUCL=-eval
+GCL=-eval
+WCL="
 
 LOAD_OPTIONS="
 SBCL=--load
 CCL=--load
 ECL=-load
 ABCL=--load
-CLISP=-i"
+CLISP=-i
+XCL=
+MKCL=-load
+CMUCL=-load
+GCL=-load
+WCL="
 
 get_val_by_key () {
 local key="$1"
