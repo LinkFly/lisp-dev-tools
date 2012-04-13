@@ -61,12 +61,26 @@ return 1
 
 # Test running lisp-system:
 test_run_lisp () {
-printf "test LISP=$1 ./run-lisp <some_parameters> ... "
-local RESULT="$(GET_CMD_P=no LISP=$1 ./run-lisp --eval '(progn (format t "~%Test running lisp-system~%Printed symbol SOME:~%") (princ '"'"'SYMBOL) (terpri))' --eval '(quit)' | tail -n1)"
+local CUR_LISP=$1
+if test -z "$CUR_LISP";then CUR_LISP=sbcl;fi
+local RUN_SCRIPT="./../run-lisp"
+local TEST_PARAMS="--common-load for-tests.lisp --common-eval '(progn (princ (quote some)) (terpri))' --common-quit"
+local TEST_CODE="LISP=$CUR_LISP $RUN_SCRIPT $TEST_PARAMS"
+printf "Test run-lisp:
+${TEST_CODE}\n\n"
+echo "Evaluated command line: 
+----------------------------------------------
+$(eval GET_CMD_P=yes $TEST_CODE)
+----------------------------------------------\n"
+
+#$(GET_CMD_P=yes LISP=$1 ./../run-lisp --common-load for-tests.lisp --common-eval '(progn (princ (quote some)) (terpri))' --common-quit)
+printf "Tests into running lisp-system:\n"
+local RESULT="$(eval $TEST_CODE | tail -n2)"
 
 TESTS_AMOUNT=$((TESTS_AMOUNT + 1))
 
-if test "$RESULT" = "SYMBOL"
+if test "$RESULT" = "100
+SOME"
 then
     PASS=$((PASS + 1))
     printf PASS
