@@ -1,6 +1,10 @@
 #!/bin/sh
 cd "$(dirname "$0")"
+cd ../sh
 . ./includes.sh
+cd ..
+
+FILE_FOR_LOAD="$(pwd)/tests/for-tests.lisp"
 
 usage () {
 echo "Using: 
@@ -63,8 +67,8 @@ return 1
 test_run_lisp () {
 local CUR_LISP=$1
 if test -z "$CUR_LISP";then CUR_LISP=sbcl;fi
-local RUN_SCRIPT="./../run-lisp"
-local TEST_PARAMS="--common-load for-tests.lisp --common-eval '(progn (princ (quote some)) (terpri))' --common-quit"
+local RUN_SCRIPT="./run-lisp"
+local TEST_PARAMS="--common-load $FILE_FOR_LOAD --common-eval '(progn (princ (quote some)) (terpri))' --common-quit"
 local TEST_CODE="LISP=$CUR_LISP $RUN_SCRIPT $TEST_PARAMS"
 printf "Test run-lisp:
 ${TEST_CODE}\n\n"
@@ -169,7 +173,7 @@ if test -z "$EXCLUDE_YOUNG_LISPS"
 then
     echo
     echo "Testing young lisps:"
-    for lisp in $(./get-all-lisps --include-young)
+    for lisp in $(./get-all-lisps --exclude-modern --include-young)
     do
 	concrete_lisp_test $lisp
     done
@@ -180,7 +184,7 @@ if test -z "$EXCLUDE_OBSOLETE_LISPS"
 then
     echo
     echo "Testing obsolete lisps:"
-    for lisp in $(./get-all-lisps --include-obsolete)
+    for lisp in $(./get-all-lisps --exclude-modern --include-obsolete)
     do
 	concrete_lisp_test $lisp
     done
