@@ -73,7 +73,6 @@ echo "Evaluated command line:
 $(eval GET_CMD_P=yes $TEST_CODE)
 ----------------------------------------------\n"
 
-#$(GET_CMD_P=yes LISP=$1 ./../run-lisp --common-load for-tests.lisp --common-eval '(progn (princ (quote some)) (terpri))' --common-quit)
 printf "Tests into running lisp-system:\n"
 local RESULT="$(eval $TEST_CODE | tail -n2)"
 
