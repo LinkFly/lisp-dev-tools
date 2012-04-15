@@ -38,6 +38,7 @@ if [ "$TOOL_PROVIDE_FILES" = "" ]; then
 fi
 
 echo "Processing of tool: $TOOL_NAME"
+
 if [ $(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS") = "yes" ];then
   echo "
 Tool $TOOL_NAME already provided.
@@ -55,10 +56,7 @@ then if ! [ -f $ARCHIVES/$TOOL_ARCHIVE ]; then
 	if [ "$TOOL_NAME" = "wget" ]; then 
 	    ln -fs $SCRIPTS_DIR/$WGET_ARCHIVE $ARCHIVES/$WGET_ARCHIVE;	
 	else 
-	    if [ "$TOOL_NAME" = "openssl" ]; then 
-		ln -fs $SCRIPTS_DIR/$OPENSSL_ARCHIVE $ARCHIVES/$OPENSSL_ARCHIVE;
-	    else provide_archive_tool "$TOOL_NAME";
-	    fi
+	    provide_archive_tool "$TOOL_NAME";
 	fi
      fi
 fi
@@ -113,7 +111,7 @@ Builded $TOOL_NAME success.
 OK."
 
 build_if_no "$FILE_LINK_NAMES" "$UTILS_DIR" "$BUILD_CMD" "$BUILDED_FILES" \
-"$MES_ALREADY" "$MESS_BUILDED_FAIL" "$MES_BUILDED_SUCC"
+"$MES_ALREADY" "$MES_BUILDED_FAIL" "$MES_BUILDED_SUCC"
 }
 
 remove_tool () {
