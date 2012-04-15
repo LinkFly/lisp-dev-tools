@@ -33,7 +33,9 @@ general_test () {
 # Using(and changing): PROVIDE_LISP_RES
 local PROVIDE="$1"
 local IF_OK="$2"
-printf "test $PROVIDE ... "
+printf "Test:
+$PROVIDE
+    ... "
 local RESULT="$(eval "$PROVIDE" 2>/dev/null | tail -n1)"
 TESTS_AMOUNT=$((TESTS_AMOUNT + 1))
 
