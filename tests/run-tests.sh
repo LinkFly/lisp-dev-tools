@@ -1,10 +1,13 @@
 #!/bin/sh
 cd "$(dirname "$0")"
+OPERATIONS_LOG="$(pwd)/tests-results/operations-log.txt"
+FILE_FOR_LOAD="$(pwd)/for-tests.lisp"
 cd ../sh
 . ./includes.sh
 cd ..
 
-FILE_FOR_LOAD="$(pwd)/tests/for-tests.lisp"
+
+
 
 usage () {
 echo "Using: 
@@ -36,7 +39,8 @@ local IF_OK="$2"
 printf "Test:
 $PROVIDE
     ... "
-local RESULT="$(eval "$PROVIDE" 2>/dev/null | tail -n1)"
+local RESULT="$(eval "$PROVIDE" 2>&1 | tee --append '$OPERATIONS_LOG' | tail -n1)"
+if test $? -eq 0
 TESTS_AMOUNT=$((TESTS_AMOUNT + 1))
 
 if test "ALREADY." = "$RESULT";then
