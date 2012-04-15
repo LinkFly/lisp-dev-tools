@@ -37,6 +37,7 @@ EXCLUDE_MODERN_LISPS=
 EXCLUDE_YOUNG_LISPS=
 EXCLUDE_OBSOLETE_LISPS=
 
+FAILED_TESTS=
 PROVIDE_LISP_RES=
 
 general_test () {
@@ -77,6 +78,8 @@ return 0;
 fi
 
 FAIL=$(($FAIL + 1))
+FAILED_TESTS="$FAILED_TESTS
+$PROVIDE"
 echo FAIL | tee --append "$TESTS_LOG"
 PROVIDE_LISP_RES=1
 return 1
@@ -257,6 +260,8 @@ then echo "All tests passed.
 
 OK." | tee --append "$TESTS_LOG"
 else echo "Not all tests passed.
+Failed tests:
+$FAILED_TESTS
 
 FAILED." | tee --append "$TESTS_LOG"
 exit 1
