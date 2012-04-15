@@ -172,7 +172,7 @@ provide_dir_or_file f "$FILE" "$PROCESS_CMD" "$MES_START_PROCESS" "$MES_ALREADY"
 }
 
 is_symlink_p () {
-if test "$(readlink "$1")" == "";then
+if test -z "$(readlink "$1")";then
     echo no;
 else echo yes;
 fi
@@ -180,7 +180,7 @@ fi
 
 get_extract_begin_cmd () {
 local FILE="$1"
-if test "$(is_symlink_p $FILE)" == "yes";then
+if test "$(is_symlink_p $FILE)" = "yes";then
     echo $(get_extract_begin_cmd "$("$SCRIPTS_DIR/realpath" "$FILE")")
 fi
 
