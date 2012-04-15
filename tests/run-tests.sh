@@ -67,18 +67,46 @@ return 1
 test_run_lisp () {
 local CUR_LISP=$1
 if test -z "$CUR_LISP";then CUR_LISP=sbcl;fi
+CUR_LISP=$(uppercase $CUR_LISP)
 local RUN_SCRIPT="./run-lisp"
-local TEST_PARAMS="--common-load $FILE_FOR_LOAD --common-eval '(progn (princ (quote some)) (terpri))' --common-quit"
-local TEST_CODE="LISP=$CUR_LISP $RUN_SCRIPT $TEST_PARAMS"
-printf "Test run-lisp:
+local RESULT=
+if test "$CUR_LISP" = "WCL" || test "$CUR_LISP" = "XCL"
+then
+######### Specific test for WCL or XCL ###########
+    local TEST_CODE=
+    local TAIL_ARG="-n5"
+    if test "$CUR_LISP" = "WCL";then TAIL_ARG="-n5";fi
+    if test "$CUR_LISP" = "XCL";then TAIL_ARG="-n4";fi
+    local TEST_CODE='echo "(progn (terpri) (princ 100) (terpri) (princ (quote some)))" | LISP=$CUR_LISP ./run-lisp | tail $TAIL_ARG | head -n2'
+    printf "Test run-lisp:
 ${TEST_CODE}\n\n"
-echo "Evaluated command line: 
+    echo "Evaluated command line: none"
+    printf "Tests into running lisp-system:\n"
+    RESULT="$(eval $TEST_CODE)"    
+##################################################
+else
+    local TEST_PARAMS="--common-load $FILE_FOR_LOAD --common-eval '(progn (princ (quote some)) (terpri))' --common-quit"
+    local TEST_CODE="LISP=$CUR_LISP $RUN_SCRIPT $TEST_PARAMS"
+    printf "Test run-lisp:
+${TEST_CODE}\n\n"
+    echo "Evaluated command line: 
 ----------------------------------------------
 $(eval GET_CMD_P=yes $TEST_CODE)
 ----------------------------------------------\n"
 
-printf "Tests into running lisp-system:\n"
-local RESULT="$(eval $TEST_CODE | tail -n2)"
+    printf "Tests into running lisp-system:\n"
+    if test "$CUR_LISP" = "CLISP"
+    then
+######### Specific getting result for CLISP ###########
+	local TMPLINES="$(eval $TEST_CODE | tail -n7)"
+	RESULT=$(echo "$TMPLINES" | head -n1)
+	RESULT="$RESULT
+$(echo "$TMPLINES" | head -n4 | tail -n1)"
+##################################################
+    else
+	RESULT="$(eval $TEST_CODE | tail -n2)"
+    fi
+fi
 
 TESTS_AMOUNT=$((TESTS_AMOUNT + 1))
 
@@ -107,7 +135,16 @@ if test "$PROVIDE_LISP_RES" != "$CONST_ALREADY"
 then general_test "LISP=$1 ./remove-lisp"
 fi
 
-general_test "LISP=$1 ./sh/provide-quicklisp.sh" "LISP=$1 ./remove-quicklisp.sh"
+local CUR_LISP="$(uppercase $1)"
+if test "$CUR_LISP" = "SBCL" ||
+test "$CUR_LISP" = "CCL" ||
+test "$CUR_LISP" = "ECL" ||
+test "$CUR_LISP" = "ABCL" ||
+test "$CUR_LISP" = "CLISP" ||
+test "$CUR_LISP" = "CMUCL"
+then
+    general_test "LISP=$CUR_LISP ./sh/provide-quicklisp.sh" "LISP=$CUR_LISP ./remove-quicklisp.sh"
+fi
 #(reserved for future)general_test ./provide-swank ./remove-swank
 }
 
