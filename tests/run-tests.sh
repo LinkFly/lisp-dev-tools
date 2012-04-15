@@ -49,6 +49,7 @@ DATETIME: $(date)
 "
 printf "$DATETIME" >> "$OPERATIONS_LOG"
 printf "$DATETIME" >> "$TESTS_LOG"
+printf "$DATETIME"
 
 printf "Test:
 $PROVIDE
