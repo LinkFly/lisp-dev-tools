@@ -175,7 +175,7 @@ echo
 echo "Testing base tools:"
 if test -z "$EXCLUDE_WGET"
 then
-    general_test "./sh/provide-tool.sh wget" "./sh/remove-tool wget"
+    general_test "./sh/provide-tool.sh wget" "./sh/remove-tool.sh wget"
 fi
 
 # Testing SBCL lisp
