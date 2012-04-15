@@ -1,0 +1,417 @@
+Processing of tool: wget
+
+Tool wget already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): wget
+
+ALREADY.
+
+Providing SBCL sbcl-1.0.53 ...
+Directory for results: /home/linkfly/Downloads/lisp-dev-tools/lisp/sbcl/sbcl-1.0.53
+
+SBCL already exist.
+Run run-lisp.sh for using, or run rebuild-lisp.sh for retry build). 
+Directory: /home/linkfly/Downloads/lisp-dev-tools/lisp/sbcl/sbcl-1.0.53
+
+ALREADY.
+
+Quicklisp already installed in: /home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp
+
+ALREADY.
+Processing of tool: emacs
+
+Tool emacs already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): emacs
+
+ALREADY.
+
+Providing SBCL sbcl-1.0.53 ...
+Directory for results: /home/linkfly/Downloads/lisp-dev-tools/lisp/sbcl/sbcl-1.0.53
+
+SBCL already exist.
+Run run-lisp.sh for using, or run rebuild-lisp.sh for retry build). 
+Directory: /home/linkfly/Downloads/lisp-dev-tools/lisp/sbcl/sbcl-1.0.53
+
+ALREADY.
+Processing of tool: emacs
+
+Tool emacs already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): emacs
+
+ALREADY.
+
+Quicklisp already installed in: /home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp
+
+ALREADY.
+This is SBCL 1.0.53, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+* To load "quicklisp-slime-helper":
+  Load 1 ASDF system:
+    alexandria
+  Install 2 Quicklisp releases:
+    quicklisp-slime-helper slime
+; Fetching #<URL "http://beta.quicklisp.org/archive/slime/2012-04-07/slime-20120407-cvs.tgz">
+; 911.28KB
+==================================================
+933,155 bytes in 0.55 seconds (1669.02KB/sec)
+; Fetching #<URL "http://beta.quicklisp.org/archive/quicklisp-slime-helper/2011-04-18/quicklisp-slime-helper-20110418-git.tgz">
+; 2.12KB
+==================================================
+2,172 bytes in 0.00 seconds (0.00KB/sec)
+; Loading "quicklisp-slime-helper"
+[package swank-loader]...
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/swank-backend.lisp" (written 15 APR 2012 09:24:36 PM):
+.........................
+[package swank-backend]...........................
+[package swank-mop]..............
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/swank-backend.fasl written
+; compilation finished in 0:00:00.830
+; loading #P"/home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/swank-backend.fasl"
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/swank-source-path-parser.lisp" (written 15 APR 2012 09:24:36 PM):
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/swank-source-path-parser.fasl written
+; compilation finished in 0:00:00.070
+; loading #P"/home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/swank-source-path-parser.fasl"
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/swank-source-file-cache.lisp" (written 15 APR 2012 09:24:36 PM):
+.
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/swank-source-file-cache.fasl written
+; compilation finished in 0:00:00.063
+; loading #P"/home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/swank-source-file-cache.fasl"
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/swank-sbcl.lisp" (written 15 APR 2012 09:24:36 PM):
+................
+[package sb-introspect-system]....................
+[package sb-cltl2-system]...............
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/swank-sbcl.fasl written
+; compilation finished in 0:00:01.599
+; loading #P"/home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/swank-sbcl.fasl"
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/swank-gray.lisp" (written 15 APR 2012 09:24:36 PM):
+.....
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/swank-gray.fasl written
+; compilation finished in 0:00:00.164
+; loading #P"/home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/swank-gray.fasl"
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/swank-match.lisp" (written 15 APR 2012 09:24:36 PM):
+.....
+[package swank-match]
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/swank-match.fasl written
+; compilation finished in 0:00:00.061
+; loading #P"/home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/swank-match.fasl"
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/swank-rpc.lisp" (written 15 APR 2012 09:24:36 PM):
+.............................
+[package swank-rpc].
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/swank-rpc.fasl written
+; compilation finished in 0:00:00.081
+; loading #P"/home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/swank-rpc.fasl"
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/swank.lisp" (written 15 APR 2012 09:24:36 PM):
+..............................
+[package swank]..............................
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/swank.fasl written
+; compilation finished in 0:00:02.707
+; loading #P"/home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/swank.fasl"
+.
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/contrib/swank-util.lisp" (written 15 APR 2012 09:24:36 PM):
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/contrib/swank-util.fasl written
+; compilation finished in 0:00:00.051
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/contrib/swank-repl.lisp" (written 15 APR 2012 09:24:36 PM):
+...
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/contrib/swank-repl.fasl written
+; compilation finished in 0:00:00.222
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/contrib/swank-c-p-c.lisp" (written 15 APR 2012 09:24:36 PM):
+.
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/contrib/swank-c-p-c.fasl written
+; compilation finished in 0:00:00.121
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/contrib/swank-arglists.lisp" (written 15 APR 2012 09:24:36 PM):
+...............
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/contrib/swank-arglists.fasl written
+; compilation finished in 0:00:01.131
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/contrib/swank-fuzzy.lisp" (written 15 APR 2012 09:24:36 PM):
+...
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/contrib/swank-fuzzy.fasl written
+; compilation finished in 0:00:00.300
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/contrib/swank-fancy-inspector.lisp" (written 15 APR 2012 09:24:36 PM):
+........
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/contrib/swank-fancy-inspector.fasl written
+; compilation finished in 0:00:00.485
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/contrib/swank-presentations.lisp" (written 15 APR 2012 09:24:36 PM):
+.
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/contrib/swank-presentations.fasl written
+; compilation finished in 0:00:00.126
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/contrib/swank-presentation-streams.lisp" (written 15 APR 2012 09:24:36 PM):
+.
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/contrib/swank-presentation-streams.fasl written
+; compilation finished in 0:00:00.090
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/contrib/swank-asdf.lisp" (written 15 APR 2012 09:24:36 PM):
+..
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/contrib/swank-asdf.fasl written
+; compilation finished in 0:00:00.117
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/contrib/swank-package-fu.lisp" (written 15 APR 2012 09:24:36 PM):
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/contrib/swank-package-fu.fasl written
+; compilation finished in 0:00:00.019
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/contrib/swank-hyperdoc.lisp" (written 15 APR 2012 09:24:36 PM):
+.
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/contrib/swank-hyperdoc.fasl written
+; compilation finished in 0:00:00.007
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/contrib/swank-sbcl-exts.lisp" (written 15 APR 2012 09:24:36 PM):
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/contrib/swank-sbcl-exts.fasl written
+; compilation finished in 0:00:00.036
+; compiling file "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/dists/quicklisp/software/slime-20120407-cvs/contrib/swank-mrepl.lisp" (written 15 APR 2012 09:24:36 PM):
+...................
+[package swank-api]...............................
+[package swank-mrepl].
+
+; /home/linkfly/.slime/fasl/2012-04-07/sbcl-1.0.53-linux-x86-64/contrib/swank-mrepl.fasl written
+; compilation finished in 0:00:00.102
+............................
+[package quicklisp-slime-helper].
+slime-helper.el installed in "/home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp/slime-helper.el"
+
+To use, add this to your ~/.emacs:
+
+  (load (expand-file-name "~/Downloads/lisp-dev-tools/lisp-libs/quicklisp/slime-helper.el"))
+  ;; Replace "sbcl" with the path to your implementation
+  (setq inferior-lisp-program "sbcl")
+
+
+("quicklisp-slime-helper")
+* 
+ELisp code lines for run the SLIME - copied into /home/linkfly/Downloads/lisp-dev-tools/emacs-libs/init-slime.el
+
+OK.
+SLIME removed.
+
+OK.
+
+Providing CCL ccl-1.7 ...
+Directory for results: /home/linkfly/Downloads/lisp-dev-tools/lisp/ccl/ccl-1.7
+
+CCL already exist.
+Run run-lisp.sh for using, or run rebuild-lisp.sh for retry build). 
+Directory: /home/linkfly/Downloads/lisp-dev-tools/lisp/ccl/ccl-1.7
+
+ALREADY.
+
+Quicklisp already installed in: /home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp
+
+ALREADY.
+Resolving dependency: m4 ...
+Processing of tool: m4
+
+Tool m4 already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): m4
+
+ALREADY.
+OK.
+
+Providing ECL ecl-11.1.1 ...
+Directory for results: /home/linkfly/Downloads/lisp-dev-tools/lisp/ecl/ecl-11.1.1
+
+ECL already exist.
+Run run-lisp.sh for using, or run rebuild-lisp.sh for retry build). 
+Directory: /home/linkfly/Downloads/lisp-dev-tools/lisp/ecl/ecl-11.1.1
+
+ALREADY.
+
+Quicklisp already installed in: /home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp
+
+ALREADY.
+Resolving dependency: jre ...
+Processing of tool: jre
+
+Tool jre already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): java
+
+ALREADY.
+OK.
+
+Providing ABCL abcl-1.0.0 ...
+Directory for results: /home/linkfly/Downloads/lisp-dev-tools/lisp/abcl/abcl-1.0.0
+
+ABCL already exist.
+Run run-lisp.sh for using, or run rebuild-lisp.sh for retry build). 
+Directory: /home/linkfly/Downloads/lisp-dev-tools/lisp/abcl/abcl-1.0.0
+
+ALREADY.
+
+Quicklisp already installed in: /home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp
+
+ALREADY.
+Resolving dependency: ncurses ...
+Processing of tool: ncurses
+
+Tool ncurses already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): ncurses-5.9
+
+ALREADY.
+OK.
+
+Providing CLISP clisp-2.49 ...
+Directory for results: /home/linkfly/Downloads/lisp-dev-tools/lisp/clisp/clisp-2.49
+
+CLISP already exist.
+Run run-lisp.sh for using, or run rebuild-lisp.sh for retry build). 
+Directory: /home/linkfly/Downloads/lisp-dev-tools/lisp/clisp/clisp-2.49
+
+ALREADY.
+
+Quicklisp already installed in: /home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp
+
+ALREADY.
+Resolving dependency: m4 ...
+Processing of tool: m4
+
+Tool m4 already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): m4
+
+ALREADY.
+OK.
+
+Providing XCL xcl-0.0.0.291 ...
+Directory for results: /home/linkfly/Downloads/lisp-dev-tools/lisp/xcl/xcl-0.0.0.291
+
+XCL already exist.
+Run run-lisp.sh for using, or run rebuild-lisp.sh for retry build). 
+Directory: /home/linkfly/Downloads/lisp-dev-tools/lisp/xcl/xcl-0.0.0.291
+
+ALREADY.
+
+Providing MKCL mkcl-1.0.1 ...
+Directory for results: /home/linkfly/Downloads/lisp-dev-tools/lisp/mkcl/mkcl-1.0.1
+
+MKCL already exist.
+Run run-lisp.sh for using, or run rebuild-lisp.sh for retry build). 
+Directory: /home/linkfly/Downloads/lisp-dev-tools/lisp/mkcl/mkcl-1.0.1
+
+ALREADY.
+Resolving dependency: time ...
+Processing of tool: time
+
+Tool time already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): time
+
+ALREADY.
+OK.
+Resolving dependency: bc ...
+Processing of tool: bc
+
+Tool bc already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): bc
+
+ALREADY.
+OK.
+
+Providing CMUCL cmucl-20c ...
+Directory for results: /home/linkfly/Downloads/lisp-dev-tools/lisp/cmucl/cmucl-20c
+
+CMUCL already exist.
+Run run-lisp.sh for using, or run rebuild-lisp.sh for retry build). 
+Directory: /home/linkfly/Downloads/lisp-dev-tools/lisp/cmucl/cmucl-20c
+
+ALREADY.
+
+Quicklisp already installed in: /home/linkfly/Downloads/lisp-dev-tools/lisp-libs/quicklisp
+
+ALREADY.
+Resolving dependency: gawk ...
+Processing of tool: gawk
+
+Tool gawk already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): gawk
+
+ALREADY.
+OK.
+Resolving dependency: m4 ...
+Processing of tool: m4
+
+Tool m4 already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): m4
+
+ALREADY.
+OK.
+Resolving dependency: gmp ...
+Processing of tool: gmp
+
+Tool gmp already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): gmp-4.3.2
+
+ALREADY.
+OK.
+Resolving dependency: rpm2cpio ...
+Processing of tool: rpm2cpio
+
+Tool rpm2cpio already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): 
+
+ALREADY.
+OK.
+Resolving dependency: cpio ...
+Processing of tool: cpio
+
+Tool cpio already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): cpio
+
+ALREADY.
+OK.
+Resolving dependency: lzma ...
+Processing of tool: lzma
+
+Tool lzma already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): unlzma
+
+ALREADY.
+OK.
+
+Providing GCL gcl-2.6.8-0.9.20110516 ...
+Directory for results: /home/linkfly/Downloads/lisp-dev-tools/lisp/gcl/gcl-2.6.8-0.9.20110516
+
+GCL already exist.
+Run run-lisp.sh for using, or run rebuild-lisp.sh for retry build). 
+Directory: /home/linkfly/Downloads/lisp-dev-tools/lisp/gcl/gcl-2.6.8-0.9.20110516
+
+ALREADY.
+Resolving dependency: gmp ...
+Processing of tool: gmp
+
+Tool gmp already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): gmp-4.3.2
+
+ALREADY.
+OK.
+Resolving dependency: binutils ...
+Processing of tool: binutils
+
+Tool binutils already provided.
+Provided concrete files (links into directory /home/linkfly/Downloads/lisp-dev-tools/utils): binutils-2.21.1
+
+ALREADY.
+OK.
+
+Providing WCL wcl-3.0 ...
+Directory for results: /home/linkfly/Downloads/lisp-dev-tools/lisp/wcl/wcl-3.0
+
+WCL already exist.
+Run run-lisp.sh for using, or run rebuild-lisp.sh for retry build). 
+Directory: /home/linkfly/Downloads/lisp-dev-tools/lisp/wcl/wcl-3.0
+
+ALREADY.

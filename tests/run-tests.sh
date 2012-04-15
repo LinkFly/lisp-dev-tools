@@ -1,6 +1,7 @@
 #!/bin/sh
 cd "$(dirname "$0")"
 OPERATIONS_LOG="$(pwd)/tests-results/operations-log.txt"
+rm -rf "$OPERATIONS_LOG"
 FILE_FOR_LOAD="$(pwd)/for-tests.lisp"
 cd ../sh
 . ./includes.sh
@@ -36,11 +37,14 @@ general_test () {
 # Using(and changing): PROVIDE_LISP_RES
 local PROVIDE="$1"
 local IF_OK="$2"
+echo "
+DATETIME: $(date)
+" >> "$OPERATIONS_LOG"
 printf "Test:
 $PROVIDE
     ... "
-local RESULT="$(eval "$PROVIDE" 2>&1 | tee --append '$OPERATIONS_LOG' | tail -n1)"
-if test $? -eq 0
+local RESULT="$(eval "$PROVIDE" 2>&1 | tee --append "$OPERATIONS_LOG" | tail -n1)"
+
 TESTS_AMOUNT=$((TESTS_AMOUNT + 1))
 
 if test "ALREADY." = "$RESULT";then
