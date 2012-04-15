@@ -1,5 +1,11 @@
 #!/bin/sh
 cd "$(dirname "$0")"
+if test -z "$TESTS_RESULTS"
+then 
+    TESTS_RESULTS="$(pwd)/tests-results"
+fi
+TESTS_LOG="$TESTS_RESULTS/tests-log.txt"
+rm -rf "$TESTS_LOG"
 OPERATIONS_LOG="$(pwd)/tests-results/operations-log.txt"
 rm -rf "$OPERATIONS_LOG"
 FILE_FOR_LOAD="$(pwd)/for-tests.lisp"
@@ -37,27 +43,30 @@ general_test () {
 # Using(and changing): PROVIDE_LISP_RES
 local PROVIDE="$1"
 local IF_OK="$2"
-echo "
+local DATETIME="
 DATETIME: $(date)
-" >> "$OPERATIONS_LOG"
+"
+printf "$DATETIME" >> "$OPERATIONS_LOG"
+printf "$DATETIME" >> "$TESTS_LOG"
+
 printf "Test:
 $PROVIDE
-    ... "
+    ... " | tee --append "$TESTS_LOG"
 local RESULT="$(eval "$PROVIDE" 2>&1 | tee --append "$OPERATIONS_LOG" | tail -n1)"
 
 TESTS_AMOUNT=$((TESTS_AMOUNT + 1))
 
 if test "ALREADY." = "$RESULT";then
 ALREADY=$(($ALREADY + 1))
-printf "PASS(ALREADY)"
-echo
+printf "PASS(ALREADY)" | tee --append "$TESTS_LOG"
+echo | tee --append "$TESTS_LOG"
 PROVIDE_LISP_RES=$CONST_ALREADY
 return 0
 fi
 
 if test "OK." = "$RESULT";then
     PASS=$(($PASS + 1))
-    printf "PASS";echo;
+    printf "PASS" | tee --append "$TESTS_LOG";echo | tee --append "$TESTS_LOG";
 
     if test "$IF_OK" != "";then 
 	general_test "$IF_OK";
@@ -68,7 +77,7 @@ return 0;
 fi
 
 FAIL=$(($FAIL + 1))
-echo FAIL
+echo FAIL | tee --append "$TESTS_LOG"
 PROVIDE_LISP_RES=1
 return 1
 }
@@ -89,22 +98,22 @@ then
     if test "$CUR_LISP" = "XCL";then TAIL_ARG="-n4";fi
     local TEST_CODE='echo "(progn (terpri) (princ 100) (terpri) (princ (quote some)))" | LISP=$CUR_LISP ./run-lisp | tail $TAIL_ARG | head -n2'
     printf "Test run-lisp:
-${TEST_CODE}\n\n"
-    echo "Evaluated command line: none"
-    printf "Tests into running lisp-system:\n"
+${TEST_CODE}\n\n" | tee --append "$TESTS_LOG"
+    echo "Evaluated command line: none" | tee --append "$TESTS_LOG"
+    printf "Tests into running lisp-system:\n" | tee --append "$TESTS_LOG"
     RESULT="$(eval $TEST_CODE)"    
 ##################################################
 else
     local TEST_PARAMS="--common-load $FILE_FOR_LOAD --common-eval '(progn (princ (quote some)) (terpri))' --common-quit"
     local TEST_CODE="LISP=$CUR_LISP $RUN_SCRIPT $TEST_PARAMS"
     printf "Test run-lisp:
-${TEST_CODE}\n\n"
+${TEST_CODE}\n\n" | tee --append "$TESTS_LOG"
     echo "Evaluated command line: 
 ----------------------------------------------
 $(eval GET_CMD_P=yes $TEST_CODE)
-----------------------------------------------\n"
+----------------------------------------------\n" | tee --append "$TESTS_LOG"
 
-    printf "Tests into running lisp-system:\n"
+    printf "Tests into running lisp-system:\n" | tee --append "$TESTS_LOG"
     if test "$CUR_LISP" = "CLISP"
     then
 ######### Specific getting result for CLISP ###########
@@ -124,18 +133,18 @@ if test "$RESULT" = "100
 SOME"
 then
     PASS=$((PASS + 1))
-    printf PASS
+    printf PASS | tee --append "$TESTS_LOG"
 else 
     FAIL=$((FAIL + 1))
-    echo FAIL
+    echo FAIL | tee --append "$TESTS_LOG"
     return 1
 fi
-echo
+echo | tee --append "$TESTS_LOG"
 }
 
 concrete_lisp_test () {
 # Using(and changing by general_test): PROVIDE_LISP_RES
-echo "Testing lisp-system $1:"
+echo "Testing lisp-system $1:" | tee --append "$TESTS_LOG"
 ### !!! Function general_test changed PROVIDE_LISP_RES
 general_test "LISP=$1 ./provide-lisp"
 ### !!! PROVIDE_LISP_RES - changed
@@ -181,8 +190,8 @@ do
 done
 
 # Testing base tools
-echo
-echo "Testing base tools:"
+echo | tee --append "$TESTS_LOG"
+echo "Testing base tools:" | tee --append "$TESTS_LOG"
 if test -z "$EXCLUDE_WGET"
 then
     general_test "./sh/provide-tool.sh wget" "./sh/remove-tool.sh wget"
@@ -191,15 +200,15 @@ fi
 # Testing SBCL lisp
 if test -z "$EXCLUDE_MODERN_LISPS"
 then
-echo
+echo | tee --append "$TESTS_LOG"
 concrete_lisp_test SBCL
 fi
 
 if test -z "$EXCLUDE_EMACS"
 then
 # Testing Emacs and Slime 
-echo
-echo "Testing Emacs and Slime:"
+echo | tee --append "$TESTS_LOG"
+echo "Testing Emacs and Slime:" | tee --append "$TESTS_LOG"
 general_test ./provide-emacs
 general_test ./provide-slime ./remove-slime
 fi
@@ -207,8 +216,8 @@ fi
 # Testing modern lisps (exclude SBCL)
 if test -z "$EXCLUDE_MODERN_LISPS"
 then
-    echo
-    echo "Testing modern lisps:"
+    echo | tee --append "$TESTS_LOG"
+    echo "Testing modern lisps:" | tee --append "$TESTS_LOG"
     for lisp in $(./get-all-lisps --exclude="SBCL")
     do
 	concrete_lisp_test $lisp
@@ -218,8 +227,8 @@ fi
 # Testing young lisps (exclude SBCL)
 if test -z "$EXCLUDE_YOUNG_LISPS"
 then
-    echo
-    echo "Testing young lisps:"
+    echo | tee --append "$TESTS_LOG"
+    echo "Testing young lisps:" | tee --append "$TESTS_LOG"
     for lisp in $(./get-all-lisps --exclude-modern --include-young)
     do
 	concrete_lisp_test $lisp
@@ -229,8 +238,8 @@ fi
 # Testing obsolete lisps (exclude SBCL)
 if test -z "$EXCLUDE_OBSOLETE_LISPS"
 then
-    echo
-    echo "Testing obsolete lisps:"
+    echo | tee --append "$TESTS_LOG"
+    echo "Testing obsolete lisps:" | tee --append "$TESTS_LOG"
     for lisp in $(./get-all-lisps --exclude-modern --include-obsolete)
     do
 	concrete_lisp_test $lisp
@@ -241,15 +250,15 @@ echo "
 tests amount = $TESTS_AMOUNT
 tests passed = $PASS
 tests already = $ALREADY
-tests failed = $FAIL"
+tests failed = $FAIL" | tee --append "$TESTS_LOG"
 
 if test "$(($PASS + $ALREADY))" = "$TESTS_AMOUNT"
 then echo "All tests passed.
 
-OK."
+OK." | tee --append "$TESTS_LOG"
 else echo "Not all tests passed.
 
-FAILED."
+FAILED." | tee --append "$TESTS_LOG"
 exit 1
 fi
 
