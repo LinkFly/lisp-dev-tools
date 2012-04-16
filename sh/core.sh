@@ -46,6 +46,7 @@ Provided concrete files (links into directory $UTILS): $TOOL_PROVIDE_FILES
 
 ALREADY."; return 0;
 fi
+
 resolve_deps "$TOOL_DEPS_ON_TOOLS" || exit 1;
 
 #### Providing archive if needed ####

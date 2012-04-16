@@ -32,7 +32,6 @@ else
 mkdir --parents $TMP_DOWNLOAD
 rm -f $TMP_ARCHIVE
 cd $TMP_DOWNLOAD;
-
 $DOWNLOAD_SCRIPT "$URL" "$LOADER_EXTRA_ARGS" "$NO_CHECK_URL_P" "$RENAME_DOWNLOAD" "$POST_DOWNLOAD_CMD" || exit 1;
 if [ -f $TMP_ARCHIVE ];
   then 
