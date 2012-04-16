@@ -5,6 +5,7 @@
 . ./internal-conf/internal-dirs.conf
 . ./include/utils.sh
 . ./include/absolutized-pathes.sh
+. ./include/copy-links.sh
 . ./conf/tools.conf
 . ./conf/lisps.conf
 . ./include/correct-params.sh
