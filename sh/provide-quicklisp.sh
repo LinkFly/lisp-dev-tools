@@ -32,7 +32,9 @@ fi
 
 $SCRIPTS_DIR/provide-lisp.sh
 mkdir --parents "$LISP_LIBS"
-$SCRIPTS_DIR/download-archive.sh "http://beta.quicklisp.org/quicklisp.lisp" "$LISP_LIBS/quickload.lisp"
+LOADER_EXTRA_ARGS="-"
+NO_CHECK_URL_P="no"
+$SCRIPTS_DIR/download-archive.sh "http://beta.quicklisp.org/quicklisp.lisp" "$LOADER_EXTRA_ARGS" "$NO_CHECK_URL_P" "$LISP_LIBS/quickload.lisp"
 
 echo "(progn 
         (print (truename \"$LISP_LIBS/quickload.lisp\"))
