@@ -148,26 +148,17 @@ echo | tee --append "$TESTS_LOG"
 
 concrete_lisp_test () {
 # Using(and changing by general_test): PROVIDE_LISP_RES
-echo "Testing lisp-system $1:" | tee --append "$TESTS_LOG"
+local CUR_LISP="$(uppercase $1)"
+echo "Testing lisp-system $CUR_LISP:" | tee --append "$TESTS_LOG"
 ### !!! Function general_test changed PROVIDE_LISP_RES
-general_test "LISP=$1 ./provide-lisp"
+general_test "LISP=$CUR_LISP ./provide-lisp"
 ### !!! PROVIDE_LISP_RES - changed
 
-test_run_lisp $1
+test_run_lisp $CUR_LISP
 if test "$PROVIDE_LISP_RES" != "$CONST_ALREADY"
-then general_test "LISP=$1 ./remove-lisp"
+then general_test "LISP=$CUR_LISP ./remove-lisp"
 fi
 
-local CUR_LISP="$(uppercase $1)"
-if test "$CUR_LISP" = "SBCL" ||
-test "$CUR_LISP" = "CCL" ||
-test "$CUR_LISP" = "ECL" ||
-test "$CUR_LISP" = "ABCL" ||
-test "$CUR_LISP" = "CLISP" ||
-test "$CUR_LISP" = "CMUCL"
-then
-    general_test "LISP=$CUR_LISP ./sh/provide-quicklisp.sh" "LISP=$CUR_LISP ./remove-quicklisp.sh"
-fi
 #(reserved for future)general_test ./provide-swank ./remove-swank
 }
 
