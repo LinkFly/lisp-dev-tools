@@ -1,7 +1,7 @@
 #!/bin/sh
 cd "$(dirname "$0")"
 . ./includes.sh
-
+echo "$UTILS";exit 1
 #### Resolving dependencies #######
 resolve_deps "$LISP_DEPS_ON_TOOLS"
 
