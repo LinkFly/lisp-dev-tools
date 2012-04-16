@@ -12,8 +12,10 @@ cd "$(dirname "$0")"
 ######### Parameters ###############
 ARCHIVE_NAME="$1"
 URL="$2"
-RENAME_DOWNLOAD="$3"
-POST_DOWNLOAD_CMD="$4"
+LOADER_EXTRA_ARGS="$3"
+NO_CHECK_URL_P="$4"
+RENAME_DOWNLOAD="$5"
+POST_DOWNLOAD_CMD="$6"
 
 ######### Configuring variables ####
 DOWNLOAD_SCRIPT=$SCRIPTS_DIR/download-archive.sh
@@ -30,7 +32,8 @@ else
 mkdir --parents $TMP_DOWNLOAD
 rm -f $TMP_ARCHIVE
 cd $TMP_DOWNLOAD;
-$DOWNLOAD_SCRIPT "$URL" "$RENAME_DOWNLOAD" "$POST_DOWNLOAD_CMD" || exit 1;
+
+$DOWNLOAD_SCRIPT "$URL" "$LOADER_EXTRA_ARGS" "$NO_CHECK_URL_P" "$RENAME_DOWNLOAD" "$POST_DOWNLOAD_CMD" || exit 1;
 if [ -f $TMP_ARCHIVE ];
   then 
     mkdir --parents $ARCHIVES;
