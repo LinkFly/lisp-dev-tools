@@ -1,5 +1,9 @@
 #!/bin/sh
 cd "$(dirname "$0")"
+
+trap "cleanup" EXIT INT
+
+###################### Initialization #########################
 if test -z "$TESTS_RESULTS"
 then 
     TESTS_RESULTS="$(pwd)/tests-results"
@@ -10,11 +14,29 @@ OPERATIONS_LOG="$(pwd)/tests-results/operations-log.txt"
 rm -rf "$OPERATIONS_LOG"
 FILE_FOR_LOAD="$(pwd)/for-tests.lisp"
 cd ../sh
+
 . ./includes.sh
+
+####### Need cleanup ############
+### Need save links for cleanup ....
+./remove-links.sh
+export NO_COPY_LINKS_P=yes
+#################################
+
 cd ..
+###############################################################
 
+################### Cleanup ##############################
+ALREADY_CLEANUP_P=
+cleanup () {
+if test "$ALREADY_CLEANUP_P" = "yes";then exit;fi
+######### Cleanup #########
 
-
+###########################
+ALREADY_CLEANUP_P=yes
+exit
+##########################################################
+}
 
 usage () {
 echo "Using: 
