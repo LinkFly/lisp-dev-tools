@@ -60,8 +60,9 @@ $LOADER $URL $EXTRA_PARAMS
 "
 eval "$LOADER $URL $EXTRA_PARAMS"
 if ! [ "$POST_DOWNLOAD_CMD" = "" ]; then
-    echo "Now evaluating POST_DOWNLOAD_CMD: $POST_DOWNLOAD_CMD";
-    PATH=$UTILS:$PATH;
+    POST_DOWNLOAD_CMD="PATH='$UTILS:$PATH';cd $TMP_DOWNLOAD && $POST_DOWNLOAD_CMD"
+    echo "Now evaluating:
+$POST_DOWNLOAD_CMD"
     eval "$POST_DOWNLOAD_CMD";
 fi
 echo "End running download-archive.sh"
