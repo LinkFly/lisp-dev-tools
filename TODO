@@ -48,21 +48,24 @@ done. 12. Separated lisps on: older, modern and young.
 14. Not building ncurses if it already existing into OS.
 
 -------- Milestones (mark with tags then when) ----------
-0.0.2:
-	- testing run-lisp on /bin/bash
-	- correct README and README_ru.
-	- upgrade TODO
-	- create CHANGELOG, NEWS and NEWS_ru
+0.0.2: (done)
+	done. - testing run-lisp on /bin/bash
+	done. - correct README and README_ru.
+	done. - upgrade TODO
+	done. - create CHANGELOG, NEWS and NEWS_ru
 			
-0.0.3
-	done. - separated lisps on: older, modern and raw (too new) 
-	- add handling of older and raw lisp (add warning and disable warning).
-	- create general interface to lisp systems (--common-load --common-eval (see experimental/common-interface.sh))	
-	- add provide-swank and run-swank
+0.0.3 (done)
+	done. - separated lisps on: older, modern and raw (too new, young) 
+	done. - create general interface to lisp systems (--common-load --common-eval --common-quit)
+	done. - add automatic tests
+	done. - add logs for tests steps and logs operations
+	done. - corrected work with symbolic links? add to .gitignore and automatic copy (if necessary)
 
 0.0.4:
-	- decorate README and README_ru
-	- ...
+	- add ./rebuild-lisp for SBCL to test
+	- add full return state after tests
+	- add handling of older and raw lisp (add warning and disable warning).
+	- add provide-swank and run-swank
 
 0.0.5:
 	- Added support Fedora16.
@@ -70,6 +73,9 @@ done. 12. Separated lisps on: older, modern and young.
 	- Added support x86 OSes.
 	- ...
 
+0.0.6:
+	- decorate README and README_ru
+	- ...
 ... 
 
 1.0:
