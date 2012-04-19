@@ -1,0 +1,291 @@
+Changes in version 0.0.3 (after 0.0.2).
+----------------------------------------------------
+commit d2714fa73793fa83ec2270d350f2e15d21875de9
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Wed Apr 18 15:08:53 2012 +0400
+
+    Update current tasks
+
+commit 8026df38f87d8609ea65c5ed8082ab37269252af
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Wed Apr 18 15:01:16 2012 +0400
+
+    smallfix typo
+
+commit ae1f3a6a3312b56fb44c842604c230e428b7134d
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Wed Apr 18 15:00:26 2012 +0400
+
+    Added to NEWS_ru. Corrected milestones into TODO
+
+commit 0a6ac1f1981b5a276964b5bc2f0bd5e7dbea135f
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Tue Apr 17 20:11:15 2012 +0400
+
+    bugfix - change gawk version
+
+commit f5fde81570255809434288825532d5910f3b5167
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Tue Apr 17 18:14:55 2012 +0400
+
+    bugfix - small prophylaxis
+
+commit 77eb48051190073bea4e97dcf7ac47c1de546b1a
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Tue Apr 17 14:09:20 2012 +0400
+
+    solve problem with links. Prepared to write cleanup code
+
+commit 7a5902b7f5720b5f4f96e574d6766672f4fccc87
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Tue Apr 17 00:17:56 2012 +0400
+
+    correct bug with providing quicklisp
+
+commit 415ab854d0f07b27e6effe547532554a17c31269
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Tue Apr 17 00:01:17 2012 +0400
+
+    add link
+
+commit 2ca66ce236bcfdf83c61c169e010d1e88fe7332e
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Mon Apr 16 23:59:27 2012 +0400
+
+    update gitignore
+
+commit 17e7793c2d698b6e2dee4553b48c2c616126a229
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Mon Apr 16 23:54:47 2012 +0400
+
+    bugfix in providing links
+
+commit 62b25b6a8d5b87728212af2774028caffdb5d3bb
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Mon Apr 16 23:32:52 2012 +0400
+
+    corrected work with symbolic links
+
+commit a428e2e09bf74798590cfc17246829b4337442a1
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Mon Apr 16 22:31:33 2012 +0400
+
+    test ignore
+
+commit 9513cf0dd7ab5599f7a0f0a9ff699219ca1956ca
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Mon Apr 16 22:29:27 2012 +0400
+
+    added for ignore links
+
+commit e6ce420f285b41b2f7f154d71d0f5dc3b7f333db
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Mon Apr 16 21:56:26 2012 +0400
+
+    bugfix in lisp archives loading
+
+commit 202ab9fb3a190a5a67e8ecec379f91cac33a4817
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Mon Apr 16 18:35:24 2012 +0400
+
+    remove not need tests - remove quicklisp test
+
+commit 947634626397d21c4bd6797bf0af39cf8a220fd2
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Mon Apr 16 18:30:05 2012 +0400
+
+    corrected loading jre - change url on url without following to https protocol
+
+commit bf8c96c9ab31d6f68b51180899b065b61432e2b7
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Mon Apr 16 17:44:31 2012 +0400
+
+    Corrected JRE downloading
+
+commit 07260342b873076b525e66431691efc234277955
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Mon Apr 16 00:28:11 2012 +0400
+
+    smallfix - printed datetime and into console
+
+commit 268604a72890c6d3382c34108c07f6b6c5a3ef88
+Merge: 95e9803 118616c
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Apr 15 23:57:03 2012 +0400
+
+    Merge branch 'master' of github.com:LinkFly/lisp-dev-tools
+
+commit 95e980304467958691fb914e99f33e4b194281d0
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Apr 15 23:53:50 2012 +0400
+
+    added showing failed tests
+
+commit 118616cd3e4de9639a889f87e114c89bda936c18
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Apr 15 23:53:50 2012 +0400
+
+    added failed tests
+
+commit 7f2a87911c3c9ac51ec6b299693dcc14f1279740
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Apr 15 22:22:35 2012 +0400
+
+    added dublicate tests output into tests-log.txt
+
+commit aef0e42cf6b942fcbd716afe63efab17fc351807
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Apr 15 21:48:57 2012 +0400
+
+    remove bad file
+
+commit 78fb79563975854c2e611147c23c000a293d2798
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Apr 15 21:46:37 2012 +0400
+
+    added show log operations (into tests) script. Added output datetime into operations log
+
+commit a1b114b13d97614a8d0404963e44b0db4557d2f5
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Apr 15 21:22:25 2012 +0400
+
+    added logging operations on tests
+
+commit 7e3e79c64a91ee24c9559d3e507e18c901e031d5
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Apr 15 19:03:39 2012 +0400
+
+    smallfix
+
+commit 682ac3deec7aeb78115d953efdb8278d4e352390
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Apr 15 18:55:58 2012 +0400
+
+    fix typo - now remove-tool.sh into run-tests.sh
+
+commit 33ffdc7ac527ac09bde6fef4d58cd03372643b78
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Apr 15 18:36:14 2012 +0400
+
+    fix typo
+
+commit afc98f3106830d3eb248a089849ee9b2a65a5089
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Apr 15 18:25:01 2012 +0400
+
+    delete not need code, bugfix bad variable name (typo)
+
+commit 3ed5dd7297d48a733f1c67959f9946928249a2e9
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Sun Apr 15 17:51:09 2012 +0400
+
+    tests accomplished
+
+commit e83562c0fd5d7dda1e782d4f62a9251c9dfa25f2
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Fri Apr 13 16:22:09 2012 +0400
+
+    Separated tests. Almost tests done (need specific tests (on running) for WCL and XCL)
+
+commit c48521d48a994c3e3ac4a9e8920c7f7a93a1dbc3
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Fri Apr 13 15:00:18 2012 +0400
+
+    smallfix
+
+commit f946072b952f037e54c97f2a28d8632ec2f2022c
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Fri Apr 13 14:59:37 2012 +0400
+
+    done running lisp systems standard test
+
+commit 9d96435e0785717ac74570abb2e7bf15501538ea
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Fri Apr 13 13:55:16 2012 +0400
+
+    Filled concrete parameters for load and eval
+
+commit 1d1e5a3298f54ce7b3289ee18c2a24344e49bcdd
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Apr 12 16:03:50 2012 +0400
+
+    Bugfix into XCL building on ubuntu 11.04 x86_64
+
+commit c3d63022d79f4efa20f64280b9f006cdebb5293c
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Apr 12 13:07:56 2012 +0400
+
+    Added --common-quit param for run-lisp
+
+commit 8709cca2b3f60e5495c518d9c7928b89209cef3e
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Thu Apr 12 01:30:08 2012 +0400
+
+    added emulating --common-eval by argument for loading (in clisp - '-i'). Now code is row
+
+commit 60840ee7ce3173dbcd9fe299f7a29bb54ec0d6c9
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Fri Mar 2 14:04:05 2012 +0400
+
+    remove not need files
+
+commit 9a9f1b3cc05721df335b080b32b7df7ccfc95749
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Fri Mar 2 14:02:52 2012 +0400
+
+    Added tests and common interface for lisps - proceed (now not working)
+
+commit d9b9c1f5d64b6c0edba640ae273030d0d2441557
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Wed Feb 29 04:28:35 2012 +0400
+
+    done task 15 - separated lisps on modern, young and obsolete. Added task about create warning on young and obsolete lisps. Also added task create parameters for disable the warnings. Testing working into Arch proceed (cmucl not building on Arch). Upgrade status.cvs and test-steps.txt
+
+commit 65e0e51e77da7412a45900c1b6eea3558b1ea4e7
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Tue Feb 28 20:52:16 2012 +0400
+
+    Increase and upgrade tests
+
+commit 2d7f0cc5c2970a9ac182b22bf30c00e56e59dae6
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Tue Feb 28 19:34:20 2012 +0400
+
+    some fixes run-tests and remove-slime message
+
+commit 469f74b1f46a04f1bbab749e9b6078f5eacbd66d
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Tue Feb 28 19:19:11 2012 +0400
+
+    small bugfix
+
+commit 4abf754cc11703eec473e49ffd004bc7e2ffe6b8
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Tue Feb 28 19:16:44 2012 +0400
+
+    Added ALREADY message for provide-slime. Upgrade tests steps describe
+
+commit 24e1ab66efdaabaadf0f2ea94c67b5addadd0a4e
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Tue Feb 28 19:00:58 2012 +0400
+
+    upgrade tests. Corrected message for already providing lisp
+
+commit 4dba9d4d3c8a72d077a53cf8fc135907b5781f82
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Tue Feb 28 17:56:36 2012 +0400
+
+    begin added tests and describe tests. Smallfix status.csv
+
+commit 451e47ce943f5745663cd5a54f5defe73cfe9c1d
+Author: Sergey Katrevich <linkfly@birulevo.net>
+Date:   Tue Feb 28 16:57:20 2012 +0400
+
+    smooth difference in output of 'file' program, now check on symbolic link by 'readlink'
+
+commit ba9b37719886b7d73e65fab2388129a7c6de1962
+Author: LinkFly <linkfly1@newmail.ru>
+Date:   Mon Feb 27 23:56:49 2012 +0400
+
+    0.0.2
+
