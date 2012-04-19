@@ -7,6 +7,7 @@
   - Быстрое и удобное обновление версий Лисп-систем.
   - Полная автоматизация загрузки, конфигурирования и постройки лисп-систем.
   - Общий интерфейс для использования множества лисп-систем с открытми исходниками.
+  - Автоматическое тестирование (рекомендуется перед серьёзным, производственным использованием).
   - Автоматизация конфигурирования и инсталляции (внутрь lisp-dev-tools) Quicklisp и Slime.
   - Переносимость: для использования на другом хосте, с такой же 
     ОС и архитектурой - достаточно только скопировать директорию!
@@ -25,16 +26,21 @@
 
 Обеспечивается 10(!) Лисп-систем с открытыми исходниками:
 
+(современные (modern) Лисп-системы)
 SBCL - Steel Bank Common Lisp	(http://www.sbcl.org/)
-CMUCL(x86 only)-CMU Common Lisp (http://www.cons.org/cmucl/)
-XCL 	    	   		(http://armedbear.org/)
-ECL - Embedded Common Lisp 	(http://ecls.sourceforge.net/)
-CLISP        	      		(http://www.clisp.org/)
-MKCL - ManKai Common Lisp 	(http://common-lisp.net/project/mkcl/)
-ABCL - Armed Bear Common Lisp 	(http://common-lisp.net/project/armedbear/)
-WCL    	     	  	 	(http://pgc.com/commonlisp/)
-GCL(CLTL1 only)-GNU Common Lisp (http://www.gnu.org/s/gcl/)
 CCL - Clozure Common Lisp	(http://ccl.clozure.com/)
+ECL - Embedded Common Lisp 	(http://ecls.sourceforge.net/)
+ABCL - Armed Bear Common Lisp 	(http://common-lisp.net/project/armedbear/)
+CLISP        	      		(http://www.clisp.org/)
+
+(молодые (young) Лисп-системы)
+XCL 	    	   		(http://armedbear.org/)
+MKCL - ManKai Common Lisp 	(http://common-lisp.net/project/mkcl/)
+
+(устаревшие (obsolete) Лисп-системы)
+CMUCL(x86 only)-CMU Common Lisp (http://www.cons.org/cmucl/)
+GCL(CLTL1 only)-GNU Common Lisp (http://www.gnu.org/s/gcl/)
+WCL    	     	  	 	(http://pgc.com/commonlisp/)
 
 ---------------------------------------------
 Смотри ПРИМЕРЫ после Рекомендаций и Примечаний.
@@ -48,7 +54,8 @@ lisp-dev-tools, а также скачает emacs, построит и уста
 	1) CMUCL строится только для архитектуры x86, а значит требуется её
 поддержка на системах с архитектурой x86-64 - для успешной постройки в 
 Ubuntu 11.04 необходимо инсталлировать пакет libc6-dev-i386 (следовательно
-этот пакет также требуется при использовании команды ./provide-all-lisps).
+этот пакет также требуется при использовании команды ./provide-all-lisps с параметрами
+--include-obsolete или --include-all).
 Для инсталляции выполните команду: 
 $ sudo apt-get -y install libc6-dev-i386
        ... вместо "apt-get" предпочтительней использовать "aptitude".
@@ -150,9 +157,18 @@ XDG_CONFIG_DIRS='/media/COMMON_LISP/lisp-dev-tools/conf:/etc/xdg/xdg-gnome:/etc/
 --------------------------------------------------------------
 Ещё примеры:
 
-    1) Получение всех поддерживаемых Лисп-систем:
+    1) Получение всех современных Лисп-систем:
 
 $ ./get-all-lisps
+SBCL
+CCL
+ECL
+ABCL
+CLISP
+
+    2) Получение всех поддерживаемых Лисп-систем:
+
+$ ./get-all-lisps --include-all
 SBCL
 CMUCL
 XCL
@@ -164,19 +180,23 @@ WCL
 GCL
 CCL
 
-    2) Получение команды для постройки или инсталляции или запуска текущий Лисп-системы:
+    3) Получение команды для постройки или инсталляции или запуска текущий Лисп-системы:
 
 $ ./get-providing-cmd <build | install | run>
 
-    3) Удаление текущей Лисп-системы или Emacs или Slime:
+    4) Удаление текущей Лисп-системы или Emacs или Slime:
 
 ./remove-emacs
 ./remove-lisp
 ./remove-slime
 
-    4) Обеспечение всеми поддерживаемыми Лисп-системами:
+    5) Обеспечение всеми современными Лисп-системами:
 
 ./provide-all-lisps
+
+    6) Обеспечение всеми поддерживаемыми Лисп-системами:
+
+./provide-all-lisps --include-all
 
 --------------------------------------------------------------
 Сброс всех изменений:

@@ -9,6 +9,7 @@ Features:
   - Fast and convenient update versions of lisp-systems.
   - Full automation of downloading, configuring and building lisp-systems.
   - General interface for using many open source lisp-systems.
+  - Automatic tests (recommended before serious, production using).
   - Automation configuring and installing (into lisp-dev-tools) Quicklisp and Slime.
   - Portable: for use on another host with the same
     OS/Architecture - just copy the directory to another host!
@@ -28,16 +29,21 @@ Required packages for compilation lisps and tools/libs
 
 Providing 10(!) open source lisps:
 
+(modern lisp-systems)
 SBCL - Steel Bank Common Lisp	(http://www.sbcl.org/)
-CMUCL(x86 only)-CMU Common Lisp (http://www.cons.org/cmucl/)
-XCL 	    	   		(http://armedbear.org/)
-ECL - Embedded Common Lisp 	(http://ecls.sourceforge.net/)
-CLISP        	      		(http://www.clisp.org/)
-MKCL - ManKai Common Lisp 	(http://common-lisp.net/project/mkcl/)
-ABCL - Armed Bear Common Lisp 	(http://common-lisp.net/project/armedbear/)
-WCL    	     	  	 	(http://pgc.com/commonlisp/)
-GCL(CLTL1 only)-GNU Common Lisp (http://www.gnu.org/s/gcl/)
 CCL - Clozure Common Lisp	(http://ccl.clozure.com/)
+ECL - Embedded Common Lisp 	(http://ecls.sourceforge.net/)
+ABCL - Armed Bear Common Lisp 	(http://common-lisp.net/project/armedbear/)
+CLISP        	      		(http://www.clisp.org/)
+
+(young lisp-systems)
+XCL 	    	   		(http://armedbear.org/)
+MKCL - ManKai Common Lisp 	(http://common-lisp.net/project/mkcl/)
+
+(obsolete lisp-systems)
+CMUCL(x86 only)-CMU Common Lisp (http://www.cons.org/cmucl/)
+GCL(CLTL1 only)-GNU Common Lisp (http://www.gnu.org/s/gcl/)
+WCL    	     	  	 	(http://pgc.com/commonlisp/)
 
 ---------------------------------------------
 See EXAMPLES after Recommendation and Notes.
@@ -52,7 +58,8 @@ Notes:
       1) CMUCL building only for x86 architecture, so required supported 
 x86 on x86-64 architectures - for succesful building in Ubuntu 11.04 
 required libc6-dev-i386 package (therefore this package also required for
-using command: ./provide-all-lisps). To install run command: 
+using command: ./provide-all-lisps with parameters --include-obsolete or 
+--include-all). To install run command: 
 $ sudo apt-get -y install libc6-dev-i386
        ... instead "apt-get" preferable to use the "aptitude".
       
@@ -152,9 +159,18 @@ XDG_CONFIG_DIRS='/media/COMMON_LISP/lisp-dev-tools/conf:/etc/xdg/xdg-gnome:/etc/
 --------------------------------------------------------------
 Else examples:
 
-	1) Getting all supported lisps:
+	1) Getting all modern lisps:
 
 $ ./get-all-lisps
+SBCL
+CCL
+ECL
+ABCL
+CLISP
+
+	2) Getting all supported lisps:
+
+$ ./get-all-lisps --include-all
 SBCL
 CMUCL
 XCL
@@ -166,19 +182,23 @@ WCL
 GCL
 CCL
 
-	2) Getting command for building or installing or running current lisp:
+	3) Getting command for building or installing or running current lisp:
 
 $ ./get-providing-cmd <build | install | run>
 
-  	3) Removing current lisp or Emacs or Slime:
+  	4) Removing current lisp or Emacs or Slime:
 
 ./remove-emacs
 ./remove-lisp
 ./remove-slime
 
-	4) Providing all supported lisps:
+	5) Providing all modern lisps:
 
 ./provide-all-lisps
+
+	6) Providing all supported lisps:
+
+./provide-all-lisps --include-all
 
 --------------------------------------------------------------
 Reset all changes:
