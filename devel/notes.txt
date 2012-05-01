@@ -1,1 +1,1 @@
-- program "file" needed into TinyCore Linux
+- program "file" required into TinyCore Linux
