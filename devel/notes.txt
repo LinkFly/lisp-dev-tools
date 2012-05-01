@@ -1,1 +1,4 @@
 - program "file" required into TinyCore Linux
+- может быть, добавить в задачи обработку ошибки отсутствия программы "file"
+- программа "make" требуется для TinyCore Linux
+

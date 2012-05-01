@@ -191,7 +191,7 @@ XDG_CONFIG_DIRS="'$PREFIX/conf:$XDG_CONFIG_DIRS'"
 RUN_COMMAND=$(get_run_lisp_cmd)
 
 ######## Checking command ###########
-if [ "$(echo $RUN_COMMAND | cut --bytes=1-5)" = "ERROR" ];then
+if [ "$(echo $RUN_COMMAND | cut -b 1-5)" = "ERROR" ];then
     echo "$RUN_COMMAND";
     exit 1;
 fi
