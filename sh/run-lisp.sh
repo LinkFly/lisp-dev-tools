@@ -207,7 +207,7 @@ else
 fi
 
 ####### Checking quicklisp require loading #########
-if [ "$(echo $LOAD_QUICKLISP_ARGS | cut --bytes=1-5)" = "ERROR" ];then
+if [ "$(echo $LOAD_QUICKLISP_ARGS | cut -b 1-5)" = "ERROR" ];then
     echo "$LOAD_QUICKLISP_ARGS";
     exit 1;
 fi
