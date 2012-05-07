@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 ######### Configuring and computing variables ####
 LISPS_COMPILERS=$COMPILERS/$LISP_LISPS_COMPILERS
 COMPILER_ARCHIVE=$ARCHIVES/$LISP_BIN_ARCHIVE
-EXTRACT_CMD=$(get_extract_begin_cmd "$COMPILER_ARCHIVE")
+EXTRACT_CMD="$SCRIPTS_DIR/extract.sh" #$(get_extract_begin_cmd "$ARCHIVES/$TOOL_ARCHIVE"); "$(get_extract_begin_cmd "$COMPILER_ARCHIVE")"
 
 CUR_LISP_UP=$(uppercase $CUR_LISP)
 
