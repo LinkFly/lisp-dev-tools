@@ -21,6 +21,7 @@ done. 16. Add to notes in README: need g++ for ncurses (./provide-emacs -> ncurs
 20. Added new supported platform info to README_ru.
 done. 21. Add to README (and README_ru) describe variable GET_CMD_P (need for getting command line), used by run-lisp.
 done. 22. Add to note (if added describe GET_CMD_P) in README (and README_ru) about strange syntax for <'> and suggest using (quote ...) instead.
+23. Move condition with added --with-crt-dir=/usr/lib/x86_64-linux-gnu for Emacs into other place.
 
 ------------- Else tasks --------------
 1. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).
