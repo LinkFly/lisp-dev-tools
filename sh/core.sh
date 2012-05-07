@@ -170,7 +170,7 @@ FAILED.";exit 1;
 fi
 
 if [ "$TOOL_EXTRACT_CMD" = "" ]; then
-    TOOL_EXTRACT_CMD=$(get_extract_begin_cmd "$ARCHIVES/$TOOL_ARCHIVE");
+    TOOL_EXTRACT_CMD="$SCRIPTS_DIR/extract.sh" #$(get_extract_begin_cmd "$ARCHIVES/$TOOL_ARCHIVE");
 fi
 
 ### Call extract_build_install ###

@@ -178,30 +178,30 @@ else echo yes;
 fi
 }
 
-get_extract_begin_cmd () {
-local FILE="$1"
-if test "$(is_symlink_p $FILE)" = "yes";then
-    echo $(get_extract_begin_cmd "$("$SCRIPTS_DIR/realpath" "$FILE")")
-fi
-
-local TYPE=$(file --brief --mime-type "$FILE")
-
-case "$TYPE" in
-    "application/x-gzip") 
-	echo "tar -xzvf";
-	;;
-    "application/x-bzip2")
-	echo "tar -xjvf";
-	;;
-    "application/x-xz")
-	echo "tar -xJvf";
-	;;
-esac
-}
-
-get_extract_cmd () {
-echo "$(get_extract_begin_cmd $1) $1"
-}
+#get_extract_begin_cmd () {
+#local FILE="$1"
+#if test "$(is_symlink_p $FILE)" = "yes";then
+#    echo $(get_extract_begin_cmd "$("$SCRIPTS_DIR/realpath" "$FILE")")
+#fi
+#
+#local TYPE=$(file --brief --mime-type "$FILE")
+#
+#case "$TYPE" in
+#    "application/x-gzip") 
+#	echo "tar -xzvf";
+#	;;
+#    "application/x-bzip2")
+#	echo "tar -xjvf";
+#	;;
+#    "application/x-xz")
+#	echo "tar -xJvf";
+#	;;
+#esac
+#}
+#
+#get_extract_cmd () {
+#echo "$(get_extract_begin_cmd $1) $1"
+#}
 
 extract_archive () {
 
