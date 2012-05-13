@@ -1,4 +1,5 @@
 "Linux x86-64 / Lisp systems ./provide-lisp";"sbcl";"cmucl";"xcl";"ecl";"clisp";"mkcl";"abcl";"wcl";"gcl";"ccl"
+"ubuntu server 12.04";"yes";"no";"yes";"yes";"yes";"yes";"yes";"yes";"yes";"yes"
 "ubuntu server 10.10";"yes";"yes";"yes";"yes";"yes";"yes";"yes";"yes";"yes";"yes"
 "Fedora 16";"yes";"no";"no";"yes";"yes";;;;;
 "Gentoo LiveDVD 12 multilib";"yes";"yes";"yes";"yes";"yes";"yes";"yes";"yes";"yes";"yes"
@@ -8,6 +9,7 @@
 "Arch* (need recheck)";"yes";"no";;;;;;;;
 ;;;;;;;;;;
 "Linux x86-64 / REBUILD";"sbcl";"cmucl";"xcl";"ecl";"clisp";"mkcl";"abcl";"wcl";"gcl";"ccl"
+"ubuntu server 12.04";"yes";;;;;;;;;
 "ubuntu server 10.10";"yes";;;;;;;;;
 "Fedora 16";;;;;;;;;;
 "Gentoo LiveDVD 12 multilib";"no";;;;;;;;;
@@ -18,6 +20,7 @@
 ;;;;;;;;;;
 ;;;;;;;;;;
 "Linux x86-64 / TOOL";"emacs";"wget";;;;;;;;
+"ubuntu server 12.04";"yes";"yes";;;;;;;;
 "ubuntu server 10.10";"yes";;;;;;;;;
 "Fedora 16";"yes";;;;;;;;;
 "Gentoo LiveDVD 12 multilib";;"no";;;;;;;;
