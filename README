@@ -16,6 +16,7 @@ Features:
 
 Now supported: 
  - Ubuntu 11.04/x86-64 
+ - Ubuntu Server 12.04/x86-64
  - Ubuntu Server 10.10/x86-64
  - Debian 6.0.4/x86-64 (into Debian 6.0.3/x86-64 also working must be)
  - Gentoo (from livedvd-amd64-multilib-2012)
@@ -61,7 +62,8 @@ required libc6-dev-i386 package (therefore this package also required for
 using command: ./provide-all-lisps with parameters --include-obsolete or 
 --include-all). To install run command: 
 $ sudo apt-get -y install libc6-dev-i386
-       ... instead "apt-get" preferable to use the "aptitude".
+      ... instead "apt-get" preferable to use the "aptitude".
+Into Ubuntu Server 12.04/x86-64 CMUCL not building.
       
       2) If executed ./run-lisp with command line contained <'> (apostrophe) and
 using GET_CMD_P=yes, then return strange syntax into command line (but valid

@@ -68,6 +68,7 @@ done. 12. Separated lisps on: older, modern and young.
 	done. - corrected work with symbolic links? add to .gitignore and automatic copy (if necessary)
 
 0.0.4:
+	done. (exclude CMUCL) - add support Ubuntu Server 12.04 x86-64.
 	- add ./rebuild-lisp for SBCL to test
 	- add full return state after tests
 	- add handling of older and raw lisp (add warning and disable warning).
