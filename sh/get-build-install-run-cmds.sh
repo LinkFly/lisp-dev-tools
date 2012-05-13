@@ -99,7 +99,7 @@ PATH=$UTILS:$PATH ./configure --prefix $LISP_DIR && PATH=$SOURCES/$LISP_LISPS_SO
 fi
 
 if [ $(downcase "$CUR_LISP") = "ccl" ]; then 
-    echo "echo '(rebuild-ccl :full t)' | PATH=$UTILS:$PATH ./lx86cl64";
+    echo "cd '$SOURCES/$LISP_LISPS_SOURCES/$LISP_SOURCES_DIRNAME';echo '(rebuild-ccl :full t)' | PATH=$UTILS:$PATH ./lx86cl64";
 fi
 }
 
