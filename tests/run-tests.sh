@@ -240,7 +240,7 @@ done
 }
 #remove_all_prefixes "/home/linkfly/Downloads/lisp-dev-tools/lisp/sbcl"
 
-local D=\$
+D=\$
 get_lisp_compiler_dir () {
 local CUR_LISP=$(uppercase $1)
 echo "$COMPILERS/$(eval echo "$D${CUR_LISP}_LISPS_COMPILERS")/$(eval echo "$D${CUR_LISP}_COMPILER_DIRNAME")"
