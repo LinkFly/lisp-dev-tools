@@ -40,9 +40,10 @@ exit
 
 usage () {
 echo "Using: 
-run-tests [ --exclude-wget | --exclude-emacs | --exclude-modern-lisps | --exclude-young-lisps | --exclude-obsolete-lisps | --exclude-rebuild ]
+run-tests [ --exclude-wget | --exclude-emacs | --exclude-modern-lisps | --exclude-young-lisps | --exclude-obsolete-lisps | --exclude-rebuild | --exclude=\"...\" ]
 Example:
-run-tests --exclude-emacs --exclude-obsolete-lisps"
+run-tests --exclude-emacs --exclude-obsolete-lisps --exclude=\"WGET CCL\"
+(into exclude maybe be all lisps, and also: WGET EMACS SLIME REBUILD)"
 exit 0
 }
 
@@ -55,6 +56,7 @@ CONST_ALREADY=10
 
 REBUILD_FOR_LISPS="SBCL"
 
+EXCLUDE=
 EXCLUDE_WGET=
 EXCLUDE_EMACS=
 EXCLUDE_MODERN_LISPS=
@@ -281,7 +283,7 @@ echo "Cleaning OK." | tee --append "$TESTS_LOG"
 
 rebuild_lisp_test () {
 # Using(and changing by general_test): PROVIDE_LISP_RES
-local local CUR_LISP="$(uppercase $1)"
+local CUR_LISP="$(uppercase $1)"
 echo "Testing rebuild lisp-system $CUR_LISP:" | tee --append "$TESTS_LOG"
 
 prepare_for_rebuild $CUR_LISP		
@@ -292,6 +294,19 @@ general_test "LISP=$CUR_LISP ./rebuild-lisp"
 test_run_lisp $CUR_LISP
 
 clean_after_rebuild $CUR_LISP	
+}
+
+is_into_exclude_p () {
+local LISP_OR_TOOL="$(uppercase "$1")"
+for elt in $EXCLUDE
+do
+    if test "$elt" = "$LISP_OR_TOOL"
+    then
+	echo yes
+	return
+    fi    
+done
+echo no
 }
 
 # Filled exclude logical variables
@@ -316,13 +331,17 @@ do
 	--exclude-rebuild)
 	    EXCLUDE_REBUILD=yes
 	    ;;
+	--exclude*)
+	    EXCLUDE="$(uppercase "${1#--exclude=}")"
+	    ;;
     esac
+    shift
 done
 
 # Testing base tools
 echo | tee --append "$TESTS_LOG"
 echo "Testing base tools:" | tee --append "$TESTS_LOG"
-if test -z "$EXCLUDE_WGET"
+if test -z "$EXCLUDE_WGET" && test "$(is_into_exclude_p WGET)" = "no"
 then
     general_test "./sh/provide-tool.sh wget" "./sh/remove-tool.sh wget"
 fi
@@ -330,17 +349,32 @@ fi
 # Testing SBCL lisp
 if test -z "$EXCLUDE_MODERN_LISPS"
 then
-echo | tee --append "$TESTS_LOG"
-concrete_lisp_test SBCL
+    if test "$(is_into_exclude_p SBCL)" = "no"
+    then
+	echo | tee --append "$TESTS_LOG"
+	concrete_lisp_test SBCL
+    fi
 fi
 
 if test -z "$EXCLUDE_EMACS"
 then
 # Testing Emacs and Slime 
-echo | tee --append "$TESTS_LOG"
-echo "Testing Emacs and Slime:" | tee --append "$TESTS_LOG"
-general_test ./provide-emacs
-general_test ./provide-slime ./remove-slime
+    echo | tee --append "$TESTS_LOG"
+    echo "Testing Emacs and Slime:" | tee --append "$TESTS_LOG"
+
+    if test "$(is_into_exclude_p SLIME)" = "no"
+    then
+	general_test ./provide-emacs
+    else
+	echo "EMACS into excludes - SKIP" | tee --append "$TESTS_LOG"
+    fi
+
+    if test "$(is_into_exclude_p SLIME)" = "no"
+    then
+	general_test ./provide-slime ./remove-slime
+    else
+	echo "SLIME into excludes - SKIP" | tee --append "$TESTS_LOG"
+    fi
 fi
 
 # Testing modern lisps (exclude SBCL)
@@ -350,7 +384,10 @@ then
     echo "Testing modern lisps:" | tee --append "$TESTS_LOG"
     for lisp in $(./get-all-lisps --exclude="SBCL")
     do
-	concrete_lisp_test $lisp
+	if test "$(is_into_exclude_p $lisp)" = "no"
+	then
+	    concrete_lisp_test $lisp
+	fi
     done
 fi
 
@@ -361,7 +398,10 @@ then
     echo "Testing rebuild lisps (for: $REBUILD_FOR_LISPS):" | tee --append "$TESTS_LOG"
     for lisp in "$REBUILD_FOR_LISPS"
     do
-	rebuild_lisp_test $lisp
+	if test "$(is_into_exclude_p $lisp)" = "no" && test "$(is_into_exclude_p REBUILD)" = "no"
+	then
+	    rebuild_lisp_test $lisp
+	fi
     done
 
 fi
@@ -373,7 +413,10 @@ then
     echo "Testing young lisps:" | tee --append "$TESTS_LOG"
     for lisp in $(./get-all-lisps --exclude-modern --include-young)
     do
-	concrete_lisp_test $lisp
+	if test "$(is_into_exclude_p $lisp)" = "no"
+	then
+	    concrete_lisp_test $lisp
+	fi
     done
 fi
 
@@ -384,7 +427,10 @@ then
     echo "Testing obsolete lisps:" | tee --append "$TESTS_LOG"
     for lisp in $(./get-all-lisps --exclude-modern --include-obsolete)
     do
-	concrete_lisp_test $lisp
+	if test "$(is_into_exclude_p $lisp)" = "no"
+	then
+	    concrete_lisp_test $lisp
+	fi
     done
 fi
 
