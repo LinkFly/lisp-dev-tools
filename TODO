@@ -69,7 +69,7 @@ done. 12. Separated lisps on: older, modern and young.
 
 0.0.4:
 	done. (exclude CMUCL) - add support Ubuntu Server 12.04 x86-64.
-	- add ./rebuild-lisp for SBCL to test
+	done. - add ./rebuild-lisp for SBCL to test
 	- add full return state after tests
 	- add handling of older and raw lisp (add warning and disable warning).
 	- add provide-swank and run-swank

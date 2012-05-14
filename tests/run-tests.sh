@@ -40,7 +40,7 @@ exit
 
 usage () {
 echo "Using: 
-run-tests [ --exclude-wget | --exclude-emacs | --exclude-modern-lisps | --exclude-young-lisps | --exclude-obsolete-lisps ]*
+run-tests [ --exclude-wget | --exclude-emacs | --exclude-modern-lisps | --exclude-young-lisps | --exclude-obsolete-lisps | --exclude-rebuild ]
 Example:
 run-tests --exclude-emacs --exclude-obsolete-lisps"
 exit 0
@@ -53,11 +53,14 @@ FAIL=0
 
 CONST_ALREADY=10
 
+REBUILD_FOR_LISPS="SBCL"
+
 EXCLUDE_WGET=
 EXCLUDE_EMACS=
 EXCLUDE_MODERN_LISPS=
 EXCLUDE_YOUNG_LISPS=
 EXCLUDE_OBSOLETE_LISPS=
+EXCLUDE_REBUILD=
 
 FAILED_TESTS=
 PROVIDE_LISP_RES=
@@ -184,6 +187,113 @@ fi
 #(reserved for future)general_test ./provide-swank ./remove-swank
 }
 
+dirs_into_dir () {
+local DIRECTORY="$1"
+for d in $(ls -1 "$DIRECTORY")
+do
+    if test "$(file -b "$DIRECTORY/$d")" = "directory"
+    then
+	echo "$DIRECTORY/$d"
+    fi
+done
+}
+
+
+RENAME_PREFIX="rename_for_tests_"
+
+rename_dir_for_tests_if_exists () {
+echo "Rename temporary for tests (directory: $1):" | tee --append "$TESTS_LOG"
+if test -d "$1"
+then 
+    local DIRNAME="$(dirname "$1")"
+    local FILENAME="$(basename "$1")"
+    echo "Rename command: mv \"$1\" \"$DIRNAME/${RENAME_PREFIX}$FILENAME\"" | tee --append "$TESTS_LOG"
+    mv "$1" "$DIRNAME/${RENAME_PREFIX}$FILENAME"
+fi
+}
+
+is_prefix_p () {
+local CUR="$1"
+if test "${1#$RENAME_PREFIX}" = "$1"
+then echo no;else echo yes;fi
+}
+
+remove_prefix_if_exists () {
+local DIRNAME="$(dirname "$1")"
+local FILENAME="$(basename "$1")"
+if test "$(is_prefix_p "$FILENAME")" = "yes"
+then 
+    echo "Rename command: mv \"$1\" \"$DIRNAME/${FILENAME#$RENAME_PREFIX}\"" | tee --append "$TESTS_LOG"
+    mv "$1" "$DIRNAME/${FILENAME#$RENAME_PREFIX}"
+fi
+}
+
+remove_all_prefixes () {
+echo "Restore directories into: $1" | tee --append "$TESTS_LOG"
+local DIRECTORY="$1"
+for d in $(dirs_into_dir "$DIRECTORY")
+do
+    remove_prefix_if_exists "$d"
+done
+}
+#remove_all_prefixes "/home/linkfly/Downloads/lisp-dev-tools/lisp/sbcl"
+
+local D=\$
+get_lisp_compiler_dir () {
+local CUR_LISP=$(uppercase $1)
+echo "$COMPILERS/$(eval echo "$D${CUR_LISP}_LISPS_COMPILERS")/$(eval echo "$D${CUR_LISP}_COMPILER_DIRNAME")"
+}
+
+get_lisp_sources_dir () {
+local CUR_LISP=$(uppercase $1)
+echo "$SOURCES/$(eval echo "$D${CUR_LISP}_LISPS_SOURCES")/$(eval echo "$D${CUR_LISP}_SOURCES_DIRNAME")"
+}
+
+get_lisp_dir () {
+local CUR_LISP=$(uppercase $1)
+echo "$PREFIX/$(eval echo "$D${CUR_LISP}_DIR")"
+}
+
+prepare_for_rebuild () {
+local CUR_LISP=$(uppercase $1)
+local D=\$
+echo "Preparing before rebuild lisp-system $CUR_LISP:" | tee --append "$TESTS_LOG"
+rename_dir_for_tests_if_exists $(get_lisp_compiler_dir $CUR_LISP)
+rename_dir_for_tests_if_exists $(get_lisp_sources_dir $CUR_LISP)
+rename_dir_for_tests_if_exists $(get_lisp_dir $CUR_LISP)
+}
+
+clean_after_rebuild () {
+local CUR_LISP=$1
+echo "
+Cleaning after rebuilded lisp-system $CUR_LISP:" | tee --append "$TESTS_LOG"
+local LISP_COMPILER_DIR="$(get_lisp_compiler_dir $CUR_LISP)"
+local LISP_SOURCES_DIR="$(get_lisp_sources_dir $CUR_LISP)"
+local LISP_DIR="$(get_lisp_dir $CUR_LISP)"
+rm -rf "$LISP_COMPILER_DIR"
+rm -rf "$LISP_SOURCES_DIR"
+rm -rf "$LISP_DIR"
+remove_all_prefixes "$(dirname "$LISP_COMPILER_DIR")"
+remove_all_prefixes "$(dirname "$LISP_SOURCES_DIR")"
+remove_all_prefixes "$(dirname "$LISP_DIR")"
+echo "Cleaning OK." | tee --append "$TESTS_LOG"
+}
+
+rebuild_lisp_test () {
+# Using(and changing by general_test): PROVIDE_LISP_RES
+local local CUR_LISP="$(uppercase $1)"
+echo "Testing rebuild lisp-system $CUR_LISP:" | tee --append "$TESTS_LOG"
+
+prepare_for_rebuild $CUR_LISP		
+
+### !!! Function general_test changed PROVIDE_LISP_RES
+general_test "LISP=$CUR_LISP ./rebuild-lisp"
+### !!! PROVIDE_LISP_RES - changed
+test_run_lisp $CUR_LISP
+
+clean_after_rebuild $CUR_LISP	
+}
+
 # Filled exclude logical variables
 while test "$1" != ""
 do
@@ -202,6 +312,9 @@ do
 	    ;;
 	--exclude-obsolete-lisps)
 	    EXCLUDE_OBSOLETE_LISPS=yes
+	    ;;
+	--exclude-rebuild)
+	    EXCLUDE_REBUILD=yes
 	    ;;
     esac
 done
@@ -239,6 +352,18 @@ then
     do
 	concrete_lisp_test $lisp
     done
+fi
+
+#Testing ./rebuild-lisp
+if test -z "$EXCLUDE_REBUILD"
+then
+    echo | tee --append "$TESTS_LOG"
+    echo "Testing rebuild lisps (for: $REBUILD_FOR_LISPS):" | tee --append "$TESTS_LOG"
+    for lisp in "$REBUILD_FOR_LISPS"
+    do
+	rebuild_lisp_test $lisp
+    done
+
 fi
 
 # Testing young lisps (exclude SBCL)
