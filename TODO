@@ -25,6 +25,7 @@ done. 22. Add to note (if added describe GET_CMD_P) in README (and README_ru) ab
 24. Not resolve dependencies if lisp provided.
 25. Added full describe failed tests (also fail of running).
 26. Report "ALREADY" for Slime - only if Emacs providing.
+29. Throw error when bad tool trying remove.
 
 ------------- Else tasks --------------
 1. Bugfix building ncurses on Debian 6 x86-64 (needed for Emacs building).

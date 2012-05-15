@@ -1,5 +1,6 @@
 #!/bin/sh
 cd "$(dirname "$0")"
+. ./get-new-files.sh
 
 trap "cleanup" EXIT INT
 
@@ -16,6 +17,12 @@ FILE_FOR_LOAD="$(pwd)/for-tests.lisp"
 cd ../sh
 
 . ./includes.sh
+
+#OLD_FILES="$(get_all_files "$PREFIX")"
+OLD_FILES=empty
+OLD_DIRS="$(get_all_dirs "$PREFIX")"
+FILES=
+DIRS=
 
 ####### Need cleanup ############
 ### Need save links for cleanup ....
@@ -433,6 +440,14 @@ then
 	fi
     done
 fi
+
+echo "---------------------------- Changed files -----------------------------------"
+#FILES="$(get_all_files "$PREFIX")"
+FILES=empty
+DIRS="$(get_all_dirs "$PREFIX")"
+describe_changed_files "$OLD_FILES" "$FILES" "$OLD_DIRS" "$DIRS"
+echo "------------------------------------------------------------------------------"
+
 
 echo "
 tests amount = $TESTS_AMOUNT
