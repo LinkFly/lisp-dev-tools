@@ -1,11 +1,14 @@
 #!/bin/sh
 
+get_all_files_or_dirs () {
+find "$2" -mindepth 1 -maxdepth ${3:-1} -type $1
+}
 get_all_files () {
-find "$1" -type f
+get_all_files_or_dirs f "$1" $2
 }
 
 get_all_dirs () {
-find "$1" -type d
+get_all_files_or_dirs d "$1" $2
 }
 
 get_new_files () {
@@ -37,7 +40,7 @@ done
 echo "$NEW_FILES"
 }
 
-describe_changed_files () {
+describe_changed_files_or_dirs () {
 #echo "Removed files:"
 #echo "-------------------------"
 #echo "$(get_new_files "$2" "$1")"

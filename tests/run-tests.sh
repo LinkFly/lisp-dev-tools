@@ -2,6 +2,12 @@
 cd "$(dirname "$0")"
 . ./get-new-files.sh
 
+SHOW_DIRS_SIZES_P=${SHOW_DIRS_SIZES_P:-yes}
+SHOW_DIRS_EXACT_SIZES_P=${SHOW_DIRS_EXACT_SIZES_P:-yes}
+
+RESULT_MESSAGE="Tests aborted.
+
+FAILED."
 trap "cleanup" EXIT INT
 
 ###################### Initialization #########################
@@ -18,13 +24,90 @@ cd ../sh
 
 . ./includes.sh
 
+echo "Tests running ...
+
+" | tee --append "$TESTS_LOG"
+
+############# Directories sizes ####################
+get_dirs_sizes () {
+    local EXTRA_ARGS="$1"
+    echo "$(du "$PREFIX" --max-depth=3 --exclude="$TESTS_RESULTS" $EXTRA_ARGS)"
+}
+
+show_dirs_sizes () {
+    local EXTRA_MES="$1 running"
+    if test "$SHOW_DIRS_SIZES_P" = "yes"
+    then 
+	echo "
+---------------------- Directories sizes $EXTRA_MES tests ----------------------
+$(get_dirs_sizes -h)
+---------------------------------------------------------------
+"
+    fi
+
+if test "$SHOW_DIRS_EXACT_SIZES_P" = "yes"
+    then 
+	echo "
+---------------------- Directories exact sizes $EXTRA_MES tests ----------------------
+$(get_dirs_sizes --bytes)
+---------------------------------------------------------------
+"
+    fi
+}
+echo "$(show_dirs_sizes before)"  | tee --append "$TESTS_LOG"
+####################################################
+
+########################
+get_all_size () {
+    local tmp
+    tmp=$(du "$PREFIX" --max-depth=0 --bytes --exclude="$TESTS_RESULTS")
+    echo ${tmp%%"$PREFIX"}
+}
+BEFORE_SIZE=$(get_all_size)
+
+########################
+get_archive_files () { get_all_files "$ARCHIVES"; }
+get_lisp_dirs () { get_all_dirs "$PREFIX/$LISPS" 2; }
+get_lisp_compilers_dirs () { get_all_dirs "$COMPILERS/$LISP_COMPILERS" 2; } 
+get_lisp_sources_dirs () { get_all_dirs "$SOURCES/$LISP_SOURCES" 2; }
+get_tools_dirs () { get_all_dirs "$UTILS/$TOOLS_DIRNAME"; }
+
+get_emacs_libs_files () { get_all_files "$EMACS_LIBS"; }
+get_emacs_libs_dirs () { get_all_dirs "$EMACS_LIBS"; }
+get_lisp_libs_files () { get_all_files "$LISP_LIBS"; }
+get_lisp_libs_dirs () { get_all_dirs "$LISP_LIBS"; }
+
+OLD_ARCHIVE_FILES="$(get_archive_files)"
+OLD_LISP_DIRS="$(get_lisp_dirs)"
+OLD_LISP_COMPILERS_DIRS="$(get_lisp_compilers_dirs)"
+OLD_LISP_SOURCES_DIRS="$(get_lisp_sources_dirs)"
+OLD_TOOLS_DIRS="$(get_tools_dirs)"
+
+OLD_EMACS_LIBS_FILES="$(get_emacs_libs_files)"
+OLD_EMACS_LIBS_DIRS="$(get_emacs_libs_dirs)"
+OLD_LISP_LIBS_FILES="$(get_lisp_libs_files)"
+OLD_LISP_LIBS_DIRS="$(get_lisp_libs_dirs)"
+
+remove_new_dirs () {
+OLD_DIRS="$1"
+DIRS="$2"
+for dir in $(get_new_files "$1" "$2")
+do
+    echo "Now running command: rm -rf "$dir"" | tee --append "$TESTS_LOG"
+    rm -rf "$dir"
+done
+}
+
+########################
 #OLD_FILES="$(get_all_files "$PREFIX")"
 OLD_FILES=empty
-OLD_DIRS="$(get_all_dirs "$PREFIX")"
+OLD_DIRS="$(get_all_dirs "$PREFIX" 5)"
 FILES=
 DIRS=
+########################
 
 ####### Need cleanup ############
+# !!!
 ### Need save links for cleanup ....
 ./remove-links.sh
 export NO_COPY_LINKS_P=yes
@@ -33,17 +116,81 @@ export NO_COPY_LINKS_P=yes
 cd ..
 ###############################################################
 
-################### Cleanup ##############################
+################### Defining cleanup ##############################
 ALREADY_CLEANUP_P=
 cleanup () {
+### Singleton ###
 if test "$ALREADY_CLEANUP_P" = "yes";then exit;fi
-######### Cleanup #########
+#########################
 
-###########################
+#################### Show changed dirs before restore #####################
+echo "---------------------------- Changed directories before restore state -----------------------------------" | tee --append "$TESTS_LOG"
+FILES=empty
+DIRS="$(get_all_dirs "$PREFIX" 5)"
+echo "$(describe_changed_files_or_dirs "$OLD_FILES" "$FILES" "$OLD_DIRS" "$DIRS")
+---------------------------------------------------------------------------------------------------------------
+" | tee --append "$TESTS_LOG"
+##############################################################
+echo "Restoring state ...
+-----------------------------------------------" | tee --append "$TESTS_LOG"
+remove_new_dirs "$OLD_ARCHIVE_FILES" "$(get_archive_files)"
+remove_new_dirs "$OLD_LISP_DIRS" "$(get_lisp_dirs)"
+remove_new_dirs "$OLD_LISP_COMPILERS_DIRS" "$(get_lisp_compilers_dirs)"
+remove_new_dirs "$OLD_LISP_SOURCES_DIRS" "$(get_lisp_sources_dirs)"
+remove_new_dirs "$OLD_TOOLS_DIRS" "$(get_tools_dirs)"
+
+remove_new_dirs "$OLD_EMACS_LIBS_FILES" "$(get_emacs_libs_files)"
+remove_new_dirs "$OLD_EMACS_LIBS_DIRS" "$(get_emacs_libs_dirs)"
+remove_new_dirs "$OLD_LISP_LIBS_FILES" "$(get_lisp_libs_files)"
+remove_new_dirs "$OLD_LISP_LIBS_DIRS" "$(get_lisp_libs_dirs)"
+echo "-----------------------------------------------
+... end restoring state." | tee --append "$TESTS_LOG"
+#################### Show changed dirs after restore #####################
+echo "---------------------------- Changed directories after restore state -----------------------------------" | tee --append "$TESTS_LOG"
+FILES=empty
+DIRS="$(get_all_dirs "$PREFIX" 5)"
+echo "$(describe_changed_files "$OLD_FILES" "$FILES" "$OLD_DIRS" "$DIRS")
+--------------------------------------------------------------------------------------------------------------
+" | tee --append "$TESTS_LOG"
+###########################################################################
+
+######################################################### Checking size #########################################
+
+############# Directories sizes ####################
+echo "$(show_dirs_sizes after)"  | tee --append "$TESTS_LOG"
+####################################################
+
+BEFORE_RESULT_MESSAGE="
+---------------------------- Checking size -----------------------------------"
+AFTER_SIZE=$(get_all_size)
+if [ $AFTER_SIZE = $BEFORE_SIZE ]
+then
+    BEFORE_RESULT_MESSAGE="$BEFORE_RESULT_MESSAGE
+Checking size - OK."
+else 
+    BEFORE_RESULT_MESSAGE="$BEFORE_RESULT_MESSAGE
+ERROR: size lisp-dev-tools after runned tests more than before run tests.
+BEFORE_SIZE: $BEFORE_SIZE
+AFTER_SIZE: $AFTER_SIZE 
+DIFFERENCE: $(( $AFTER_SIZE - $BEFORE_SIZE ))
+
+Checking size - FAILED."
+fi
+#################################################################################################################
+
+######### Construct and output RESULT_MESSAGE here ##########
+RESULT_MESSAGE="$BEFORE_RESULT_MESSAGE
+------------------------------------------------------------------------------
+
+$RESULT_MESSAGE"
+
+echo "$RESULT_MESSAGE" | tee --append "$TESTS_LOG"
+######################################################
+
 ALREADY_CLEANUP_P=yes
 exit
-##########################################################
 }
+################### End defining cleanup ##############################
 
 usage () {
 echo "Using: 
@@ -216,8 +363,9 @@ if test -d "$1"
 then 
     local DIRNAME="$(dirname "$1")"
     local FILENAME="$(basename "$1")"
-    echo "Rename command: mv \"$1\" \"$DIRNAME/${RENAME_PREFIX}$FILENAME\"" | tee --append "$TESTS_LOG"
-    mv "$1" "$DIRNAME/${RENAME_PREFIX}$FILENAME"
+    local NEWNAME="$DIRNAME/${RENAME_PREFIX}$FILENAME"
+    echo "Rename command: rm -rf \"$NEWNAME\";mv \"$1\" \"$NEWNAME\"" | tee --append "$TESTS_LOG"
+    rm -rf "$NEWNAME";mv "$1" "$DIRNAME/${RENAME_PREFIX}$FILENAME"
 fi
 }
 
@@ -441,29 +589,27 @@ then
     done
 fi
 
-echo "---------------------------- Changed files -----------------------------------"
-#FILES="$(get_all_files "$PREFIX")"
-FILES=empty
-DIRS="$(get_all_dirs "$PREFIX")"
-describe_changed_files "$OLD_FILES" "$FILES" "$OLD_DIRS" "$DIRS"
-echo "------------------------------------------------------------------------------"
+RESULT_MESSAGE="------------------------------------------------------------------------------
 
-
-echo "
 tests amount = $TESTS_AMOUNT
 tests passed = $PASS
 tests already = $ALREADY
-tests failed = $FAIL" | tee --append "$TESTS_LOG"
+tests failed = $FAIL
+
+------------------------------------------------------------------------------
+"
 
 if test "$(($PASS + $ALREADY))" = "$TESTS_AMOUNT"
-then echo "All tests passed.
+then RESULT_MESSAGE="$RESULT_MESSAGE
+All tests passed.
 
-OK." | tee --append "$TESTS_LOG"
-else echo "Not all tests passed.
+OK."
+else RESULT_MESSAGE="$RESULT_MESSAGE
+Not all tests passed.
 Failed tests:
 $FAILED_TESTS
 
-FAILED." | tee --append "$TESTS_LOG"
+FAILED."
 exit 1
 fi
 
