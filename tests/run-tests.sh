@@ -22,6 +22,7 @@ rm -rf "$OPERATIONS_LOG"
 FILE_FOR_LOAD="$(pwd)/for-tests.lisp"
 cd ../sh
 
+NO_COPY_LINKS_P=yes
 . ./includes.sh
 
 echo "Tests running ...
@@ -106,11 +107,17 @@ FILES=
 DIRS=
 ########################
 
-####### Need cleanup ############
-# !!!
-### Need save links for cleanup ....
-./remove-links.sh
-export NO_COPY_LINKS_P=yes
+####### Saving symlinks ############
+#./remove-links.sh
+TMP_SYMLINKS_DIR="$UTILS/tmp-for-tests-cur-symlinks"
+
+rm -rf "$TMP_SYMLINKS_DIR"
+mkdir "$TMP_SYMLINKS_DIR"
+for link in $(find "$UTILS" -maxdepth 1 -name "*" -type l)
+do
+    ln -s "$(readlink '$UTILS/$link')" "$TMP_SYMLINKS_DIR/$(basename '$link')"
+    rm "$UTILS/$link"
+done
 #################################
 
 cd ..
@@ -121,7 +128,15 @@ ALREADY_CLEANUP_P=
 cleanup () {
 ### Singleton ###
 if test "$ALREADY_CLEANUP_P" = "yes";then exit;fi
-#########################
+#################
+
+####################################### Restore symlinks ############################
+for link in $(find "$TMP_SYMLINKS_DIR" -maxdepth 1 -name "*" -type l)
+do
+    ln -s "$(readlink '$TMP_SYMLINKS_DIR/$link')" "$UTILS/$(basename '$link')"
+    rm -rf "$TMP_SYMLINKS_DIR"
+done
+#####################################################################################
 
 #################### Show changed dirs before restore #####################
 echo "---------------------------- Changed directories before restore state -----------------------------------" | tee --append "$TESTS_LOG"
@@ -149,7 +164,7 @@ echo "-----------------------------------------------
 echo "---------------------------- Changed directories after restore state -----------------------------------" | tee --append "$TESTS_LOG"
 FILES=empty
 DIRS="$(get_all_dirs "$PREFIX" 5)"
-echo "$(describe_changed_files "$OLD_FILES" "$FILES" "$OLD_DIRS" "$DIRS")
+echo "$(describe_changed_files_or_dirs "$OLD_FILES" "$FILES" "$OLD_DIRS" "$DIRS")
 --------------------------------------------------------------------------------------------------------------
 " | tee --append "$TESTS_LOG"
 ###########################################################################

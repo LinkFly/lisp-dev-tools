@@ -90,5 +90,5 @@ echo "-------------------------"
 #FILES="$(get_all_files "/home/linkfly/tmp")"
 #DIRS="$(get_all_dirs "/home/linkfly/tmp")"
 #
-#describe_changed_files "$OLD_FILES" "$FILES" "$OLD_DIRS" "$DIRS"
+#describe_changed_files_or_dirs "$OLD_FILES" "$FILES" "$OLD_DIRS" "$DIRS"
 ########################################
