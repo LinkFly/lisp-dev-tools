@@ -286,7 +286,7 @@ Testing Emacs and Slime:"
 	printlog "SLIME into excludes - SKIP"
     fi
 
-    if test "$(is_into_exclude_p EMACS)" = "no" && "$EMACS_NOT_ALREADY_P" = "yes"
+    if test "$(is_into_exclude_p EMACS)" = "no" && test "$EMACS_NOT_ALREADY_P" = "yes"
     then
 	general_test ./remove-emacs
     fi
