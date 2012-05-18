@@ -67,7 +67,8 @@ get_all_size () {
 BEFORE_SIZE=$(get_all_size)
 
 ########################
-get_archive_files () { get_all_files "$ARCHIVES"; }
+get_archive_files () { get_all_files_or_symlinks "$ARCHIVES"; }
+
 get_lisp_dirs () { get_all_dirs "$PREFIX/$LISPS" 2; }
 get_lisp_compilers_dirs () { get_all_dirs "$COMPILERS/$LISP_COMPILERS" 2; } 
 get_lisp_sources_dirs () { get_all_dirs "$SOURCES/$LISP_SOURCES" 2; }

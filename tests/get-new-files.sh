@@ -11,6 +11,10 @@ get_all_dirs () {
 get_all_files_or_dirs d "$1" $2
 }
 
+get_all_files_or_symlinks () {
+find "$1" -mindepth 1 -maxdepth ${2:-1} -type f -o -type l
+}
+
 get_new_files () {
 local NEW_FILES=
 local IS_FILE_P=
