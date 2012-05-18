@@ -4,6 +4,7 @@ cd "$(dirname "$0")"
 ######## Main variables ########
 TESTS_DIR="$(pwd)"
 cd ../sh
+NO_COPY_LINKS_P=yes ### variableused by copy-links.sh
 . ./includes.sh
 cd "$TESTS_DIR"
 
@@ -67,9 +68,6 @@ PROVIDE_LISP_RES=
 RENAME_PREFIX="rename_for_tests_"
 TMP_SYMLINKS_DIR="$UTILS/tmp-for-tests-cur-symlinks"
 ######################################
-
-######## Variables used by external scripts  #########
-NO_COPY_LINKS_P=yes
 
 ############# Includes #################
 . ./get-new-files.sh

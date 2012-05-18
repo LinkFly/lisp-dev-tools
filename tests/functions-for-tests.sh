@@ -43,7 +43,7 @@ Saving symbolic links ..."
 }
 restore_symlinks () {
     printlog "
-Saving symbolic links ..."
+Restoring symbolic links ..."
     for link in $(get_all_symlinks "$TMP_SYMLINKS_DIR")
     do
 	mv "$link" "$UTILS/$(basename "$link")"
@@ -111,8 +111,6 @@ get_all_size () {
 }
 
 remove_new_dirs () {
-OLD_DIRS="$1"
-DIRS="$2"
 for dir in $(get_new_files "$1" "$2")
 do
     printlog "Now running command: rm -rf "$dir"" | tee --append "$TESTS_LOG"
@@ -122,14 +120,11 @@ done
 
 ####### Show changed dirs before restore ######
 show_changed_dirs () {
-local TITLE="$1"
-    if test "$TESTS_COMPLETE_P" = "yes"
-    then
-	printlog "
+    local TITLE="$1"
+    printlog "
 ------- $TITLE ----------
 $(describe_changed_dirs "$OLD_DIRS" "$(get_all_dirs "$PREFIX" 3)")
 -----------------------------------------------------------"
-    fi
 }
 
 ##################### Tests functions #########################
