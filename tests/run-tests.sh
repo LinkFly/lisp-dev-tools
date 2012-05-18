@@ -205,8 +205,8 @@ save_symlinks
 ########################################## Starting tests ############################################
 printlog "
 ------- Total size -------
-$BEFORE_SIZE"
---------------------------
+$BEFORE_SIZE
+--------------------------"
 printlog "$(show_dirs_sizes before)"
 
 # Filled exclude logical variables
