@@ -116,7 +116,7 @@ rm -rf "$TMP_SYMLINKS_DIR"
 mkdir "$TMP_SYMLINKS_DIR"
 for link in $(find "$UTILS" -maxdepth 1 -name "*" -type l)
 do
-    ln -s "$(readlink '$UTILS/$link')" "$TMP_SYMLINKS_DIR/$(basename '$link')"
+    ln -s "$(readlink \"$UTILS/$link\")" "$TMP_SYMLINKS_DIR/$(basename \"$link\")"
     rm "$UTILS/$link"
 done
 #################################
