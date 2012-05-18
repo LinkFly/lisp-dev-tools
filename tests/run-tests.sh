@@ -188,6 +188,13 @@ OLD_LISP_LIBS_DIRS="$(get_lisp_libs_dirs)"
 
 OLD_DIRS="$(get_all_dirs "$PREFIX" 3)"
 
+########### Show total size ##########
+printlog "
+------- Total size -------
+$BEFORE_SIZE
+--------------------------"
+
+####### Show all directories #########
 if test "$SHOW_DIRS_P" = "yes"
 then 
     printlog "
@@ -199,15 +206,11 @@ $OLD_DIRS
 "
 fi
 
-###### Saving symlinks ######
-save_symlinks
+###### Show directories sizes #######
+printlog "$(show_dirs_sizes before)"
+
 
 ########################################## Starting tests ############################################
-printlog "
-------- Total size -------
-$BEFORE_SIZE
---------------------------"
-printlog "$(show_dirs_sizes before)"
 
 # Filled exclude logical variables
 while test "$1" != ""
@@ -237,6 +240,9 @@ do
     esac
     shift
 done
+
+###### Saving symlinks ######
+save_symlinks
 
 # Testing base tools
 printlog "
