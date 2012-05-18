@@ -67,6 +67,7 @@ PROVIDE_LISP_RES=
 
 RENAME_PREFIX="rename_for_tests_"
 TMP_SYMLINKS_DIR="$UTILS/tmp-for-tests-cur-symlinks"
+EMACS_NOT_ALREADY_P=
 ######################################
 
 ############# Includes #################
@@ -264,6 +265,10 @@ Testing Emacs and Slime:"
     if test "$(is_into_exclude_p EMACS)" = "no"
     then
 	general_test ./provide-emacs
+	if test "$PROVIDE_LISP_RES" != "$CONST_ALREADY"
+	then
+	    EMACS_NOT_ALREADY_P=yes
+	fi
     else
 	printlog "EMACS into excludes - SKIP"
     fi
@@ -273,6 +278,11 @@ Testing Emacs and Slime:"
 	general_test ./provide-slime ./remove-slime
     else
 	printlog "SLIME into excludes - SKIP"
+    fi
+
+    if test "$(is_into_exclude_p EMACS)" = "no" && "$EMACS_NOT_ALREADY_P" = "yes"
+    then
+	general_test ./remove-emacs
     fi
 fi
 
