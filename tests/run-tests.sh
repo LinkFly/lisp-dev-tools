@@ -10,14 +10,14 @@ cd "$TESTS_DIR"
 
 ######## Configurable variables ########
 TESTS_RESULTS=${TESTS_RESULTS:-"$(pwd)/tests-results"}
-TESTS_LOG=${TESTS_LOG:-"$TESTS_RESULTS/tests-log.txt"}
-OPERATIONS_LOG=${OPERATIONS_LOG:-"$TESTS_RESULTS/operations-log.txt"}
 SHOW_DIRS_P=${SHOW_DIRS_P:-yes}
 SHOW_DIRS_SIZES_P=${SHOW_DIRS_SIZES_P:-yes}
 SHOW_DIRS_EXACT_SIZES_P=${SHOW_DIRS_EXACT_SIZES_P:-yes}
 
 ############# Pathnames variables #############
 FILE_FOR_LOAD="$(pwd)/for-tests.lisp"
+TESTS_LOG="$TESTS_RESULTS/tests-log.txt"
+OPERATIONS_LOG="$TESTS_RESULTS/operations-log.txt"
 
 ######## Inner variables #########
 TESTS_COMPLETE_P=no
