@@ -1,23 +1,21 @@
 #!/bin/sh
 
-get_all_files_or_dirs () {
-find "$2" -mindepth 1 -maxdepth ${3:-1} -type $1
-}
 get_all_files () {
-get_all_files_or_dirs f "$1" $2
+find "$1" -mindepth 1 -maxdepth ${2:-1} -type f -o -type l ! -name .gitignore
+}
+
+get_all_symlinks () {
+find "$1" -maxdepth 1 -type l
 }
 
 get_all_dirs () {
-get_all_files_or_dirs d "$1" $2
-}
-
-get_all_files_or_symlinks () {
-find "$1" -mindepth 1 -maxdepth ${2:-1} -type f -o -type l
+find "$1" -mindepth 1 -maxdepth ${2:-1} ! -name ".git" -type d ! -path "$1/.git/*" 
 }
 
 get_new_files () {
 local NEW_FILES=
 local IS_FILE_P=
+
 for f2 in $2
 do
     IS_FILE_P=no
@@ -44,26 +42,16 @@ done
 echo "$NEW_FILES"
 }
 
-describe_changed_files_or_dirs () {
-#echo "Removed files:"
-#echo "-------------------------"
-#echo "$(get_new_files "$2" "$1")"
-#echo "-------------------------"
-#echo 
-echo "Removed directories:"
-echo "-------------------------"
-echo "$(get_new_files "$4" "$3")"
-echo "-------------------------"
+describe_changed_dirs () {
+echo "Removed directories:
+-------------------------
+$(get_new_files "$2" "$1")
+-------------------------"
 
-#echo "New files:"
-#echo "-------------------------"
-#echo "$(get_new_files "$1" "$2")"
-#echo "-------------------------"
-#echo
-echo "New directories:"
-echo "-------------------------"
-echo "$(get_new_files "$3" "$4")"
-echo "-------------------------"
+echo "New directories:
+-------------------------
+$(get_new_files "$1" "$2")
+-------------------------"
 }
 
 ################# Test #############################
