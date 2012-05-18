@@ -231,7 +231,7 @@ do
 	    EXCLUDE_REBUILD=yes
 	    ;;
 	--exclude*)
-	    EXCLUDE="$(uppercase "${1#--exclude=}")"
+	    EXCLUDE="$(echo "${1#--exclude=}" | tr 'a-z' 'A-Z')"
 	    ;;
     esac
     shift
