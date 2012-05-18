@@ -12,8 +12,8 @@ exit 0
 printlog () { echo "$1" | tee --append "$TESTS_LOG"; }
 
 remove_tests_results () { 
-    rm "$TESTS_LOG"
-    rm "$OPERATIONS_LOG"
+    rm -f "$TESTS_LOG"
+    rm -f "$OPERATIONS_LOG"
 }
 
 get_archive_files () { get_all_files "$ARCHIVES"; }
