@@ -61,14 +61,14 @@ done. 12. Separated lisps on: older, modern and young.
 	done. - upgrade TODO
 	done. - create CHANGELOG, NEWS and NEWS_ru
 			
-0.0.3 (done)
+0.0.3: (done)
 	done. - separated lisps on: older, modern and raw (too new, young) 
 	done. - create general interface to lisp systems (--common-load --common-eval --common-quit)
 	done. - add automatic tests
 	done. - add logs for tests steps and logs operations
 	done. - corrected work with symbolic links? add to .gitignore and automatic copy (if necessary)
 
-0.0.4:
+0.0.4: (done)
 	done. (exclude CMUCL) - add support Ubuntu Server 12.04 x86-64.
 	done. - add ./rebuild-lisp for SBCL to test
 	done. - add --exclude parameter for run-tests.sh
