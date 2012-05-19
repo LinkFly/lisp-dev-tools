@@ -54,6 +54,7 @@ CONST_ALREADY=10
 
 REBUILD_FOR_LISPS="SBCL"
 
+ONLY=
 EXCLUDE=
 EXCLUDE_WGET=
 EXCLUDE_EMACS=
@@ -237,6 +238,9 @@ do
 	--exclude*)
 	    EXCLUDE="$(echo "${1#--exclude=}" | tr 'a-z' 'A-Z')"
 	    ;;
+	--only*)
+	    ONLY="$(echo "${1#--only=}" | tr 'a-z' 'A-Z')"
+	    ;;
     esac
     shift
 done
@@ -249,7 +253,10 @@ printlog "
 Testing base tools:"
 if test -z "$EXCLUDE_WGET" && test "$(is_into_exclude_p WGET)" = "no"
 then
-    general_test "./sh/provide-tool.sh wget" "./sh/remove-tool.sh wget"
+    if test "$(is_into_only_p WGET)" = "yes"
+    then
+	general_test "./sh/provide-tool.sh wget" "./sh/remove-tool.sh wget"
+    fi
 fi
 
 # Testing SBCL lisp
@@ -257,8 +264,11 @@ if test -z "$EXCLUDE_MODERN_LISPS"
 then
     if test "$(is_into_exclude_p SBCL)" = "no"
     then
-	echo | tee --append "$TESTS_LOG"
-	concrete_lisp_test SBCL
+	if test "$(is_into_only_p SBCL)" = "yes"
+	then
+	    echo | tee --append "$TESTS_LOG"
+	    concrete_lisp_test SBCL
+	fi
     fi
 fi
 
@@ -270,10 +280,15 @@ Testing Emacs and Slime:"
 
     if test "$(is_into_exclude_p EMACS)" = "no"
     then
-	general_test ./provide-emacs
-	if test "$PROVIDE_LISP_RES" != "$CONST_ALREADY"
+	if test "$(is_into_only_p EMACS)" = "yes"
 	then
-	    EMACS_NOT_ALREADY_P=yes
+	    general_test ./provide-emacs
+	    if test "$PROVIDE_LISP_RES" != "$CONST_ALREADY"
+	    then
+		EMACS_NOT_ALREADY_P=yes
+	    fi
+	else
+	    printlog "EMACS not into ONLY (only mode on)"
 	fi
     else
 	printlog "EMACS into excludes - SKIP"
@@ -281,14 +296,22 @@ Testing Emacs and Slime:"
 
     if test "$(is_into_exclude_p SLIME)" = "no"
     then
-	general_test ./provide-slime ./remove-slime
+	if test "$(is_into_only_p SLIME)" = "yes"
+	then
+	    general_test ./provide-slime ./remove-slime
+	else
+	    printlog "SLIME not into ONLY (only mode on)"
+	fi
     else
 	printlog "SLIME into excludes - SKIP"
     fi
 
     if test "$(is_into_exclude_p EMACS)" = "no" && test "$EMACS_NOT_ALREADY_P" = "yes"
     then
-	general_test ./remove-emacs
+	if test "$(is_into_only_p EMACS)" = "yes"
+	then
+	    general_test ./remove-emacs
+	fi
     fi
 fi
 
@@ -301,13 +324,16 @@ Testing modern lisps:"
     do
 	if test "$(is_into_exclude_p $lisp)" = "no"
 	then
-	    concrete_lisp_test $lisp
+	    if test "$(is_into_only_p $(uppercase $lisp))" = "yes"
+	    then
+		concrete_lisp_test $lisp
+	    fi
 	fi
     done
 fi
 
 #Testing ./rebuild-lisp
-if test -z "$EXCLUDE_REBUILD"
+if test -z "$EXCLUDE_REBUILD" && test "$(is_into_exclude_p REBUILD)" = "yes"
 then
     printlog "
 Testing rebuild lisps (for: $REBUILD_FOR_LISPS):"
@@ -315,7 +341,10 @@ Testing rebuild lisps (for: $REBUILD_FOR_LISPS):"
     do
 	if test "$(is_into_exclude_p $lisp)" = "no" && test "$(is_into_exclude_p REBUILD)" = "no"
 	then
-	    rebuild_lisp_test $lisp
+	    if test "$(is_into_only_p $(uppercase $lisp))" = "yes"
+	    then
+		rebuild_lisp_test $lisp
+	    fi
 	fi
     done
 
@@ -330,7 +359,10 @@ Testing young lisps:"
     do
 	if test "$(is_into_exclude_p $lisp)" = "no"
 	then
-	    concrete_lisp_test $lisp
+	    if test "$(is_into_only_p $(uppercase $lisp))" = "yes"
+	    then
+		concrete_lisp_test $lisp
+	    fi
 	fi
     done
 fi
@@ -344,7 +376,10 @@ Testing obsolete lisps:"
     do
 	if test "$(is_into_exclude_p $lisp)" = "no"
 	then
-	    concrete_lisp_test $lisp
+	    if test "$(is_into_only_p $(uppercase $lisp))" = "yes"
+	    then
+		concrete_lisp_test $lisp
+	    fi
 	fi
     done
 fi

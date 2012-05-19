@@ -54,11 +54,10 @@ Restoring symbolic links ..."
 }
 
 ######## Checking is exist into --exclude parameter #########
-is_into_exclude_p () {
-local LISP_OR_TOOL="$(uppercase "$1")"
-for elt in $EXCLUDE
+is_into_p () {
+for elt in $2
 do
-    if test "$elt" = "$LISP_OR_TOOL"
+    if test "$elt" = "$1"
     then
 	echo yes
 	return
@@ -66,6 +65,17 @@ do
 done
 echo no
 }
+
+is_into_exclude_p () { is_into_p "$(uppercase "$1")" "$EXCLUDE"; }
+is_into_only_p () {
+    if ! test -z "$ONLY"
+    then
+	is_into_p "$(uppercase "$1")" "$ONLY"
+    else
+	echo yes
+    fi
+}
+
 
 ############# Directories sizes ####################
 get_dirs_sizes () {

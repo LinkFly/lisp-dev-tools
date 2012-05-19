@@ -72,7 +72,7 @@ done. 12. Separated lisps on: older, modern and young.
 	done. (exclude CMUCL) - add support Ubuntu Server 12.04 x86-64.
 	done. - add ./rebuild-lisp for SBCL to test
 	done. - add --exclude parameter for run-tests.sh
-	- add --only parameter for run-tests.sh
+	done. - add --only parameter for run-tests.sh
 	done. - add full return state after tests
 
 0.0.5:
