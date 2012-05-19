@@ -44,6 +44,7 @@ Saving symbolic links ..."
 restore_symlinks () {
     printlog "
 Restoring symbolic links ..."
+    remove_all_symlinks "$UTILS"
     for link in $(get_all_symlinks "$TMP_SYMLINKS_DIR")
     do
 	mv "$link" "$UTILS/$(basename "$link")"

@@ -8,6 +8,11 @@ get_all_symlinks () {
 find "$1" -maxdepth 1 -type l
 }
 
+remove_all_symlinks () {
+find "$1" -maxdepth 1 -type l -exec rm {} \;
+}
+
+
 get_all_dirs () {
 find "$1" -mindepth 1 -maxdepth ${2:-1} ! -name ".git" -type d ! -path "$1/.git/*" 
 }
