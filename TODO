@@ -73,17 +73,19 @@ done. 12. Separated lisps on: older, modern and young.
 	done. - add ./rebuild-lisp for SBCL to test
 	done. - add --exclude parameter for run-tests.sh
 	- add --only parameter for run-tests.sh
-	- add full return state after tests
+	done. - add full return state after tests
+
+0.0.5:
 	- add handling of older and raw lisp (add warning and disable warning).
 	- add provide-swank and run-swank
 
-0.0.5:
+0.0.6:
 	- Added support Fedora16.
 	- Added support Arch.
 	- Added support x86 OSes.
 	- ...
 
-0.0.6:
+0.0.7:
 	- decorate README and README_ru
 	- ...
 ... 
