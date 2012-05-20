@@ -102,57 +102,60 @@ $ ./run-slime
 
 ------------------------------------------
 Using (advanced examples):
+	1) Testing - preferable before serious "production" using, if used distribution is not included in officially supported distributions or if it included, but its settings is very different from the default distribution settings (below we`ll describe the options of test run in details):
 
-	1) Downloading (by default pre-builded binaries SBCL), configuring, building, and install into lisp-dev-tools (for portability):
+$ ./tests/run-tests
+
+	2) Downloading (by default pre-builded binaries SBCL), configuring, building, and install into lisp-dev-tools (for portability):
 
 $ ./provide-lisp
 
-	2) Running lisp (by default binaries SBCL):
+	3) Running lisp (by default binaries SBCL):
 
 $ ./run-lisp 
 
-  	3) Providing and running other lisp (example CCL):
+  	4) Providing and running other lisp (example CCL):
 
 $ LISP=ccl ./provide-lisp && LISP=ccl ./run-lisp
 
-  	4) Get current lisp:
+  	5) Get current lisp:
 
 $ ./get-lisp
 sbcl
 
-	5) Change current lisp:
+	6) Change current lisp:
 
 $ ./change-lisp ccl
 Current lisp: ccl
 
-	6) Get current lisp version: 
+	7) Get current lisp version: 
 
 $ ./get-version
 1.0.53
 
-	7) Change current lisp version (attention: url includes the new version should be valid):
+	8) Change current lisp version (attention: url includes the new version should be valid):
 
 $ ./change-version 1.0.52
 Current lisp version: 1.0.52
 
-	8) Provide and run the lisp different version:
+	9) Provide and run the lisp different version:
 
 $ VERSION=1.0.51 ./provide-lisp
 $ VERSION=1.0.51 ./run-lisp
 
-  	9) For rebuilding current lisp to run:
+  	10) For rebuilding current lisp to run:
 
 $ ./rebuild-lisp
 
-	10) Providing fresh Emacs (if Emacs not found in /usr/bin/emacs):
+	11) Providing fresh Emacs (if Emacs not found in /usr/bin/emacs):
 
 ./provide-emacs
 
-	11) Running Emacs without Slime (for running Slime into running Emacs to run M-x slime):
+	12) Running Emacs without Slime (for running Slime into running Emacs to run M-x slime):
 
 $ ./run-emacs	
 
-  	12) Getting command line for calling lisp system without executed it:
+  	13) Getting command line for calling lisp system without executed it:
 
 $ GET_CMD_P=yes ./run-lisp --eval "(print 999)" --eval "(quit)"
 XDG_CONFIG_DIRS='/media/COMMON_LISP/lisp-dev-tools/conf:/etc/xdg/xdg-gnome:/etc/xdg' /media/COMMON_LISP/lisp-dev-tools/lisp/sbcl/sbcl-1.0.53/bin/sbcl --core /media/COMMON_LISP/lisp-dev-tools/lisp/sbcl/sbcl-1.0.53/lib/sbcl/sbcl.core '--eval' '(print 999)' '--eval' '(quit)' '--load' '/media/COMMON_LISP/lisp-dev-tools/lisp-libs/quicklisp/setup.lisp'
@@ -214,4 +217,26 @@ $ ./clean/clean-lisp.sh
 $ ./clean/clean-all.sh
 
 --------------------------------------------------------------
-	
+Testing:
+	1) Run all tests:
+
+$ ./tests/run-tests.sh
+
+	2) Run almost all tests, but exclude some:
+
+$ ./tests/run-tests.sh --exclude="SBCL WGET"
+
+  ... into --exclude="..." besides lisp-systems, maybe these keywords naming appropriate tests: WGET EMACS SLIME REBUILD
+
+        3) Run only concreate tests:
+
+$ ./tests/run-tests.sh --exclude="CCL EMACS SLIME"
+
+  ... into --only="..." besides keywords naming lisp-systems, maybe these keywords naming appropriate tests: WGET EMACS SLIME REBUILD
+
+Keywors denoting the tests:
+WGET - test providing wget tool, if necessary to test building (and removal) of this utility.
+EMACS - test command ./provide-emacs, if Emacs building and installing, then will be tested ./remove-emacs command.
+SLIME - test command ./provide-slime, if Slime building and installing, then will be tested ./remove-slime command.
+REBUILD - test command ./rebuild-lisp, restoring the old contents of the directories associated with the compilation.
+--------------------------------------------------------------
