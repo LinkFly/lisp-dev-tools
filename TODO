@@ -77,6 +77,7 @@ done. 12. Separated lisps on: older, modern and young.
 
 0.0.5:
 	- blocking any actions and run tests when tests/run-tests.sh already running
+	- checking necessary base program ("make", "gcc", "g++", and maybe "file").
 	- automatization running tests on remote host
 	- add handling of older and raw lisp (add warning and disable warning).
 	- add provide-swank and run-swank
