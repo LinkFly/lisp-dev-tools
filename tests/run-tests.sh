@@ -5,8 +5,32 @@ cd "$(dirname "$0")"
 TESTS_DIR="$(pwd)"
 cd ../sh
 NO_COPY_LINKS_P=yes ### variableused by copy-links.sh
+FORCE_UNLOCKED_P=no
+for arg in $@
+do
+    if test "$arg" = "--zap"
+    then 
+	FORCE_UNLOCKED_P=yes
+    fi
+done
 . ./includes.sh
+if test "$FORCE_UNLOCKED_P" = "yes"
+then
+    if test -f "$TESTS_LOCK_FILE"
+    then
+	rm "$TESTS_LOCK_FILE"
+	echo "Unlocked - success."
+    else
+	echo "Not locked."
+    fi
+    exit 0
+fi
+
 cd "$TESTS_DIR"
+
+########### For locking any actions while tests running ############
+touch "$TESTS_LOCK_FILE"
+export FORCE_UNLOCKED_P=yes
 
 ######## Configurable variables ########
 TESTS_RESULTS=${TESTS_RESULTS:-"$(pwd)/tests-results"}
@@ -162,9 +186,13 @@ fi
 
 printlog "$RESULT_MESSAGE"
 ALREADY_CLEANUP_P=yes
+
+######### For unlock ##########
+rm "$TESTS_LOCK_FILE"
+
 exit
 }
-trap "cleanup" EXIT INT
+trap "cleanup" EXIT INT FAIL
 #################################################################################
 ############################# END DEFINING CLEANUP ##############################
 
