@@ -1,7 +1,11 @@
 #!/bin/sh
 
+### Using: ###
+# TMP_WORK_FILES_DIR
+##############
+
 get_all_files () {
-find "$1" -mindepth 1 -maxdepth ${2:-1} -type f -o -type l ! -name .gitignore
+find "$1" -mindepth 1 -maxdepth ${2:-1} -type f -o -type l ! -name .gitignore ! -path "$TMP_WORK_FILES_DIR/*"
 }
 
 get_all_symlinks () {
@@ -14,7 +18,7 @@ find "$1" -maxdepth 1 -type l -exec rm {} \;
 
 
 get_all_dirs () {
-find "$1" -mindepth 1 -maxdepth ${2:-1} ! -name ".git" -type d ! -path "$1/.git/*" 
+find "$1" -mindepth 1 -maxdepth ${2:-1} ! -name ".git" -type d ! -path "$1/.git/*" ! -path "$TMP_WORK_FILES_DIR/*"
 }
 
 get_new_files () {

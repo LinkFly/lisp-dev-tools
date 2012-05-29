@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TESTS_LOCK_FILE="$PREFIX/run-tests.lock"
+TESTS_LOCK_FILE="$TESTS/tmp-tests-work-files/run-tests.lock"
 
 if test -f "$TESTS_LOCK_FILE" && test "$FORCE_UNLOCKED_P" != "yes"
 then

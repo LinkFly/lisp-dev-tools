@@ -53,6 +53,8 @@ done. 12. Separated lisps on: older, modern and young.
 14. Not building ncurses if it already existing into OS.
 15. Bugfix in ./provide-all-lisps --help
 16. Check work of parameters in running ./provide-all-lisps
+17. Signal error when giving bad command line parameters for tests/run-tests.sh.
+
 
 -------- Milestones (mark with tags then when) ----------
 0.0.2: (done)

@@ -1,3 +1,15 @@
+#!/bin/sh
+
+### Using vars: ###
+# PREFIX LISPS COMPILERS LISP_COMPILERS SOURCES LISP_SOURCES UTILS TOOLS_DIRNAME EMACS_LIBS 
+# TESTS_LOG OPERATIONS_LOG TMP_SYMLINKS_DIR TMP_WORK_FILES_DIR TESTS_RESULTS 
+# OLD_ARCHIVE_FILES OLD_LISP_DIRS OLD_LISP_COMPILERS_DIRS OLD_LISP_SOURCES_DIRS OLD_TOOLS_DIRS
+# OLD_EMACS_LIBS_FILES OLD_EMACS_LIBS_DIRS OLD_LISP_LIBS_FILES OLD_LISP_LIBS_DIRS
+# OLD_DIRS
+# SHOW_DIRS_SIZES_P SHOW_DIRS_EXACT_SIZES_P
+# EXCLUDE ONLY
+##############
+
 #################################################################################
 #################################### FUNCTIONS ##################################
 usage () {
@@ -10,6 +22,7 @@ exit 0
 }
 
 printlog () { echo "$1" | tee --append "$TESTS_LOG"; }
+printflog () { printf "$1" | tee --append "$TESTS_LOG"; }
 
 remove_tests_results () { 
     rm -f "$TESTS_LOG"
@@ -42,15 +55,42 @@ Saving symbolic links ..."
     printlog "... ok"
 }
 restore_symlinks () {
-    printlog "
-Restoring symbolic links ..."
-    remove_all_symlinks "$UTILS"
-    for link in $(get_all_symlinks "$TMP_SYMLINKS_DIR")
-    do
-	mv "$link" "$UTILS/$(basename "$link")"
-    done
-    rm -rf "$TMP_SYMLINKS_DIR"
-    printlog "... ok"
+    if test -d "$TMP_SYMLINKS_DIR"
+    then
+
+	printflog "
+Restoring symbolic links ... "
+	remove_all_symlinks "$UTILS"
+	for link in $(get_all_symlinks "$TMP_SYMLINKS_DIR")
+	do
+	    mv "$link" "$UTILS/$(basename "$link")"
+	done
+	rm -rf "$TMP_SYMLINKS_DIR"
+	printlog "OK.
+"
+    fi
+}
+
+full_restore_state () {
+printlog "
+Restoring state ...
+-----------------------------------------------"
+
+##### Restore symlinks #####
+restore_symlinks
+
+remove_new_files "$(cat "$OLD_ARCHIVE_FILES")" "$(get_archive_files)"
+remove_new_dirs "$(cat "$OLD_LISP_DIRS")" "$(get_lisp_dirs)"
+remove_new_dirs "$(cat "$OLD_LISP_COMPILERS_DIRS")" "$(get_lisp_compilers_dirs)"
+remove_new_dirs "$(cat "$OLD_LISP_SOURCES_DIRS")" "$(get_lisp_sources_dirs)"
+remove_new_dirs "$(cat "$OLD_TOOLS_DIRS")" "$(get_tools_dirs)"
+
+remove_new_dirs "$(cat "$OLD_EMACS_LIBS_FILES")" "$(get_emacs_libs_files)"
+remove_new_dirs "$(cat "$OLD_EMACS_LIBS_DIRS")" "$(get_emacs_libs_dirs)"
+remove_new_dirs "$(cat "$OLD_LISP_LIBS_FILES")" "$(get_lisp_libs_files)"
+remove_new_dirs "$(cat "$OLD_LISP_LIBS_DIRS")" "$(get_lisp_libs_dirs)"
+printlog "-----------------------------------------------
+... end restoring state - OK."
 }
 
 ######## Checking is exist into --exclude parameter #########
@@ -80,7 +120,7 @@ is_into_only_p () {
 ############# Directories sizes ####################
 get_dirs_sizes () {
     local EXTRA_ARGS="$2"
-    echo "$(du "$1" --max-depth=3 --exclude="$TESTS_RESULTS" --exclude="$1/.git" $EXTRA_ARGS)"
+    echo "$(du "$1" --max-depth=3 --exclude="$TESTS_RESULTS" --exclude="$TMP_WORK_FILES_DIR" --exclude="$1/.git" $EXTRA_ARGS)"
 }
 
 get_git_dir_size () {
@@ -105,6 +145,8 @@ if test "$SHOW_DIRS_EXACT_SIZES_P" = "yes"
     then 
 	echo "
 ---------------------- Directories exact sizes $EXTRA_MES tests ----------------------
+(Exclude dirs: "$TESTS_RESULTS" and "$TMP_WORK_FILES_DIR")
+-------------------------------
 $(get_dirs_sizes "$PREFIX" -b)
 ----- Directory .git size -----
 $(get_git_dir_size "$PREFIX" -b)
@@ -117,24 +159,38 @@ $(get_git_dir_size "$PREFIX" -b)
 ########################
 get_all_size () {
     local tmp
-    tmp=$(du "$PREFIX" --max-depth=0 --bytes --exclude="$TESTS_RESULTS")
+    tmp=$(du "$PREFIX" --max-depth=0 --bytes --exclude="$TESTS_RESULTS" --exclude="$TMP_WORK_FILES_DIR")
     echo ${tmp%%"$PREFIX"}
 }
 
-remove_new_dirs () {
-for dir in $(get_new_files "$1" "$2")
+remove_files_and_dirs () {
+local NOT_DIRS_P=$3
+if test "$NOT_DIRS_P" = "yes"
+then
+    local RM_ARGS="-f"
+else 
+    local RM_ARGS="-rf"
+fi
+
+for dir_or_file in $(get_new_files "$1" "$2")
 do
-    printlog "Now running command: rm -rf "$dir"" | tee --append "$TESTS_LOG"
-    rm -rf "$dir"
+    if test -e "$dir_or_file" 
+    then
+	printlog "Now running command: rm $RM_ARGS "$dir_or_file""
+	rm $RM_ARGS "$dir_or_file"
+    fi
 done
 }
+
+remove_new_files () { remove_files_and_dirs "$1" "$2" yes; }
+remove_new_dirs () { remove_files_and_dirs "$1" "$2"; }
 
 ####### Show changed dirs before restore ######
 show_changed_dirs () {
     local TITLE="$1"
     printlog "
 ------- $TITLE ----------
-$(describe_changed_dirs "$OLD_DIRS" "$(get_all_dirs "$PREFIX" 3)")
+$(describe_changed_dirs "$(cat "$OLD_DIRS")" "$(get_all_dirs "$PREFIX" 3)")
 -----------------------------------------------------------"
 }
 
@@ -147,8 +203,7 @@ local DATETIME="
 DATETIME: $(date)
 "
 printf "$DATETIME" >> "$OPERATIONS_LOG"
-printf "$DATETIME" >> "$TESTS_LOG"
-printf "$DATETIME"
+printflog "$DATETIME"
 
 printlog "Test:
 $PROVIDE
@@ -159,15 +214,15 @@ TESTS_AMOUNT=$((TESTS_AMOUNT + 1))
 
 if test "ALREADY." = "$RESULT";then
 ALREADY=$(($ALREADY + 1))
-printf "PASS(ALREADY)" | tee --append "$TESTS_LOG"
-echo | tee --append "$TESTS_LOG"
+printflog "PASS(ALREADY)"
+printlog
 PROVIDE_LISP_RES=$CONST_ALREADY
 return 0
 fi
 
 if test "OK." = "$RESULT";then
     PASS=$(($PASS + 1))
-    printf "PASS" | tee --append "$TESTS_LOG";echo | tee --append "$TESTS_LOG";
+    printflog "PASS";printlog
 
     if test "$IF_OK" != "";then 
 	general_test "$IF_OK";
@@ -199,24 +254,24 @@ then
     local TAIL_ARG="-n5"
     if test "$CUR_LISP" = "WCL";then TAIL_ARG="-n5";fi
     if test "$CUR_LISP" = "XCL";then TAIL_ARG="-n4";fi
-    local TEST_CODE='echo "(progn (terpri) (princ 100) (terpri) (princ (quote some)))" | LISP=$CUR_LISP ./run-lisp | tail $TAIL_ARG | head -n2'
-    printf "Test run-lisp:
-${TEST_CODE}\n\n" | tee --append "$TESTS_LOG"
-    echo "Evaluated command line: none" | tee --append "$TESTS_LOG"
-    printf "Tests into running lisp-system:\n" | tee --append "$TESTS_LOG"
+    local TEST_CODE='echo "(progn (terpri) (princ 100) (terpri) (princ (quote some)))" | LISP='"$CUR_LISP"' ./run-lisp | tail '"$TAIL_ARG"' | head -n2'
+    printflog "Test run-lisp:
+${TEST_CODE}\n\n"
+    printlog "Evaluated command line: none"
+    printflog "Tests into running lisp-system:\n"
     RESULT="$(eval $TEST_CODE)"    
 ##################################################
 else
     local TEST_PARAMS="--common-load $FILE_FOR_LOAD --common-eval '(progn (princ (quote some)) (terpri))' --common-quit"
     local TEST_CODE="LISP=$CUR_LISP $RUN_SCRIPT $TEST_PARAMS"
-    printf "Test run-lisp:
-${TEST_CODE}\n\n" | tee --append "$TESTS_LOG"
+    printflog "Test run-lisp:
+${TEST_CODE}\n\n"
     printlog "Evaluated command line: 
 ----------------------------------------------
 $(eval GET_CMD_P=yes $TEST_CODE)
 ----------------------------------------------\n"
 
-    printf "Tests into running lisp-system:\n" | tee --append "$TESTS_LOG"
+    printflog "Tests into running lisp-system:\n"
     if test "$CUR_LISP" = "CLISP"
     then
 ######### Specific getting result for CLISP ###########
@@ -236,7 +291,7 @@ if test "$RESULT" = "100
 SOME"
 then
     PASS=$((PASS + 1))
-    printf PASS | tee --append "$TESTS_LOG"
+    printflog PASS
 else 
     FAIL=$((FAIL + 1))
     printlog FAIL
@@ -248,7 +303,7 @@ echo | tee --append "$TESTS_LOG"
 concrete_lisp_test () {
 # Using(and changing by general_test): PROVIDE_LISP_RES
 local CUR_LISP="$(uppercase $1)"
-echo "Testing lisp-system $CUR_LISP:" | tee --append "$TESTS_LOG"
+printlog "Testing lisp-system $CUR_LISP:"
 ### !!! Function general_test changed PROVIDE_LISP_RES
 general_test "LISP=$CUR_LISP ./provide-lisp"
 ### !!! PROVIDE_LISP_RES - changed
@@ -271,7 +326,7 @@ then
     local DIRNAME="$(dirname "$1")"
     local FILENAME="$(basename "$1")"
     local NEWNAME="$DIRNAME/${RENAME_PREFIX}$FILENAME"
-    echo "Rename command: rm -rf \"$NEWNAME\";mv \"$1\" \"$NEWNAME\"" | tee --append "$TESTS_LOG"
+    printlog "Rename command: rm -rf \"$NEWNAME\";mv \"$1\" \"$NEWNAME\""
     rm -rf "$NEWNAME";mv "$1" "$DIRNAME/${RENAME_PREFIX}$FILENAME"
 fi
 }
@@ -286,13 +341,13 @@ local DIRNAME="$(dirname "$1")"
 local FILENAME="$(basename "$1")"
 if test "$(is_prefix_p "$FILENAME")" = "yes"
 then 
-    echo "Rename command: mv \"$1\" \"$DIRNAME/${FILENAME#$RENAME_PREFIX}\"" | tee --append "$TESTS_LOG"
+    printlog "Rename command: mv \"$1\" \"$DIRNAME/${FILENAME#$RENAME_PREFIX}\""
     mv "$1" "$DIRNAME/${FILENAME#$RENAME_PREFIX}"
 fi
 }
 
 remove_all_prefixes () {
-echo "Restore directories into: $1" | tee --append "$TESTS_LOG"
+printlog "Restore directories into: $1"
 local DIRECTORY="$1"
 for d in $(get_all_dirs "$DIRECTORY" 1)
 do
@@ -320,7 +375,7 @@ echo "$PREFIX/$(eval echo "$D${CUR_LISP}_DIR")"
 prepare_for_rebuild () {
 local CUR_LISP=$(uppercase $1)
 local D=\$
-echo "Preparing before rebuild lisp-system $CUR_LISP:" | tee --append "$TESTS_LOG"
+printlog "Preparing before rebuild lisp-system $CUR_LISP:"
 rename_dir_for_tests_if_exists $(get_lisp_compiler_dir $CUR_LISP)
 rename_dir_for_tests_if_exists $(get_lisp_sources_dir $CUR_LISP)
 rename_dir_for_tests_if_exists $(get_lisp_dir $CUR_LISP)
@@ -339,13 +394,13 @@ rm -rf "$LISP_DIR"
 remove_all_prefixes "$(dirname "$LISP_COMPILER_DIR")"
 remove_all_prefixes "$(dirname "$LISP_SOURCES_DIR")"
 remove_all_prefixes "$(dirname "$LISP_DIR")"
-echo "Cleaning OK." | tee --append "$TESTS_LOG"
+printlog "Cleaning OK."
 }
 
 rebuild_lisp_test () {
 # Using(and changing by general_test): PROVIDE_LISP_RES
 local CUR_LISP="$(uppercase $1)"
-echo "Testing rebuild lisp-system $CUR_LISP:" | tee --append "$TESTS_LOG"
+printlog "Testing rebuild lisp-system $CUR_LISP:"
 
 prepare_for_rebuild $CUR_LISP		
 

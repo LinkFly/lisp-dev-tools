@@ -3,6 +3,8 @@ cd "$(dirname "$0")"
 
 ######## Main variables ########
 TESTS_DIR="$(pwd)"
+TMP_WORK_FILES_DIR="$TESTS_DIR/tmp-tests-work-files"
+
 cd ../sh
 NO_COPY_LINKS_P=yes ### variableused by copy-links.sh
 FORCE_UNLOCKED_P=no
@@ -14,32 +16,17 @@ do
     fi
 done
 . ./includes.sh
-if test "$FORCE_UNLOCKED_P" = "yes"
-then
-    if test -f "$TESTS_LOCK_FILE"
-    then
-	rm "$TESTS_LOCK_FILE"
-	echo "Unlocked - success."
-    else
-	echo "Not locked."
-    fi
-    exit 0
-fi
 
 cd "$TESTS_DIR"
 
-########### For locking any actions while tests running ############
-touch "$TESTS_LOCK_FILE"
-export FORCE_UNLOCKED_P=yes
-
 ######## Configurable variables ########
-TESTS_RESULTS=${TESTS_RESULTS:-"$(pwd)/tests-results"}
+TESTS_RESULTS=${TESTS_RESULTS:-"$TESTS_DIR/tests-results"}
 SHOW_DIRS_P=${SHOW_DIRS_P:-yes}
 SHOW_DIRS_SIZES_P=${SHOW_DIRS_SIZES_P:-yes}
 SHOW_DIRS_EXACT_SIZES_P=${SHOW_DIRS_EXACT_SIZES_P:-yes}
 
 ############# Pathnames variables #############
-FILE_FOR_LOAD="$(pwd)/for-tests.lisp"
+FILE_FOR_LOAD="$TESTS_DIR/for-tests.lisp"
 TESTS_LOG="$TESTS_RESULTS/tests-log.txt"
 OPERATIONS_LOG="$TESTS_RESULTS/operations-log.txt"
 
@@ -51,23 +38,20 @@ FAILED."
 
 BEFORE_SIZE=
 
-OLD_ARCHIVE_FILES=
-OLD_LISP_DIRS=
-OLD_LISP_COMPILERS_DIRS=
-OLD_LISP_SOURCES_DIRS=
-OLD_TOOLS_DIRS=
+############ Defining vars with files contained old files and dirs. Remove these files #########
+OLD_ARCHIVE_FILES="$TMP_WORK_FILES_DIR/old_archive_files"
+OLD_LISP_DIRS="$TMP_WORK_FILES_DIR/old_lisp_dirs"
+OLD_LISP_COMPILERS_DIRS="$TMP_WORK_FILES_DIR/old_lisp_compilers_dirs"
+OLD_LISP_SOURCES_DIRS="$TMP_WORK_FILES_DIR/old_lisp_sources_dirs"
+OLD_TOOLS_DIRS="$TMP_WORK_FILES_DIR/old_tools_dirs"
 
-OLD_EMACS_LIBS_FILES=
-OLD_EMACS_LIBS_DIRS=
-OLD_LISP_LIBS_FILES=
-OLD_LISP_LIBS_DIRS=
+OLD_EMACS_LIBS_FILES="$TMP_WORK_FILES_DIR/old_emacs_libs_files"
+OLD_EMACS_LIBS_DIRS="$TMP_WORK_FILES_DIR/old_emacs_libs_dirs"
+OLD_LISP_LIBS_FILES="$TMP_WORK_FILES_DIR/old_lisp_libs_files"
+OLD_LISP_LIBS_DIRS="$TMP_WORK_FILES_DIR/old_lisp_libs_dirs"
 
-OLD_FILES=
-OLD_DIRS=
-FILES=
-DIRS=
-
-######################################
+OLD_DIRS="$TMP_WORK_FILES_DIR/old_dirs"
+##########################################################################3
 
 TESTS_AMOUNT=0
 PASS=0
@@ -91,7 +75,7 @@ FAILED_TESTS=
 PROVIDE_LISP_RES=
 
 RENAME_PREFIX="rename_for_tests_"
-TMP_SYMLINKS_DIR="$UTILS/tmp-for-tests-cur-symlinks"
+TMP_SYMLINKS_DIR="$TESTS/tmp-tests-work-files/tmp-for-tests-cur-symlinks"
 EMACS_NOT_ALREADY_P=
 ######################################
 
@@ -100,14 +84,51 @@ EMACS_NOT_ALREADY_P=
 . ./functions-for-tests.sh
 cd ..
 
+#################### #####################
+if test "$FORCE_UNLOCKED_P" = "yes"
+then
+    if test -f "$TESTS_LOCK_FILE"
+    then
+	full_restore_state
+	printf "Removed "$TESTS_LOCK_FILE" ... "
+	rm "$TESTS_LOCK_FILE"
+	echo "OK."
+	echo "Unlocked - success."
+    else
+	echo "Not locked."
+    fi
+    exit 0
+fi
+##########################################
 
-
+####### Experiments (need delete) #####
+# CMPDIRS="/home/linkfly/tmp/exp"
+# echo "$(get_lisp_compilers_dirs)" > "$CMPDIRS"
+# echo "$(cat "$CMPDIRS")"
+# 
+# mkdir --parents "$COMPILERS/$LISP_COMPILERS/newnext1"
+# mkdir --parents "$COMPILERS/$LISP_COMPILERS/newnext2"
+# 
+# echo now
+# echo "$(get_lisp_compilers_dirs)"
+# 
+# echo changed
+# echo "$(get_new_files "$(cat "$CMPDIRS")" "$(get_lisp_compilers_dirs)")"
+# 
+# echo "remove..."
+# remove_new_dirs "$(cat "$CMPDIRS")" "$(get_lisp_compilers_dirs)"
+# 
+# echo after-remove
+# echo "$(get_lisp_compilers_dirs)"
+# 
+# rm "$TESTS_LOCK_FILE"
+# exit 1
+#########################
 
 ############################## DEFINING CLEANUP #################################
 #################################################################################
 ALREADY_CLEANUP_P=
 cleanup () {
-
 ### Singleton ###
 if test "$ALREADY_CLEANUP_P" = "yes";then exit;fi
 #################
@@ -132,25 +153,8 @@ fi
 #################### Show changed dirs before restore #####################
 show_changed_dirs "Changed directories before restore state"
 
-##### Restore symlinks #####
-restore_symlinks
-
 ######################## Restoring state ############################
-printlog "
-Restoring state ...
------------------------------------------------"
-remove_new_dirs "$OLD_ARCHIVE_FILES" "$(get_archive_files)"
-remove_new_dirs "$OLD_LISP_DIRS" "$(get_lisp_dirs)"
-remove_new_dirs "$OLD_LISP_COMPILERS_DIRS" "$(get_lisp_compilers_dirs)"
-remove_new_dirs "$OLD_LISP_SOURCES_DIRS" "$(get_lisp_sources_dirs)"
-remove_new_dirs "$OLD_TOOLS_DIRS" "$(get_tools_dirs)"
-
-remove_new_dirs "$OLD_EMACS_LIBS_FILES" "$(get_emacs_libs_files)"
-remove_new_dirs "$OLD_EMACS_LIBS_DIRS" "$(get_emacs_libs_dirs)"
-remove_new_dirs "$OLD_LISP_LIBS_FILES" "$(get_lisp_libs_files)"
-remove_new_dirs "$OLD_LISP_LIBS_DIRS" "$(get_lisp_libs_dirs)"
-printlog "-----------------------------------------------
-... end restoring state."
+full_restore_state
 
 #################### Show changed dirs after restore #####################
 show_changed_dirs "Changed directories after restore state"
@@ -190,9 +194,12 @@ ALREADY_CLEANUP_P=yes
 ######### For unlock ##########
 rm "$TESTS_LOCK_FILE"
 
+######### Delete not required files ########
+rm -rf "$TMP_WORK_FILES_DIR/*"
+
 exit
 }
-trap "cleanup" EXIT INT FAIL
+trap "cleanup" EXIT INT
 #################################################################################
 ############################# END DEFINING CLEANUP ##############################
 
@@ -200,28 +207,38 @@ trap "cleanup" EXIT INT FAIL
 
 ###################### Initialization #########################
 remove_tests_results
+rm -rf "$TMP_WORK_FILES_DIR/*"
+
+########### For locking any actions while tests running ############
+touch "$TESTS_LOCK_FILE"
+export FORCE_UNLOCKED_P=yes
+
 printlog "Tests running ..."
 
 BEFORE_SIZE=$(get_all_size)
 
-OLD_ARCHIVE_FILES="$(get_archive_files)"
-OLD_LISP_DIRS="$(get_lisp_dirs)"
-OLD_LISP_COMPILERS_DIRS="$(get_lisp_compilers_dirs)"
-OLD_LISP_SOURCES_DIRS="$(get_lisp_sources_dirs)"
-OLD_TOOLS_DIRS="$(get_tools_dirs)"
+####################### Create new files contained info about older files and dirs ###############
+echo "$(get_archive_files)" > "$OLD_ARCHIVE_FILES"
+echo "$(get_lisp_dirs)" > "$OLD_LISP_DIRS" 
+echo "$(get_lisp_compilers_dirs)" > "$OLD_LISP_COMPILERS_DIRS" 
+echo "$(get_lisp_sources_dirs)" > "$OLD_LISP_SOURCES_DIRS" 
+echo "$(get_tools_dirs)" > "$OLD_TOOLS_DIRS" 
 
-OLD_EMACS_LIBS_FILES="$(get_emacs_libs_files)"
-OLD_EMACS_LIBS_DIRS="$(get_emacs_libs_dirs)"
-OLD_LISP_LIBS_FILES="$(get_lisp_libs_files)"
-OLD_LISP_LIBS_DIRS="$(get_lisp_libs_dirs)"
+echo "$(get_emacs_libs_files)" > "$OLD_EMACS_LIBS_FILES" 
+echo "$(get_emacs_libs_dirs)" > "$OLD_EMACS_LIBS_DIRS" 
+echo "$(get_lisp_libs_files)" > "$OLD_LISP_LIBS_FILES" 
+echo "$(get_lisp_libs_dirs)" > "$OLD_LISP_LIBS_DIRS" 
 
-OLD_DIRS="$(get_all_dirs "$PREFIX" 3)"
+echo "$(get_all_dirs "$PREFIX" 3)" > "$OLD_DIRS"
+#################################################################################################
 
 ########### Show total size ##########
 printlog "
-------- Total size -------
+----------------------------------- Total size -----------------------------------
+(Exclude dirs: "$TESTS_RESULTS" and "$TMP_WORK_FILES_DIR")
+-----------------------
 $BEFORE_SIZE
---------------------------"
+----------------------------------------------------------------------------------"
 
 ####### Show all directories #########
 if test "$SHOW_DIRS_P" = "yes"
@@ -230,7 +247,7 @@ then
 --------------------------
 Directories before tests (depth = 3):
 ----------------
-$OLD_DIRS
+$(cat "$OLD_DIRS")
 --------------------------
 "
 fi
