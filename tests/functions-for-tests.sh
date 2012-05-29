@@ -198,7 +198,7 @@ $(describe_changed_dirs "$(cat "$OLD_DIRS")" "$(get_all_dirs "$PREFIX" 3)")
 
 ################### Functions for provide and rebuild test #################
 copy_dir_for_tests_if_exists () {
-echo "Copy temporary dir for tests (directory: $1):" | tee --append "$TESTS_LOG"
+printlog "Copy temporary dir for tests (directory: $1):"
 if test -d "$1"
 then 
     local DIRNAME="$(dirname "$1")"
@@ -237,32 +237,45 @@ done
 D=\$
 get_lisp_compiler_dir () {
 local CUR_LISP=$(uppercase $1)
-echo "$COMPILERS/$(eval echo "$D${CUR_LISP}_LISPS_COMPILERS")/$(eval echo "$D${CUR_LISP}_COMPILER_DIRNAME")"
+local LISPS_COMPILERS="$(eval echo "$D${CUR_LISP}_LISPS_COMPILERS")"
+local COMPILER_DIRNAME="$(eval echo "$D${CUR_LISP}_COMPILER_DIRNAME")"
+if test -n "$LISPS_COMPILERS" && test -n "$COMPILER_DIRNAME"
+then echo "$COMPILERS/$LISPS_COMPILERS/$COMPILER_DIRNAME"
+fi
 }
 
 get_lisp_sources_dir () {
 local CUR_LISP=$(uppercase $1)
-echo "$SOURCES/$(eval echo "$D${CUR_LISP}_LISPS_SOURCES")/$(eval echo "$D${CUR_LISP}_SOURCES_DIRNAME")"
+local LISPS_SOURCES="$(eval echo "$D${CUR_LISP}_LISPS_SOURCES")"
+local SOURCES_DIRNAME="$(eval echo "$D${CUR_LISP}_SOURCES_DIRNAME")"
+if test -n "$LISPS_SOURCES" && test -n "$SOURCES_DIRNAME"
+then 
+    echo "$COMPILERS/$LISPS_SOURCES/$SOURCES_DIRNAME"
+fi
 }
 
 get_lisp_dir () {
-local CUR_LISP=$(uppercase $1)
-echo "$PREFIX/$(eval echo "$D${CUR_LISP}_DIR")"
+local CUR_LISP="$(uppercase $1)"
+local LISP_DIR="$(eval echo "$D${CUR_LISP}_DIR")"
+if test -n "$LISP_DIR"
+then 
+    echo "$PREFIX/$LISP_DIR"
+fi
 }
 
 prepare_for_build () {
 local CUR_LISP=$(uppercase $1)
 local D=\$
 printlog "Preparing before build lisp-system $CUR_LISP:"
-copy_dir_for_tests_if_exists $(get_lisp_compiler_dir $CUR_LISP)
-copy_dir_for_tests_if_exists $(get_lisp_sources_dir $CUR_LISP)
-copy_dir_for_tests_if_exists $(get_lisp_dir $CUR_LISP)
+copy_dir_for_tests_if_exists "$(get_lisp_compiler_dir $CUR_LISP)"
+copy_dir_for_tests_if_exists "$(get_lisp_sources_dir $CUR_LISP)"
+copy_dir_for_tests_if_exists "$(get_lisp_dir $CUR_LISP)"
 }
 
 clean_after_build () {
 local CUR_LISP=$1
-echo "
-Cleaning after builded lisp-system $CUR_LISP:" | tee --append "$TESTS_LOG"
+printlog "
+Cleaning after builded lisp-system $CUR_LISP:"
 local LISP_COMPILER_DIR="$(get_lisp_compiler_dir $CUR_LISP)"
 local LISP_SOURCES_DIR="$(get_lisp_sources_dir $CUR_LISP)"
 local LISP_DIR="$(get_lisp_dir $CUR_LISP)"
