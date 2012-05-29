@@ -74,7 +74,7 @@ EXCLUDE_REBUILD=
 FAILED_TESTS=
 PROVIDE_LISP_RES=
 
-RENAME_PREFIX="rename_for_tests_"
+RESERV_COPY_PREFIX="rename_for_tests_"
 TMP_SYMLINKS_DIR="$TESTS/tmp-tests-work-files/tmp-for-tests-cur-symlinks"
 EMACS_NOT_ALREADY_P=
 ######################################

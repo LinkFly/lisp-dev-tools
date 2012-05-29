@@ -194,6 +194,90 @@ $(describe_changed_dirs "$(cat "$OLD_DIRS")" "$(get_all_dirs "$PREFIX" 3)")
 -----------------------------------------------------------"
 }
 
+
+
+################### Functions for provide and rebuild test #################
+copy_dir_for_tests_if_exists () {
+echo "Copy temporary dir for tests (directory: $1):" | tee --append "$TESTS_LOG"
+if test -d "$1"
+then 
+    local DIRNAME="$(dirname "$1")"
+    local FILENAME="$(basename "$1")"
+    local NEWNAME="$DIRNAME/${RESERV_COPY_PREFIX}$FILENAME"
+    printlog "Create reserv command: rm -rf \"$NEWNAME\";mv \"$1\" \"$NEWNAME\""
+    rm -rf "$NEWNAME";cp -r "$1" "$DIRNAME/${RESERV_COPY_PREFIX}$FILENAME"
+fi
+}
+
+is_prefix_p () {
+if test "${1#$RESERV_COPY_PREFIX}" = "$1"
+then echo no;else echo yes;fi
+}
+
+remove_prefix_if_exists () {
+local DIRNAME="$(dirname "$1")"
+local FILENAME="$(basename "$1")"
+if test "$(is_prefix_p "$FILENAME")" = "yes"
+then 
+    printlog "Rename command: mv \"$1\" \"$DIRNAME/${FILENAME#$RESERV_COPY_PREFIX}\""
+    mv "$1" "$DIRNAME/${FILENAME#$RESERV_COPY_PREFIX}"
+fi
+}
+
+remove_all_prefixes () {
+printlog "Restore directories into: $1"
+local DIRECTORY="$1"
+for d in $(get_all_dirs "$DIRECTORY" 1)
+do
+    remove_prefix_if_exists "$d"
+done
+}
+#remove_all_prefixes "/home/linkfly/Downloads/lisp-dev-tools/lisp/sbcl"
+
+D=\$
+get_lisp_compiler_dir () {
+local CUR_LISP=$(uppercase $1)
+echo "$COMPILERS/$(eval echo "$D${CUR_LISP}_LISPS_COMPILERS")/$(eval echo "$D${CUR_LISP}_COMPILER_DIRNAME")"
+}
+
+get_lisp_sources_dir () {
+local CUR_LISP=$(uppercase $1)
+echo "$SOURCES/$(eval echo "$D${CUR_LISP}_LISPS_SOURCES")/$(eval echo "$D${CUR_LISP}_SOURCES_DIRNAME")"
+}
+
+get_lisp_dir () {
+local CUR_LISP=$(uppercase $1)
+echo "$PREFIX/$(eval echo "$D${CUR_LISP}_DIR")"
+}
+
+prepare_for_build () {
+local CUR_LISP=$(uppercase $1)
+local D=\$
+printlog "Preparing before build lisp-system $CUR_LISP:"
+copy_dir_for_tests_if_exists $(get_lisp_compiler_dir $CUR_LISP)
+copy_dir_for_tests_if_exists $(get_lisp_sources_dir $CUR_LISP)
+copy_dir_for_tests_if_exists $(get_lisp_dir $CUR_LISP)
+}
+
+clean_after_build () {
+local CUR_LISP=$1
+echo "
+Cleaning after builded lisp-system $CUR_LISP:" | tee --append "$TESTS_LOG"
+local LISP_COMPILER_DIR="$(get_lisp_compiler_dir $CUR_LISP)"
+local LISP_SOURCES_DIR="$(get_lisp_sources_dir $CUR_LISP)"
+local LISP_DIR="$(get_lisp_dir $CUR_LISP)"
+rm -rf "$LISP_COMPILER_DIR"
+rm -rf "$LISP_SOURCES_DIR"
+rm -rf "$LISP_DIR"
+remove_all_prefixes "$(dirname "$LISP_COMPILER_DIR")"
+remove_all_prefixes "$(dirname "$LISP_SOURCES_DIR")"
+remove_all_prefixes "$(dirname "$LISP_DIR")"
+printlog "Cleaning OK."
+}
+################## End functions for provide and rebuild test #################
+
+
+
 ##################### Tests functions #########################
 general_test () {
 # Using(and changing): PROVIDE_LISP_RES
@@ -304,6 +388,9 @@ concrete_lisp_test () {
 # Using(and changing by general_test): PROVIDE_LISP_RES
 local CUR_LISP="$(uppercase $1)"
 printlog "Testing lisp-system $CUR_LISP:"
+
+prepare_for_build $CUR_LISP		
+
 ### !!! Function general_test changed PROVIDE_LISP_RES
 general_test "LISP=$CUR_LISP ./provide-lisp"
 ### !!! PROVIDE_LISP_RES - changed
@@ -313,105 +400,28 @@ if test "$PROVIDE_LISP_RES" != "$CONST_ALREADY"
 then general_test "LISP=$CUR_LISP ./remove-lisp"
 fi
 
+clean_after_build $CUR_LISP	
+
 #(reserved for future)general_test ./provide-swank ./remove-swank
 }
 ###################### End test functions #########################
 
-
-################### Functions for rebuild test #################
-rename_dir_for_tests_if_exists () {
-echo "Rename temporary for tests (directory: $1):" | tee --append "$TESTS_LOG"
-if test -d "$1"
-then 
-    local DIRNAME="$(dirname "$1")"
-    local FILENAME="$(basename "$1")"
-    local NEWNAME="$DIRNAME/${RENAME_PREFIX}$FILENAME"
-    printlog "Rename command: rm -rf \"$NEWNAME\";mv \"$1\" \"$NEWNAME\""
-    rm -rf "$NEWNAME";mv "$1" "$DIRNAME/${RENAME_PREFIX}$FILENAME"
-fi
-}
-
-is_prefix_p () {
-if test "${1#$RENAME_PREFIX}" = "$1"
-then echo no;else echo yes;fi
-}
-
-remove_prefix_if_exists () {
-local DIRNAME="$(dirname "$1")"
-local FILENAME="$(basename "$1")"
-if test "$(is_prefix_p "$FILENAME")" = "yes"
-then 
-    printlog "Rename command: mv \"$1\" \"$DIRNAME/${FILENAME#$RENAME_PREFIX}\""
-    mv "$1" "$DIRNAME/${FILENAME#$RENAME_PREFIX}"
-fi
-}
-
-remove_all_prefixes () {
-printlog "Restore directories into: $1"
-local DIRECTORY="$1"
-for d in $(get_all_dirs "$DIRECTORY" 1)
-do
-    remove_prefix_if_exists "$d"
-done
-}
-#remove_all_prefixes "/home/linkfly/Downloads/lisp-dev-tools/lisp/sbcl"
-
-D=\$
-get_lisp_compiler_dir () {
-local CUR_LISP=$(uppercase $1)
-echo "$COMPILERS/$(eval echo "$D${CUR_LISP}_LISPS_COMPILERS")/$(eval echo "$D${CUR_LISP}_COMPILER_DIRNAME")"
-}
-
-get_lisp_sources_dir () {
-local CUR_LISP=$(uppercase $1)
-echo "$SOURCES/$(eval echo "$D${CUR_LISP}_LISPS_SOURCES")/$(eval echo "$D${CUR_LISP}_SOURCES_DIRNAME")"
-}
-
-get_lisp_dir () {
-local CUR_LISP=$(uppercase $1)
-echo "$PREFIX/$(eval echo "$D${CUR_LISP}_DIR")"
-}
-
-prepare_for_rebuild () {
-local CUR_LISP=$(uppercase $1)
-local D=\$
-printlog "Preparing before rebuild lisp-system $CUR_LISP:"
-rename_dir_for_tests_if_exists $(get_lisp_compiler_dir $CUR_LISP)
-rename_dir_for_tests_if_exists $(get_lisp_sources_dir $CUR_LISP)
-rename_dir_for_tests_if_exists $(get_lisp_dir $CUR_LISP)
-}
-
-clean_after_rebuild () {
-local CUR_LISP=$1
-echo "
-Cleaning after rebuilded lisp-system $CUR_LISP:" | tee --append "$TESTS_LOG"
-local LISP_COMPILER_DIR="$(get_lisp_compiler_dir $CUR_LISP)"
-local LISP_SOURCES_DIR="$(get_lisp_sources_dir $CUR_LISP)"
-local LISP_DIR="$(get_lisp_dir $CUR_LISP)"
-rm -rf "$LISP_COMPILER_DIR"
-rm -rf "$LISP_SOURCES_DIR"
-rm -rf "$LISP_DIR"
-remove_all_prefixes "$(dirname "$LISP_COMPILER_DIR")"
-remove_all_prefixes "$(dirname "$LISP_SOURCES_DIR")"
-remove_all_prefixes "$(dirname "$LISP_DIR")"
-printlog "Cleaning OK."
-}
 
 rebuild_lisp_test () {
 # Using(and changing by general_test): PROVIDE_LISP_RES
 local CUR_LISP="$(uppercase $1)"
 printlog "Testing rebuild lisp-system $CUR_LISP:"
 
-prepare_for_rebuild $CUR_LISP		
+prepare_for_build $CUR_LISP		
 
 ### !!! Function general_test changed PROVIDE_LISP_RES
 general_test "LISP=$CUR_LISP ./rebuild-lisp"
 ### !!! PROVIDE_LISP_RES - changed
 test_run_lisp $CUR_LISP
 
-clean_after_rebuild $CUR_LISP	
+clean_after_build $CUR_LISP	
 }
-################## End functions for rebuild test #################
+
 
 
 #################################################################################
