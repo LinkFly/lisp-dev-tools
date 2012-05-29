@@ -54,6 +54,7 @@ done. 12. Separated lisps on: older, modern and young.
 15. Bugfix in ./provide-all-lisps --help
 16. Check work of parameters in running ./provide-all-lisps
 17. Signal error when giving bad command line parameters for tests/run-tests.sh.
+18. Remove realpath and commented code (with realpath) if it does not required.
 
 
 -------- Milestones (mark with tags then when) ----------

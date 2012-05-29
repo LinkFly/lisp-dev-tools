@@ -181,7 +181,8 @@ fi
 #get_extract_begin_cmd () {
 #local FILE="$1"
 #if test "$(is_symlink_p $FILE)" = "yes";then
-#    echo $(get_extract_begin_cmd "$("$SCRIPTS_DIR/realpath" "$FILE")")
+##    echo $(get_extract_begin_cmd "$("$SCRIPTS_DIR/realpath" "$FILE")")
+#    echo $(get_extract_begin_cmd "$(readlink -f "$FILE")")
 #fi
 #
 #local TYPE=$(file --brief --mime-type "$FILE")

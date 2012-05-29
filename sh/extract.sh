@@ -12,7 +12,8 @@ cd "$CURPATH"
 FILE="$1"
 
 if test "$(is_symlink_p $FILE)" = "yes";then    
-    "$SCRIPTS_DIR/$(basename "$0")" "$("$SCRIPTS_DIR/realpath" "$FILE")"
+#    "$SCRIPTS_DIR/$(basename "$0")" "$("$SCRIPTS_DIR/realpath" "$FILE")"
+    "$SCRIPTS_DIR/$(basename "$0")" "$(readlink -f "$FILE")"
 else
     TYPE=$(file --brief --mime-type "$FILE")
     case "$TYPE" in

@@ -174,7 +174,8 @@ cd $LISP_DIR
 fi
 
 if [ $(downcase "$CUR_LISP") = "abcl" ];then
-    JAVA_REALPATH=$($SCRIPTS_DIR/realpath $UTILS/java);
+#    JAVA_REALPATH=$($SCRIPTS_DIR/realpath $UTILS/java);
+    JAVA_REALPATH=$(readlink -f $UTILS/java);
     echo "
 cd $LISP_DIR
 PATH=$UTILS:$PWD JAVA_HOME=$(dirname $(dirname $JAVA_REALPATH)) java -jar abcl.jar${LISP_BEGIN_OPTIONS}"
