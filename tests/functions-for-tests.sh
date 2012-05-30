@@ -188,7 +188,7 @@ for dir_or_file in $(get_new_files "$1" "$2")
 do
     if test -e "$dir_or_file" 
     then
-	printlog "Now running command: rm $RM_ARGS "$dir_or_file""
+	printlog "Now running command: rm $RM_ARGS \"$dir_or_file\""
 	rm $RM_ARGS "$dir_or_file"
     fi
 done
@@ -210,9 +210,9 @@ $(describe_changed_dirs "$(cat "$OLD_DIRS")" "$(get_all_dirs "$PREFIX" 3)")
 
 ################### Functions for provide and rebuild test #################
 copy_dir_for_tests_if_exists () {
-printlog "Copy temporary dir for tests (directory: $1):"
 if test -d "$1"
 then 
+    printlog "Copy temporary dir for tests (directory: $1):"
     local DIRNAME="$(dirname "$1")"
     local FILENAME="$(basename "$1")"
     local NEWNAME="$DIRNAME/${RESERV_COPY_PREFIX}$FILENAME"

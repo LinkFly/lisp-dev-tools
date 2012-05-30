@@ -9,8 +9,8 @@ abs_path EMACS_LIBS
 abs_path ARCHIVES
 abs_path TMP
 abs_path TMP_DOWNLOAD
-abs_path TESTS
 
 ### Internal ###
 abs_path SCRIPTS_DIR
+abs_path TESTS
 
