@@ -160,7 +160,7 @@ full_restore_state
 show_changed_dirs "Changed directories after restore state"
 
 ########################## Checking size #################################
-if test "$TESTS_COMPLETE_P" = "yes"
+if test -n "$BEFORE_SIZE"
 then
     printlog "$(show_dirs_sizes after)"
     BEFORE_RESULT_MESSAGE="

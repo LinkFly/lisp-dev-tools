@@ -3,6 +3,7 @@
 #### Using entities ####
 # PREFIX from dirs.conf
 #
+PREFIX="${PREFIX:-"$(pwd)"}"
 
 ######## Function definitions ######
 elt_in_set_p () {
@@ -24,32 +25,32 @@ local MES_CHECK_START
 local MES_SUCCESS
 local MES_FAILED
 
-ARG=$1
-ARGS_NEED=$2
-MES_CHECK_START=$3
-MES_SUCCESS=$4
-MES_FAILED=$5
+ARG="$1"
+ARGS_NEED="$2"
+MES_CHECK_START="$3"
+MES_SUCCESS="$4"
+MES_FAILED="$5"
 
 printf "$MES_CHECK_START"
 if [ "$SRC_OR_BIN" = "" ];
-then echo $MES_FAILED; return 1;
+then echo "$MES_FAILED"; return 1;
 else 
     for arg in $ARGS_NEED;
     do
-	if [ $arg = $ARG ];
-        then echo $MES_SUCCESS; return 0;
+	if test "$arg" = "$ARG";
+        then echo "$MES_SUCCESS"; return 0;
 	fi
     done;
-    echo $MES_FAILED; return 1;
+    echo "$MES_FAILED"; return 1;
 fi
 }
 
 subdir_to_dir () {
-local DIR=$1
-local SUBDIR=$(ls $DIR)
-for f in $(ls -A $DIR/$SUBDIR); 
-do mv $DIR/$SUBDIR/$f $DIR/$f; done
-rm -rf $DIR/$SUBDIR
+local DIR="$1"
+local SUBDIR="$(ls "$DIR")"
+for f in $(ls -A "$DIR/$SUBDIR"); 
+do mv "$DIR/$SUBDIR/$f" "$DIR/$f"; done
+rm -rf "$DIR/$SUBDIR"
 }
 
 uppercase () {
@@ -91,30 +92,22 @@ echo $1 | cut -c 1
 }
 
 abs_path_p () {
-local TMP
-TMP=$(fst_char $1)
-if [ $TMP ]; then 
-  if [ "$TMP" = "/" ];
-  then echo "yes";
-  else echo "no";
-  fi
+if test "$(fst_char $1)" = "/"
+then echo "yes";
+else echo "no";
 fi
 }
 
 abs_path () {
 local PATH_SYM=$1
+local ABS_PATH_TMP="$(eval "echo '$D$PATH_SYM'")"
+local D=\$
 
-local ABS_PATH_TMP
-local ABS_PATH_ABS_P
-local ABS_PATH_D=\$
-
-eval ABS_PATH_TMP=$ABS_PATH_D$PATH_SYM
 if [ "$ABS_PATH_TMP" = "" ]; then return 0; fi
-ABS_PATH_ABS_P=$(abs_path_p $ABS_PATH_TMP)
-if [ $ABS_PATH_ABS_P = "no" ]; then
-    eval $1=$PREFIX/$ABS_PATH_TMP;
-fi
 
+if [ "$(abs_path_p "$ABS_PATH_TMP")" = "no" ]; then
+    eval "$PATH_SYM='$PREFIX/$ABS_PATH_TMP'";
+fi
 }
 
 get_spec_val () {

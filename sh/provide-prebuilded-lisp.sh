@@ -11,7 +11,7 @@ abs_path LISP_DIR
 CUR_LISP_UP=$(uppercase $CUR_LISP)
 
 ########## Building sbcl if needed ####
-DIR=$LISP_DIR
+DIR="$LISP_DIR"
 
 PROCESS_SCRIPT=$BUILD_SCRIPT
 
