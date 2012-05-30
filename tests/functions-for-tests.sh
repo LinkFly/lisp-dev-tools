@@ -120,7 +120,7 @@ is_into_only_p () {
 ############# Directories sizes ####################
 get_dirs_sizes () {
     local EXTRA_ARGS="$2"
-    echo "$(du "$1" --max-depth=3 --exclude="$TESTS_RESULTS" --exclude="$TMP_WORK_FILES_DIR" --exclude="$1/.git" $EXTRA_ARGS)"
+    echo "$(du "$1" --max-depth=3 --exclude="$TESTS_RESULTS" --exclude="$TMP_WORK_FILES_DIR" --exclude="$TMP" --exclude="$TMP_DOWNLOAD" --exclude="$1/.git" $EXTRA_ARGS)"
 }
 
 get_git_dir_size () {
@@ -134,6 +134,13 @@ show_dirs_sizes () {
     then 
 	echo "
 ---------------------- Directories sizes $EXTRA_MES tests ----------------------
+-------------------------------
+(Exclude dirs: 
+$TESTS_RESULTS
+$TMP_WORK_FILES_DIR
+$TMP
+$TMP_DOWNLOAD)
+-------------------------------
 $(get_dirs_sizes "$PREFIX" -h)
 ----- Directory .git size -----
 $(get_git_dir_size "$PREFIX" -h)
@@ -145,7 +152,12 @@ if test "$SHOW_DIRS_EXACT_SIZES_P" = "yes"
     then 
 	echo "
 ---------------------- Directories exact sizes $EXTRA_MES tests ----------------------
-(Exclude dirs: "$TESTS_RESULTS" and "$TMP_WORK_FILES_DIR")
+-------------------------------
+(Exclude dirs: 
+$TESTS_RESULTS
+$TMP_WORK_FILES_DIR
+$TMP
+$TMP_DOWNLOAD)
 -------------------------------
 $(get_dirs_sizes "$PREFIX" -b)
 ----- Directory .git size -----
@@ -159,7 +171,7 @@ $(get_git_dir_size "$PREFIX" -b)
 ########################
 get_all_size () {
     local tmp
-    tmp=$(du "$PREFIX" --max-depth=0 --bytes --exclude="$TESTS_RESULTS" --exclude="$TMP_WORK_FILES_DIR")
+    tmp=$(du "$PREFIX" --max-depth=0 --bytes --exclude="$TESTS_RESULTS" --exclude="$TMP_WORK_FILES_DIR" --exclude="$TMP" --exclude="$TMP_DOWNLOAD")
     echo ${tmp%%"$PREFIX"}
 }
 

@@ -76,6 +76,7 @@ PROVIDE_LISP_RES=
 
 RESERV_COPY_PREFIX="reserv-for-restore-after-tests_"
 TMP_SYMLINKS_DIR="$TESTS/tmp-tests-work-files/tmp-for-tests-cur-symlinks"
+
 EMACS_NOT_ALREADY_P=
 ######################################
 
@@ -164,7 +165,14 @@ if test -n "$BEFORE_SIZE"
 then
     printlog "$(show_dirs_sizes after)"
     BEFORE_RESULT_MESSAGE="
----------------------------- Checking size -----------------------------------"
+---------------------------- Checking size -----------------------------------
+-------------------------------
+(Exclude dirs: 
+$TESTS_RESULTS
+$TMP_WORK_FILES_DIR
+$TMP
+$TMP_DOWNLOAD)
+-------------------------------"
     AFTER_SIZE=$(get_all_size)
     if [ $AFTER_SIZE = $BEFORE_SIZE ]
     then
@@ -235,8 +243,13 @@ echo "$(get_all_dirs "$PREFIX" 3)" > "$OLD_DIRS"
 ########### Show total size ##########
 printlog "
 ----------------------------------- Total size -----------------------------------
-(Exclude dirs: "$TESTS_RESULTS" and "$TMP_WORK_FILES_DIR")
------------------------
+-------------------------------
+(Exclude dirs: 
+$TESTS_RESULTS
+$TMP_WORK_FILES_DIR
+$TMP
+$TMP_DOWNLOAD)
+-------------------------------
 $BEFORE_SIZE
 ----------------------------------------------------------------------------------"
 

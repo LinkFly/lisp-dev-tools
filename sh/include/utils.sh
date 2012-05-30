@@ -100,8 +100,9 @@ fi
 
 abs_path () {
 local PATH_SYM=$1
-local ABS_PATH_TMP="$(eval "echo '$D$PATH_SYM'")"
+local ABS_PATH_TMP=
 local D=\$
+eval "ABS_PATH_TMP=\"$D$PATH_SYM\""
 
 if [ "$ABS_PATH_TMP" = "" ]; then return 0; fi
 
