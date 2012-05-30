@@ -2,10 +2,10 @@
 
 ##### Include scripts #####
 . ./conf/dirs.conf
-. ./include/exit-if-lock.sh
 . ./internal-conf/internal-dirs.conf
 . ./include/utils.sh
 . ./include/absolutized-pathes.sh
+. ./include/exit-if-lock.sh
 . ./include/copy-links.sh
 . ./conf/tools.conf
 . ./conf/lisps.conf
