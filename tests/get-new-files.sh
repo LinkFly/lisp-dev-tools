@@ -5,7 +5,7 @@
 ##############
 
 get_all_files () {
-find "$1" -mindepth 1 -maxdepth ${2:-1} -type f -o -type l ! -name .gitignore ! -path "$TMP_WORK_FILES_DIR*" ! -path "$TESTS_RESULTS*"
+find "$1" -mindepth 1 -maxdepth ${2:-1} -type f -o -type l ! -name .gitignore ! -path "$TMP_WORK_FILES_DIR*" ! -path "$TESTS_RESULTS*" ! -path "$TMP*" ! -path "$TMP_DOWNLOAD*"
 }
 
 get_all_symlinks () {
@@ -18,7 +18,7 @@ find "$1" -maxdepth 1 -type l -exec rm {} \;
 
 
 get_all_dirs () {
-find "$1" -mindepth 1 -maxdepth ${2:-1} ! -name ".git" -type d ! -path "$1/.git/*" ! -path "$TMP_WORK_FILES_DIR*" ! -path "$TESTS_RESULTS*"
+find "$1" -mindepth 1 -maxdepth ${2:-1} ! -name ".git" -type d ! -path "$1/.git/*" ! -path "$TMP_WORK_FILES_DIR*" ! -path "$TESTS_RESULTS*" ! -path "$TMP*" ! -path "$TMP_DOWNLOAD*"
 }
 
 get_new_files () {
