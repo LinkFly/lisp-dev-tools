@@ -23,7 +23,7 @@ include_if_exist "$LDT_CUSTOM_CONF_DIR/custom-dirs.conf"
 . ./include/exit-if-lock.sh
 . ./include/copy-links.sh
 . ./conf/tools.conf
-. ./lisp-and-version.conf
+. ./conf/lisp-and-version.conf
 include_if_exist "$LDT_CUSTOM_CONF_DIR/custom-lisp-and-version.conf"    
 . ./conf/lisps.conf
 . ./include/correct-params.sh

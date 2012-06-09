@@ -1,2 +1,5 @@
 #!/bin/sh
-$(dirname $0)/get-default-param.sh CUR_LISP $(dirname $0)/conf/lisps.conf
+#!/bin/sh
+cd "$(dirname "$0")"
+. ./includes.sh
+echo "$CUR_LISP"

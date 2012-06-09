@@ -390,6 +390,15 @@ fi
 cd "$CURPATH"
 }
 
+is_param_p () {
+local PARAM="$1"
+local FILE="$2"
+if test -n "$(grep "$PARAM=" "$FILE")"
+then echo yes
+else echo no;
+fi
+}
+
 change_param () {
 local PARAM="$1"
 local FILE="$2"
@@ -399,6 +408,13 @@ local NEW_VAL="$4"
 local CHANGE_REGEX="s/$PARAM=$OLD_VAL/$PARAM=$NEW_VAL/g"
 sed -i $CHANGE_REGEX $FILE
 }
+
+add_empty_param () {
+local PARAM="$1"
+local FILE="$2"
+echo "$PARAM=" >> "$FILE"
+}
+
 
 extract_build_install () {
 #### Parameters ####
