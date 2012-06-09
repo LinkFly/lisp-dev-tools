@@ -1,0 +1,13 @@
+#!/bin/sh
+cd "$(dirname "$0")"
+USAGE="Using: 
+run-tests [ --all | --lisp | --lisp-version | --all-versions ]
+
+--all - revert all defaults
+--lisp - revert current lisp to default.
+--lisp-version - revert version of current lisp to default version
+--all-versions - revert versions of all lisp systems to default values
+
+Example:
+$(basename "$0") --all-versions"
+USAGE="$USAGE" sh/set-defaults.sh "$@"

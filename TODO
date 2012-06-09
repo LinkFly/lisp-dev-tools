@@ -60,7 +60,8 @@ done. 19. Move TESTS from dirs.conf (it not configurable parameter).
 21. Into tests: before output info about changed directories, show info about changed (new) archives.
 22. Isolation UTILS dir for maked true configurable parameter into dirs.conf.
 23. Move definition var TESTS_LOCK_FILE from exit-if-lock.sh to more declarable place.
-24. Create scripts for setted default lisp and lisp-version.
+done. 24. Create scripts for setted default lisp and lisp-version.
+25. Into set-defaults.sh make output error prompts in error stream.
 
 -------- Milestones (mark with tags then when) ----------
 0.0.2: (done)
