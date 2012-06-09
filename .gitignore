@@ -11,3 +11,5 @@ tmp/*
 tmp-download/*
 utils/tools/*
 emacs-libs/*
+sh/conf/custom-dirs.conf
+sh/conf/custom-lisp-and-version.conf
