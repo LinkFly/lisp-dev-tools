@@ -217,8 +217,8 @@ prepare_args "$@"
 
 ## Handling CORRECTED_ARGS for support common parameters: --common-[load | eval | quit]
 
-
-FULL_RUN_CMD="${IF_EMULATE_BY_LOAD}XDG_CONFIG_DIRS=$XDG_CONFIG_DIRS $RUN_COMMAND $CORRECTED_ARGS${LOAD_QUICKLISP_ARGS}"
+### Experimental change - now before loading quicklisp
+FULL_RUN_CMD="${IF_EMULATE_BY_LOAD}XDG_CONFIG_DIRS=$XDG_CONFIG_DIRS $RUN_COMMAND ${LOAD_QUICKLISP_ARGS} $CORRECTED_ARGS"
 
 ### Variable GET_CMD_P initialized into run-lisp script file ###
 if [ "$GET_CMD_P" = "yes" ];then
