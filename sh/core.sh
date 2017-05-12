@@ -13,7 +13,30 @@ then
 fi
 }
 
+# TODO move Utils in better place
+########### Utils ##########3
+log_core_cmd () {
+    echo "
+[core.sh] CMD: "$1""
+}
+
+log_core_vars () {
+    echo "
+[core.sh] VARS: "$1""
+}
+
+log_call () {
+    local CMD="$1"
+    # TODO Extract of function
+    local THIS_FILE="core.sh"
+    local THIS_SCR="$THIS_FILE"
+echo "
+Running function ($THIS_SCR) '$CMD' ..."
+}
+########### end Utils ##########3
+
 provide_tool () {
+log_call "provide_tool $1"
 ### Parameters ###
 local TOOL_NAME=$1
 
@@ -30,6 +53,7 @@ local TOOL_RELATIVE_DIR=$(get_spec_val $TOOL_NAME _RELATIVE_DIR)
 local TOOL_ARCHIVE=$(get_spec_val $TOOL_NAME _ARCHIVE)
 local TOOL_DEPS_ON_TOOLS="$(get_spec_val $TOOL_NAME _DEPS_ON_TOOLS)"
 local TOOL_PROVIDE_FILES="$(get_spec_val $TOOL_NAME _PROVIDE_FILES)"
+local TOOL_TRY_USE_EXIST="$(get_spec_val $TOOL_NAME _TRY_USE_EXIST)"
 
 local LINK_TO_TOOL_DIR_P="no"
 if [ "$TOOL_PROVIDE_FILES" = "" ]; then
@@ -47,22 +71,56 @@ Provided concrete files (links into directory $UTILS): $TOOL_PROVIDE_FILES
 ALREADY."; return 0;
 fi
 
-resolve_deps "$TOOL_DEPS_ON_TOOLS" || exit 1;
+# TODO Make more abstract
+log_core_vars "'TOOL_TRY_USE_EXIST=$TOOL_TRY_USE_EXIST'"
+if [ "$TOOL_TRY_USE_EXIST" = "yes" ]; then
+    if [ "$TOOL_NAME" != "wget" ] && [ "$TOOL_NAME" != "emacs" ]; then
+	echo "ERROR: Not implemented handling parameter with suffix '_TRY_USE_EXIST' for other tools than wget or emacs
 
-#### Providing archive if needed ####
-local ALL_FILES_EXIST_P=$(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS_DIR")
+FAIL."
+	exit 1;
+    fi
+    # TODO move to internal variables
+    local USR_BIN_DIR=/usr/bin
+    local TOOL_PROGRAM="$USR_BIN_DIR/$TOOL_NAME"
+    local TOOL_LINK="$UTILS/$TOOL_NAME"
+    if [ -f $USR_BIN_DIR/$TOOL_NAME ]; then
+	rm -f "$TOOL_LINK"
+	ln -s "$TOOL_PROGRAM" "$TOOL_LINK"
+	echo "
+Providing $TOOL_NAME is successful.
 
-if [ "$ALL_FILES_EXIST_P" = "no" ]
-then if ! [ -f $ARCHIVES/$TOOL_ARCHIVE ]; then
-	if [ "$TOOL_NAME" = "wget" ]; then 
-	    ln -fs $SCRIPTS_DIR/$WGET_ARCHIVE $ARCHIVES/$WGET_ARCHIVE;	
-	else 
-	    provide_archive_tool "$TOOL_NAME";
-	fi
-     fi
+OK."
+    fi
 fi
 
+#### Resolving deps ####
+if ! [ "$TOOL_TRY_USE_EXIST" = "yes" ]; then
+    resolve_deps "$TOOL_DEPS_ON_TOOLS" || exit 1;
+fi
+
+#### Providing archive if needed ####
+# TODO Using ALL_FILES_EXIST_P above (do once call links_is_exist_p)
+if ! [ "$TOOL_TRY_USE_EXIST" = "yes" ]; then
+    log_core_vars "TOOL_PROVIDE_FILES='$TOOL_PROVIDE_FILES' UTILS='$UTILS'"
+    local ALL_FILES_EXIST_P=$(links_is_exist_p "$TOOL_PROVIDE_FILES" "$UTILS")
+    log_core_vars "ALL_FILES_EXIST_P=$ALL_FILES_EXIST_P"
+    echo "
+Start providing archive tool ..."
+    if [ "$ALL_FILES_EXIST_P" = "no" ]; then
+	if ! [ -f $ARCHIVES/$TOOL_ARCHIVE ]; then
+	    if [ "$TOOL_NAME" = "wget" ]; then
+		ln -fs $SCRIPTS_DIR/$WGET_ARCHIVE $ARCHIVES/$WGET_ARCHIVE;	
+	    else
+		provide_archive_tool "$TOOL_NAME";
+	    fi
+	fi
+	echo "
+Providing archive tool is successful."
+    fi
+fi
 #########################################
+
 local LINK_REFERS_STR="
 "
 for link in $TOOL_PROVIDE_FILES;
@@ -72,7 +130,6 @@ do
     LINK_REFERS_STR="${LINK_REFERS_STR}
 ${NOT_FOUND} ${link}: $REFER";
 done
-
 if ! [ "$TOOL_RELATIVE_DIR" = "" ]; then
     TOOL_RELATIVE_DIR="/$TOOL_RELATIVE_DIR"
 fi
@@ -147,6 +204,7 @@ remove_dir "$DIR" "$MES_SUCC" "$MES_FAIL" "$MES_ABSENCE"
 }
 
 build_tool () {
+log_call "build_tool $1"
 local TOOL_NAME="$1"
 
 local D=\$
@@ -194,6 +252,16 @@ local PRE_MAKE_CMD="$TOOL_PRE_MAKE_CMD"
 local PRE_INSTALL_CMD="$TOOL_PRE_INSTALL_CMD"
 local REQUIRED_COMPILE_P="$TOOL_REQUIRED_COMPILE_P"
 local CONFIGURE_VARS="$TOOL_CONFIGURE_VARS"
+
+### Internal ###
+local THIS_SCR=core.sh
+
+# TODO Get rid of repeating
+# TODO Remove messages from call and logging
+
+echo "[$THIS_SCR] CALL: extract_build_install "$ARCHIVE_PATH" "$TMP_TOOL_DIR" "$EXTRACT_SCRIPT" "$RESULT_DIR" \
+"$COMPILING_EXTRA_PARAMS" "$MES_ARCHIVE_CHECK_FAIL" "$MES_BUILD_FAIL" "$PRE_BUILD_CMD" \
+"$PRE_MAKE_CMD" "$PRE_INSTALL_CMD" "$REQUIRED_COMPILE_P" "$CONFIGURE_VARS""
 
 extract_build_install "$ARCHIVE_PATH" "$TMP_TOOL_DIR" "$EXTRACT_SCRIPT" "$RESULT_DIR" \
 "$COMPILING_EXTRA_PARAMS" "$MES_ARCHIVE_CHECK_FAIL" "$MES_BUILD_FAIL" "$PRE_BUILD_CMD" \

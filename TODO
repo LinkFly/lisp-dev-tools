@@ -1,3 +1,7 @@
+New:
+--------------
+ - Check link creating and exit if fail
+---------------------------------
 done. 1. Discovery - why downloading EMACS, although it presence true link - utils/emacs -> /usr/bin/emacs.
 done. 2. Correct providing WGET and EMACS tool.
 undo. 3. Finding - why was bad message about bad parameter EXTRA_PARAMS.

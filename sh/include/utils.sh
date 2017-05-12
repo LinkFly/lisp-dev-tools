@@ -308,8 +308,10 @@ local ALL_FILES_EXIST_P=$(links_is_exist_p "$FILE_LINK_NAMES" "$UTILS_DIR")
 ########## Building if does not exist #######
 if [ "$ALL_FILES_EXIST_P" = "yes" ];
   then echo "$MES_ALREADY";
-  else
+else
     RESULT=1;
+    echo "
+Building with command: '$BUILD_CMD && RESULT=0' ..."
     eval "$BUILD_CMD && RESULT=0";    
     if [ $RESULT = 0 ];
     then
@@ -421,7 +423,33 @@ local FILE="$2"
 sed -i "/$PARAM=/d" "$FILE"
 }
 
+log_scr_run () {
+    local CMD="$1"
+echo "
+[$CMD] "$2""
+}
+
+log_func_call () {
+    local CMD="$1"
+    # TODO Extract of function
+    
+    local THIS_SCR="$2"
+echo "
+[$THIS_SCR] INTO CALL: '$CMD' ..."
+}
+
+# TODO Using in all functions
+log_util_call () {
+    log_func_call "$1" "utils.sh"
+}
+
+log_util () {
+    echo "
+[utils.sh] "$1""
+}
+
 extract_build_install () {
+    
 #### Parameters ####
 local ARCHIVE_PATH="$1"
 local TMP_TOOL_DIR="$2"
@@ -439,6 +467,9 @@ shift
 local REQUIRED_COMPILE_P="$9"
 shift
 local CONFIGURE_VARS="$9"
+# TODO Discovery - Why don't logging?
+# log_util_call "extract_build_install "$ARCHIVE_PATH" "$TMP_TOOL_DIR" "$EXTRACT_SCRIPT" "$RESULT_DIR" "$COMPILING_EXTRA_PARAMS" "$MES_ARCHIVE_CHECK_FAIL" "$MES_BUILD_FAIL" "$PRE_BUILD_CMD" "$PRE_MAKE_CMD" "$PRE_INSTALL_CMD" "$REQUIRED_COMPILE_P" "$CONFIGURE_VARS""
+# echo !!! "$MES_ARCHIVE_CHECK_FAIL"
 
 local START_DIR=$PWD
 local RESULT
@@ -449,11 +480,14 @@ fi
 
 ################################
 rm -rf $TMP_TOOL_DIR
+log_util "CMD: 'mkdir --parents $TMP_TOOL_DIR'"
 mkdir --parents $TMP_TOOL_DIR
 cd $TMP_TOOL_DIR
 RESULT=1
+log_util "VARS: PWD=$PWD"
+log_util "CMD: '$EXTRACT_SCRIPT $ARCHIVE_PATH && RESULT=0;'"
 $EXTRACT_SCRIPT $ARCHIVE_PATH && RESULT=0;
-
+log_util "VARS: RESULT="$RESULT""
 if [ $RESULT = 1 ]; then
     echo "$MES_BUILD_FAIL"; rm -rf $TMP_TOOL_DIR; exit 1;
 fi

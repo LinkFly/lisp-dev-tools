@@ -7,4 +7,6 @@ CREATED_DIRS="$ARCHIVES $LISPS $COMPILERS $SOURCES $LISP-LIBS $TMP $TMP-DOWNLOAD
 for dir in $CREATED_DIRS
 do rm -rf "$PREFIX/$dir";
 done
+rm -f $UTILS/wget
+rm -f $UTILS/emacs
 echo "OK."
