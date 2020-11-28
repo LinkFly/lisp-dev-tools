@@ -1,5 +1,6 @@
 New:
 --------------
+ - Add restrictions for ./change-lisp and ./change-version
  - Check link creating and exit if fail
 ---------------------------------
 done. 1. Discovery - why downloading EMACS, although it presence true link - utils/emacs -> /usr/bin/emacs.
