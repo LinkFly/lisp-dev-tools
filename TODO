@@ -1,5 +1,6 @@
 New:
 --------------
+ - Fix error into ./rebuild-lisp for sbcl "make-config.sh: 226: sbcl: not found"
  - Add restrictions for ./change-lisp and ./change-version
  - Check link creating and exit if fail
 ---------------------------------
